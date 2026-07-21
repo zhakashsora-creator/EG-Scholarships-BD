@@ -10,6 +10,12 @@ type AnalyzeBody = {
   consentToAiDocumentReview?: boolean;
 };
 
+const MAX_AI_INPUT_BYTES = 48 * 1024 * 1024;
+const PROFILE_KEYS: Array<keyof StudentProfile> = [
+  "studyLevel", "preferredCountries", "field", "gpa", "englishTest", "englishScore",
+  "budget", "intake", "workExperience", "notes",
+];
+
 const profileSchema = {
   type: "object",
   properties: {
@@ -43,21 +49,31 @@ async function extractProfileFromDocuments(email: string, profile: StudentProfil
   if (!apiKey) return null;
 
   const rows = await database()
-    .prepare(`SELECT filename, mime_type AS mimeType, storage_key AS storageKey
+    .prepare(`SELECT id, filename, mime_type AS mimeType, size_bytes AS sizeBytes, storage_key AS storageKey
       FROM documents WHERE owner_email = ? ORDER BY created_at DESC LIMIT 6`)
     .bind(email)
-    .all<{ filename: string; mimeType: string; storageKey: string }>();
+    .all<{ id: string; filename: string; mimeType: string; sizeBytes: number; storageKey: string }>();
 
   const fileInputs: Array<Record<string, string>> = [];
+  const analyzedIds: string[] = [];
+  let totalBytes = 0;
   for (const row of rows.results ?? []) {
+    if (row.sizeBytes > MAX_AI_INPUT_BYTES || totalBytes + row.sizeBytes > MAX_AI_INPUT_BYTES) continue;
     const object = await documentBucket().get(row.storageKey);
     if (!object) continue;
     const base64 = Buffer.from(await object.arrayBuffer()).toString("base64");
     if (row.mimeType.startsWith("image/")) {
       fileInputs.push({ type: "input_image", image_url: `data:${row.mimeType};base64,${base64}`, detail: "high" });
     } else {
-      fileInputs.push({ type: "input_file", filename: row.filename, file_data: `data:${row.mimeType};base64,${base64}` });
+      fileInputs.push({
+        type: "input_file",
+        filename: row.filename,
+        file_data: `data:${row.mimeType};base64,${base64}`,
+        ...(row.mimeType === "application/pdf" ? { detail: "high" } : {}),
+      });
     }
+    totalBytes += row.sizeBytes;
+    analyzedIds.push(row.id);
   }
   if (!fileInputs.length) return null;
 
@@ -65,7 +81,7 @@ async function extractProfileFromDocuments(email: string, profile: StudentProfil
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "gpt-5.6-terra",
+      model: (env as unknown as { OPENAI_MODEL?: string }).OPENAI_MODEL || "gpt-5.6-terra",
       store: false,
       safety_identifier: await safetyIdentifier(email),
       reasoning: { effort: "low" },
@@ -73,7 +89,7 @@ async function extractProfileFromDocuments(email: string, profile: StudentProfil
         {
           role: "developer",
           content:
-            "Extract only facts supported by the student's documents or supplied form. Do not infer grades, funds, test scores, eligibility, or identity details. Preserve uncertainty in missingInformation. Return concise evidence notes without quoting identifiers such as passport numbers, account numbers, or full addresses.",
+            "Read the supplied academic, language, financial, identity and supporting files carefully, including scanned page images. Extract only facts supported by the student's documents or supplied form. Keep student-entered preferences unless a document provides a more precise factual value. Do not infer grades, funds, test scores, eligibility, or identity details. Preserve uncertainty in missingInformation. Return concise evidence notes without quoting passport numbers, account numbers, full addresses or other unnecessary identifiers.",
         },
         {
           role: "user",
@@ -98,7 +114,21 @@ async function extractProfileFromDocuments(email: string, profile: StudentProfil
     ?.flatMap((item) => item.content ?? [])
     .find((item) => item.type === "output_text")?.text;
   if (!outputText) throw new Error("AI analysis returned no structured profile");
-  return JSON.parse(outputText) as StudentProfile & { evidenceNotes: string[]; missingInformation: string[] };
+  return {
+    extracted: JSON.parse(outputText) as StudentProfile & { evidenceNotes: string[]; missingInformation: string[] },
+    analyzedIds,
+  };
+}
+
+function mergeSupportedProfile(submitted: StudentProfile, extracted: StudentProfile) {
+  const merged: StudentProfile = { ...submitted };
+  for (const key of PROFILE_KEYS) {
+    const value = extracted[key];
+    if (Array.isArray(value) ? value.length > 0 : Boolean(String(value ?? "").trim())) {
+      Object.assign(merged, { [key]: value });
+    }
+  }
+  return merged;
 }
 
 export async function POST(request: Request) {
@@ -108,7 +138,7 @@ export async function POST(request: Request) {
   const submitted = body.profile ?? {};
   await ensureSchema();
 
-  let extracted: (StudentProfile & { evidenceNotes?: string[]; missingInformation?: string[] }) | null = null;
+  let extracted: Awaited<ReturnType<typeof extractProfileFromDocuments>> = null;
   let mode: "ai" | "rules" = "rules";
   let notice = "Matches use the verified catalogue and the profile fields you entered.";
   if (body.consentToAiDocumentReview) {
@@ -117,7 +147,11 @@ export async function POST(request: Request) {
       if (extracted) {
         mode = "ai";
         notice = "Documents were read with your consent; extracted facts were then matched against the verified catalogue.";
-        await database().prepare(`UPDATE documents SET status = 'analyzed' WHERE owner_email = ?`).bind(user.email).run();
+        const placeholders = extracted.analyzedIds.map(() => "?").join(", ");
+        await database()
+          .prepare(`UPDATE documents SET status = 'analyzed' WHERE owner_email = ? AND id IN (${placeholders})`)
+          .bind(user.email, ...extracted.analyzedIds)
+          .run();
       } else {
         notice = "No AI key or uploaded documents are available yet, so matching used your entered profile only.";
       }
@@ -126,7 +160,7 @@ export async function POST(request: Request) {
     }
   }
 
-  const profile = extracted ?? submitted;
+  const profile = extracted ? mergeSupportedProfile(submitted, extracted.extracted) : submitted;
   const results = rankScholarships(profile, 5);
   const completenessFields = [profile.studyLevel, profile.field, profile.gpa, profile.englishScore, profile.intake];
   const completeness = Math.round((completenessFields.filter(Boolean).length / completenessFields.length) * 100);

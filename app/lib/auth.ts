@@ -20,7 +20,7 @@ export async function getStudentUser(): Promise<StudentUser | null> {
     }
   }
 
-  // Keep the existing Sites sign-in as a transition path for the pilot owner.
+  // Retain Sites authentication as an administrator recovery path.
   const chatGPTUser = await getChatGPTUser();
   if (chatGPTUser) return chatGPTUser;
 

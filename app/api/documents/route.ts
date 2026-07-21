@@ -84,3 +84,33 @@ export async function POST(request: Request) {
     document: { id, category, filename: file.name, mimeType, sizeBytes: file.size, status: "ready" },
   });
 }
+
+export async function DELETE(request: Request) {
+  const user = await getStudentUser();
+  if (!user) return NextResponse.json({ error: "Sign in required" }, { status: 401 });
+
+  const id = new URL(request.url).searchParams.get("id")?.trim();
+  if (!id) return NextResponse.json({ error: "Document ID is required" }, { status: 400 });
+
+  await ensureSchema();
+  const document = await database()
+    .prepare(`SELECT filename, storage_key AS storageKey FROM documents WHERE id = ? AND owner_email = ?`)
+    .bind(id, user.email)
+    .first<{ filename: string; storageKey: string }>();
+  if (!document) return NextResponse.json({ error: "Document not found" }, { status: 404 });
+
+  try {
+    await documentBucket().delete(document.storageKey);
+    await database().batch([
+      database().prepare(`DELETE FROM documents WHERE id = ? AND owner_email = ?`).bind(id, user.email),
+      database().prepare(`INSERT INTO progress_events (id, owner_email, stage, note) VALUES (?, ?, 'Document removed', ?)`).bind(
+        crypto.randomUUID(), user.email, `${document.filename} removed from the document vault`,
+      ),
+    ]);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Storage is temporarily unavailable";
+    return NextResponse.json({ error: `Document could not be removed: ${message}` }, { status: 503 });
+  }
+
+  return NextResponse.json({ ok: true, id });
+}

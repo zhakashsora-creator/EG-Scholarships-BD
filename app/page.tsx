@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { getStudentUser } from "./lib/auth";
 import { scholarships } from "./lib/matching";
 
@@ -12,7 +13,7 @@ export default async function Home() {
     <main className="landing-shell">
       <header className="landing-nav">
         <a className="brand" href="https://egconsultancy.com.bd/eg-scholarships/">
-          <span className="brand-seal">EG</span>
+          <img className="brand-logo" src="/egc-emblem.png" alt="Excellence Global Consultancy" />
           <span><strong>EG Scholarships</strong><small>by Excellence Global Consultancy</small></span>
         </a>
         <nav aria-label="Primary navigation">
@@ -39,7 +40,7 @@ export default async function Home() {
         </div>
 
         <div className="hero-product" aria-label="Dashboard preview">
-          <div className="product-top"><span className="mini-seal">EG</span><span>Student workspace</span><i>Profile 82%</i></div>
+          <div className="product-top"><img className="mini-logo" src="/egc-emblem.png" alt="" /><span>Student workspace</span><i>Profile 82%</i></div>
           <div className="product-grid">
             <aside><b>OVERVIEW</b><span className="active">Dashboard</span><span>Documents <i>8</i></span><span>AI profile</span><span>Top Five <i>5</i></span><span>Applications</span></aside>
             <div className="product-main">

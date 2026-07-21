@@ -1,6 +1,8 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { scholarships, type ScholarshipMatch, type StudentProfile } from "../lib/matching";
 
 type Tab = "overview" | "documents" | "profile" | "matches" | "applications" | "consultant";
@@ -35,6 +37,7 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
   const [consultantSent, setConsultantSent] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [aiConfigured, setAiConfigured] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   async function readJson(response: Response) {
     const payload = await response.json().catch(() => ({}));
@@ -73,6 +76,20 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
       setNotice(error instanceof Error ? error.message : "Upload failed");
       return false;
     } finally { setBusy(false); }
+  }
+
+  async function removeDocument(id: string, filename: string) {
+    if (!window.confirm(`Remove ${filename} from your document vault? This cannot be undone.`)) return;
+    setDeletingId(id);
+    try {
+      await readJson(await fetch(`/api/documents?id=${encodeURIComponent(id)}`, { method: "DELETE" }));
+      setDocuments((current) => current.filter((document) => document.id !== id));
+      setNotice(`${filename} was removed from your document vault.`);
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Document could not be removed");
+    } finally {
+      setDeletingId(null);
+    }
   }
 
   async function saveProfile() {
@@ -116,11 +133,11 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
   }
 
   const navItems: Array<[Tab, string, string]> = [["overview", "01", "Overview"], ["documents", "02", "Documents"], ["profile", "03", "My profile"], ["matches", "04", "Top Five"], ["applications", "05", "Applications"], ["consultant", "06", "Consultant"]];
-  if (loading) return <main className="workspace-loading"><span className="brand-seal">EG</span><strong>Preparing your secure workspace</strong><i /></main>;
+  if (loading) return <main className="workspace-loading"><img className="brand-logo" src="/egc-emblem.png" alt="Excellence Global Consultancy" /><strong>Preparing your secure workspace</strong><i /></main>;
 
   return <main className="dashboard-shell">
     <aside className={`dashboard-sidebar ${sidebarOpen ? "open" : ""}`}>
-      <a className="brand dashboard-brand" href="/"><span className="brand-seal">EG</span><span><strong>EG Scholarships</strong><small>Student workspace</small></span></a>
+      <Link className="brand dashboard-brand" href="/"><img className="brand-logo" src="/egc-emblem.png" alt="Excellence Global Consultancy" /><span><strong>EG Scholarships</strong><small>Student workspace</small></span></Link>
       <button className="sidebar-close" onClick={() => setSidebarOpen(false)} aria-label="Close menu">×</button>
       <p className="nav-label">YOUR JOURNEY</p>
       <nav>{navItems.map(([id, icon, label]) => <button key={id} className={tab === id ? "active" : ""} onClick={() => { setTab(id); setSidebarOpen(false); }}><span>{icon}</span>{label}{id === "matches" && matches.length > 0 && <i>{matches.length}</i>}{id === "documents" && documents.length > 0 && <i>{documents.length}</i>}</button>)}</nav>
@@ -133,7 +150,7 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
       <div className="dashboard-body">
         <div className="page-heading"><div><span className="eyebrow">{tab === "overview" ? "YOUR ACTION CENTRE" : "STUDENT WORKSPACE"}</span><h1>{tab === "overview" ? `Welcome back, ${user.name.split(" ")[0]}.` : navItems.find(([id]) => id === tab)?.[2]}</h1><p>{tab === "overview" ? "Your priorities, evidence and application progress in one place." : notice}</p></div>{tab === "overview" && <button className="button primary compact" onClick={() => setTab(completeness < 80 ? "profile" : "matches")}>{completeness < 80 ? "Complete my profile" : "Review my Top Five"}<span>→</span></button>}</div>
         {tab === "overview" && <Overview documents={documents} matches={matches} completeness={completeness} categoryCount={categoryCount} applications={applications} progress={progress} onNavigate={setTab} />}
-        {tab === "documents" && <Documents documents={documents} busy={busy} notice={notice} onUpload={uploadDocument} />}
+        {tab === "documents" && <Documents documents={documents} busy={busy} deletingId={deletingId} notice={notice} onUpload={uploadDocument} onDelete={removeDocument} />}
         {tab === "profile" && <Profile profile={profile} setProfile={setProfile} consent={consent} setConsent={setConsent} documents={documents.length} busy={busy} aiConfigured={aiConfigured} onSave={saveProfile} onRun={runMatch} />}
         {tab === "matches" && <Matches matches={matches} notice={notice} onProfile={() => setTab("profile")} onConsultant={() => setTab("consultant")} onTrack={(id) => { updateApplication(id, "shortlisted"); setTab("applications"); }} />}
         {tab === "applications" && <Applications matches={matches} applications={applications} onUpdate={updateApplication} />}
@@ -155,14 +172,14 @@ function Overview({ documents, matches, completeness, categoryCount, application
   </>;
 }
 
-function Documents({ documents, busy, notice, onUpload }: { documents: DocumentItem[]; busy: boolean; notice: string; onUpload: (data: FormData) => Promise<boolean> }) {
+function Documents({ documents, busy, deletingId, notice, onUpload, onDelete }: { documents: DocumentItem[]; busy: boolean; deletingId: string | null; notice: string; onUpload: (data: FormData) => Promise<boolean>; onDelete: (id: string, filename: string) => Promise<void> }) {
   const [selected, setSelected] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
   const [category, setCategory] = useState("academic");
   async function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); if (!selected) return; const form = event.currentTarget; const data = new FormData(); data.set("category", category); data.set("file", selected); if (await onUpload(data)) { setSelected(null); form.reset(); } }
   return <><section className="document-guide"><div><span className="section-kicker">DOCUMENT CHECKLIST</span><h2>Build a complete evidence vault.</h2><p>Upload clear, complete files. You control when AI may read them.</p></div><div className="category-cards">{categories.map(([id, label, text, number]) => { const count = documents.filter((doc) => doc.category === id).length; return <article key={id} className={count ? "complete" : ""}><span>{count ? "✓" : number}</span><div><strong>{label}</strong><small>{text}</small></div><b>{count}</b></article>; })}</div></section>
     <div className="dashboard-two-col documents-layout"><section className="panel"><div className="panel-head"><div><span className="section-kicker">SECURE UPLOAD</span><h2>Add a document</h2></div><span className="privacy-chip">Private to your account</span></div><form className="upload-form" onSubmit={submit}><label>Document category<select value={category} onChange={(event) => setCategory(event.target.value)}>{categories.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label><label className={`drop-zone ${dragging ? "dragging" : ""}`} onDragEnter={() => setDragging(true)} onDragLeave={() => setDragging(false)} onDrop={() => setDragging(false)}><span>↑</span><strong>{selected ? selected.name : "Drop a file here or choose from your device"}</strong><small>{selected ? `${fileSize(selected.size)} ready to upload` : "PDF, DOC, DOCX, JPG or PNG — up to 20 MB"}</small><input type="file" name="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onChange={(event) => setSelected(event.target.files?.[0] ?? null)} required /></label><button className="button primary" disabled={busy || !selected}>{busy ? "Uploading securely..." : selected ? "Upload this document" : "Choose a document first"}</button><p className="form-notice" role="status">{notice}</p></form></section>
-      <section className="panel"><div className="panel-head"><div><span className="section-kicker">YOUR FILES</span><h2>{documents.length} document{documents.length === 1 ? "" : "s"} stored</h2></div></div><div className="document-list">{documents.length ? documents.map((doc) => <article key={doc.id}><span>{doc.filename.split(".").pop()?.slice(0, 4).toUpperCase() || "FILE"}</span><div><strong>{doc.filename}</strong><small>{friendlyCategory(doc.category)} · {fileSize(doc.sizeBytes)}</small></div><i>{doc.status === "analyzed" ? "AI reviewed" : "Ready"}</i><a href={`/api/documents/download?id=${encodeURIComponent(doc.id)}`} target="_blank" rel="noreferrer">Open</a></article>) : <div className="empty-state"><b>↑</b><strong>No documents uploaded yet</strong><p>Start with your latest transcript and English-test report.</p></div>}</div></section></div></>;
+      <section className="panel"><div className="panel-head"><div><span className="section-kicker">YOUR FILES</span><h2>{documents.length} document{documents.length === 1 ? "" : "s"} stored</h2></div></div><div className="document-list">{documents.length ? documents.map((doc) => <article key={doc.id}><span>{doc.filename.split(".").pop()?.slice(0, 4).toUpperCase() || "FILE"}</span><div><strong>{doc.filename}</strong><small>{friendlyCategory(doc.category)} · {fileSize(doc.sizeBytes)}</small></div><i>{doc.status === "analyzed" ? "AI reviewed" : "Ready"}</i><div className="document-actions"><a href={`/api/documents/download?id=${encodeURIComponent(doc.id)}`} target="_blank" rel="noreferrer">Open</a><button type="button" onClick={() => onDelete(doc.id, doc.filename)} disabled={deletingId === doc.id}>{deletingId === doc.id ? "Removing..." : "Remove"}</button></div></article>) : <div className="empty-state"><b>↑</b><strong>No documents uploaded yet</strong><p>Start with your latest transcript and English-test report.</p></div>}</div></section></div></>;
 }
 
 function Profile({ profile, setProfile, consent, setConsent, documents, busy, aiConfigured, onSave, onRun }: { profile: StudentProfile; setProfile: (profile: StudentProfile) => void; consent: boolean; setConsent: (value: boolean) => void; documents: number; busy: boolean; aiConfigured: boolean; onSave: () => void; onRun: () => void }) {

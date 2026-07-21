@@ -33,7 +33,7 @@ export default function AuthClient({ config, next }: { config: { url: string; an
   }
 
   if (!supabase) {
-    return <div className="auth-setup"><strong>Student sign-in is being connected.</strong><p>The dashboard is available to the pilot owner while Google and email authentication is configured.</p><a className="button primary" href="/signin-with-chatgpt?return_to=/dashboard">Continue as pilot owner</a></div>;
+    return <div className="auth-setup"><strong>Secure student sign-in is temporarily unavailable.</strong><p>The authentication service needs administrator attention. No student account can be created until it is restored.</p><a className="button primary" href="mailto:ceo.egconsulting@gmail.com?subject=EG%20Scholarships%20sign-in%20support">Contact EG support</a></div>;
   }
 
   return <div className="auth-actions">
