@@ -1,9 +1,28 @@
 import { headers } from "next/headers";
-import { getChatGPTUser, type ChatGPTUser } from "../chatgpt-auth";
+import { getChatGPTUser } from "../chatgpt-auth";
+import { createSupabaseServerClient } from "./supabase";
 
-export async function getStudentUser(): Promise<ChatGPTUser | null> {
-  const user = await getChatGPTUser();
-  if (user) return user;
+export type StudentUser = {
+  displayName: string;
+  email: string;
+  fullName: string;
+};
+
+export async function getStudentUser(): Promise<StudentUser | null> {
+  const supabase = await createSupabaseServerClient();
+  if (supabase) {
+    const { data } = await supabase.auth.getUser();
+    if (data.user?.email) {
+      const fullName = String(
+        data.user.user_metadata?.full_name ?? data.user.user_metadata?.name ?? data.user.email.split("@")[0],
+      );
+      return { displayName: fullName, fullName, email: data.user.email };
+    }
+  }
+
+  // Keep the existing Sites sign-in as a transition path for the pilot owner.
+  const chatGPTUser = await getChatGPTUser();
+  if (chatGPTUser) return chatGPTUser;
 
   const requestHeaders = await headers();
   const host = requestHeaders.get("host") ?? "";

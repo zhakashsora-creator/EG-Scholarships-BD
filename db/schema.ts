@@ -48,3 +48,12 @@ export const consultantRequests = sqliteTable("consultant_requests", {
   status: text("status").notNull().default("requested"),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
+
+export const applications = sqliteTable("applications", {
+  id: text("id").primaryKey(),
+  ownerEmail: text("owner_email").notNull(),
+  scholarshipId: text("scholarship_id").notNull(),
+  stage: text("stage").notNull().default("shortlisted"),
+  nextAction: text("next_action").notNull().default("Review eligibility"),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});

@@ -4,7 +4,7 @@ import { database, documentBucket, ensureSchema } from "../../lib/storage";
 
 export const dynamic = "force-dynamic";
 
-const MAX_FILE_BYTES = 10 * 1024 * 1024;
+const MAX_FILE_BYTES = 20 * 1024 * 1024;
 const ACCEPTED = new Set([
   "application/pdf",
   "application/msword",
@@ -15,6 +15,12 @@ const ACCEPTED = new Set([
 
 function safeFilename(value: string) {
   return value.replace(/[^a-zA-Z0-9._-]+/g, "-").slice(-120);
+}
+
+function normalizedMime(file: File) {
+  if (ACCEPTED.has(file.type)) return file.type;
+  const extension = file.name.toLowerCase().split(".").pop();
+  return ({ pdf: "application/pdf", doc: "application/msword", docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png" } as Record<string, string>)[extension ?? ""] ?? "";
 }
 
 async function ownerPrefix(email: string) {
@@ -44,28 +50,37 @@ export async function POST(request: Request) {
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "Choose a document to upload" }, { status: 400 });
   }
-  if (!ACCEPTED.has(file.type)) {
+  const mimeType = normalizedMime(file);
+  if (!mimeType) {
     return NextResponse.json({ error: "Use PDF, DOC, DOCX, JPG or PNG files" }, { status: 400 });
   }
   if (file.size > MAX_FILE_BYTES) {
-    return NextResponse.json({ error: "Each document must be 10 MB or smaller" }, { status: 400 });
+    return NextResponse.json({ error: "Each document must be 20 MB or smaller" }, { status: 400 });
   }
 
   await ensureSchema();
   const id = crypto.randomUUID();
   const key = `${await ownerPrefix(user.email)}/${id}-${safeFilename(file.name)}`;
-  await documentBucket().put(key, file.stream(), {
-    httpMetadata: { contentType: file.type },
-    customMetadata: { ownerEmail: user.email, category },
-  });
-  await database()
-    .prepare(`INSERT INTO documents
-      (id, owner_email, category, filename, mime_type, size_bytes, storage_key, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, 'uploaded')`)
-    .bind(id, user.email, category, file.name, file.type, file.size, key)
-    .run();
+  try {
+    await documentBucket().put(key, file.stream(), {
+      httpMetadata: { contentType: mimeType },
+      customMetadata: { category },
+    });
+    await database().batch([
+      database().prepare(`INSERT INTO documents
+        (id, owner_email, category, filename, mime_type, size_bytes, storage_key, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'ready')`)
+        .bind(id, user.email, category, file.name, mimeType, file.size, key),
+      database().prepare(`INSERT INTO progress_events (id, owner_email, stage, note) VALUES (?, ?, 'Document uploaded', ?)`)
+        .bind(crypto.randomUUID(), user.email, `${file.name} added to ${category} documents`),
+    ]);
+  } catch (error) {
+    await documentBucket().delete(key).catch(() => undefined);
+    const message = error instanceof Error ? error.message : "Storage is temporarily unavailable";
+    return NextResponse.json({ error: `Upload could not be completed: ${message}` }, { status: 503 });
+  }
 
   return NextResponse.json({
-    document: { id, category, filename: file.name, mimeType: file.type, sizeBytes: file.size, status: "uploaded" },
+    document: { id, category, filename: file.name, mimeType, sizeBytes: file.size, status: "ready" },
   });
 }

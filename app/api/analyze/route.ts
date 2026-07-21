@@ -53,12 +53,11 @@ async function extractProfileFromDocuments(email: string, profile: StudentProfil
     const object = await documentBucket().get(row.storageKey);
     if (!object) continue;
     const base64 = Buffer.from(await object.arrayBuffer()).toString("base64");
-    fileInputs.push({
-      type: "input_file",
-      filename: row.filename,
-      file_data: `data:${row.mimeType};base64,${base64}`,
-      ...(row.mimeType === "application/pdf" ? { detail: "high" } : {}),
-    });
+    if (row.mimeType.startsWith("image/")) {
+      fileInputs.push({ type: "input_image", image_url: `data:${row.mimeType};base64,${base64}`, detail: "high" });
+    } else {
+      fileInputs.push({ type: "input_file", filename: row.filename, file_data: `data:${row.mimeType};base64,${base64}` });
+    }
   }
   if (!fileInputs.length) return null;
 
@@ -118,6 +117,7 @@ export async function POST(request: Request) {
       if (extracted) {
         mode = "ai";
         notice = "Documents were read with your consent; extracted facts were then matched against the verified catalogue.";
+        await database().prepare(`UPDATE documents SET status = 'analyzed' WHERE owner_email = ?`).bind(user.email).run();
       } else {
         notice = "No AI key or uploaded documents are available yet, so matching used your entered profile only.";
       }

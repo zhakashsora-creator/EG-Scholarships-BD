@@ -42,8 +42,20 @@ export async function ensureSchema() {
           id TEXT PRIMARY KEY, owner_email TEXT NOT NULL, message TEXT NOT NULL,
           status TEXT NOT NULL DEFAULT 'requested', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
         )`),
+        database().prepare(`CREATE TABLE IF NOT EXISTS applications (
+          id TEXT PRIMARY KEY, owner_email TEXT NOT NULL, scholarship_id TEXT NOT NULL,
+          stage TEXT NOT NULL DEFAULT 'shortlisted', next_action TEXT NOT NULL DEFAULT 'Review eligibility',
+          updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          UNIQUE(owner_email, scholarship_id)
+        )`),
+        database().prepare(`CREATE INDEX IF NOT EXISTS applications_owner_idx ON applications(owner_email)`),
+        database().prepare(`CREATE UNIQUE INDEX IF NOT EXISTS applications_owner_scholarship_idx ON applications(owner_email, scholarship_id)`),
       ])
-      .then(() => undefined);
+      .then(() => undefined)
+      .catch((error) => {
+        schemaReady = null;
+        throw error;
+      });
   }
   return schemaReady;
 }

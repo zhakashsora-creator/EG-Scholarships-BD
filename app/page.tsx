@@ -1,4 +1,3 @@
-import { chatGPTSignInPath } from "./chatgpt-auth";
 import { getStudentUser } from "./lib/auth";
 import { scholarships } from "./lib/matching";
 
@@ -7,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const user = await getStudentUser();
   const countries = new Set(scholarships.map((item) => item.country).filter(Boolean)).size;
-  const target = user ? "/dashboard" : chatGPTSignInPath("/dashboard");
+  const target = user ? "/dashboard" : "/login?next=/dashboard";
 
   return (
     <main className="landing-shell">
@@ -19,7 +18,7 @@ export default async function Home() {
         <nav aria-label="Primary navigation">
           <a href="#how">How it works</a>
           <a href="#privacy">Privacy</a>
-          <a className="nav-cta" href={target}>{user ? "Open dashboard" : "Student sign in"}</a>
+          <a className="nav-cta" href={target}>{user ? "Open dashboard" : "Google / email sign in"}</a>
         </nav>
       </header>
 
