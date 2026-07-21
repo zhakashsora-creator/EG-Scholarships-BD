@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { env } from "cloudflare:workers";
 import { getStudentUser } from "../../lib/auth";
 import { scholarships, type StudentProfile } from "../../lib/matching";
 import { database, ensureSchema } from "../../lib/storage";
@@ -24,8 +23,7 @@ export async function GET() {
   });
   let profile: StudentProfile = {};
   try { profile = student?.profileJson ? JSON.parse(student.profileJson) : {}; } catch { profile = {}; }
-  const aiConfigured = Boolean((env as unknown as { OPENAI_API_KEY?: string }).OPENAI_API_KEY);
-  return NextResponse.json({ profile, completeness: student?.completeness ?? 0, matches, applications: applicationRows.results ?? [], progress: progressRows.results ?? [], aiConfigured });
+  return NextResponse.json({ profile, completeness: student?.completeness ?? 0, matches, applications: applicationRows.results ?? [], progress: progressRows.results ?? [], analysisMode: "on-device" });
 }
 
 export async function PUT(request: Request) {

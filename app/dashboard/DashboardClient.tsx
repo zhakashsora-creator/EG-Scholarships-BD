@@ -36,8 +36,8 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
   const [loading, setLoading] = useState(true);
   const [consultantSent, setConsultantSent] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [aiConfigured, setAiConfigured] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [analysisProgress, setAnalysisProgress] = useState("");
 
   async function readJson(response: Response) {
     const payload = await response.json().catch(() => ({}));
@@ -52,7 +52,6 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
         setMatches(workspace.matches ?? []);
         setApplications(workspace.applications ?? []);
         setProgress(workspace.progress ?? []);
-        setAiConfigured(Boolean(workspace.aiConfigured));
         setDocuments(documentData.documents ?? []);
       })
       .catch((error) => setNotice(error instanceof Error ? error.message : "Workspace could not be loaded"))
@@ -103,14 +102,25 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
 
   async function runMatch() {
     setBusy(true);
+    setAnalysisProgress("");
     try {
-      const payload = await readJson(await fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ profile, consentToAiDocumentReview: consent }) }));
+      let localExtraction = null;
+      if (consent && documents.length) {
+        setAnalysisProgress("Preparing on-device document reading");
+        const { analyzeDocumentsOnDevice } = await import("../lib/local-document-analysis");
+        localExtraction = await analyzeDocumentsOnDevice(documents, setAnalysisProgress);
+      }
+      const payload = await readJson(await fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ profile, localExtraction }) }));
       setProfile({ ...emptyProfile, ...payload.profile });
       setMatches(payload.results ?? []);
+      if (payload.analyzedIds?.length) {
+        const reviewed = new Set<string>(payload.analyzedIds);
+        setDocuments((current) => current.map((document) => reviewed.has(document.id) ? { ...document, status: "analyzed" } : document));
+      }
       setNotice(payload.notice);
       setTab("matches");
     } catch (error) { setNotice(error instanceof Error ? error.message : "Profile analysis failed"); }
-    finally { setBusy(false); }
+    finally { setBusy(false); setAnalysisProgress(""); }
   }
 
   async function updateApplication(scholarshipId: string, stage: string) {
@@ -151,7 +161,7 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
         <div className="page-heading"><div><span className="eyebrow">{tab === "overview" ? "YOUR ACTION CENTRE" : "STUDENT WORKSPACE"}</span><h1>{tab === "overview" ? `Welcome back, ${user.name.split(" ")[0]}.` : navItems.find(([id]) => id === tab)?.[2]}</h1><p>{tab === "overview" ? "Your priorities, evidence and application progress in one place." : notice}</p></div>{tab === "overview" && <button className="button primary compact" onClick={() => setTab(completeness < 80 ? "profile" : "matches")}>{completeness < 80 ? "Complete my profile" : "Review my Top Five"}<span>→</span></button>}</div>
         {tab === "overview" && <Overview documents={documents} matches={matches} completeness={completeness} categoryCount={categoryCount} applications={applications} progress={progress} onNavigate={setTab} />}
         {tab === "documents" && <Documents documents={documents} busy={busy} deletingId={deletingId} notice={notice} onUpload={uploadDocument} onDelete={removeDocument} />}
-        {tab === "profile" && <Profile profile={profile} setProfile={setProfile} consent={consent} setConsent={setConsent} documents={documents.length} busy={busy} aiConfigured={aiConfigured} onSave={saveProfile} onRun={runMatch} />}
+        {tab === "profile" && <Profile profile={profile} setProfile={setProfile} consent={consent} setConsent={setConsent} documents={documents.length} busy={busy} analysisProgress={analysisProgress} onSave={saveProfile} onRun={runMatch} />}
         {tab === "matches" && <Matches matches={matches} notice={notice} onProfile={() => setTab("profile")} onConsultant={() => setTab("consultant")} onTrack={(id) => { updateApplication(id, "shortlisted"); setTab("applications"); }} />}
         {tab === "applications" && <Applications matches={matches} applications={applications} onUpdate={updateApplication} />}
         {tab === "consultant" && <Consultant sent={consultantSent} busy={busy} onRequest={requestConsultant} />}
@@ -182,9 +192,33 @@ function Documents({ documents, busy, deletingId, notice, onUpload, onDelete }: 
       <section className="panel"><div className="panel-head"><div><span className="section-kicker">YOUR FILES</span><h2>{documents.length} document{documents.length === 1 ? "" : "s"} stored</h2></div></div><div className="document-list">{documents.length ? documents.map((doc) => <article key={doc.id}><span>{doc.filename.split(".").pop()?.slice(0, 4).toUpperCase() || "FILE"}</span><div><strong>{doc.filename}</strong><small>{friendlyCategory(doc.category)} · {fileSize(doc.sizeBytes)}</small></div><i>{doc.status === "analyzed" ? "AI reviewed" : "Ready"}</i><div className="document-actions"><a href={`/api/documents/download?id=${encodeURIComponent(doc.id)}`} target="_blank" rel="noreferrer">Open</a><button type="button" onClick={() => onDelete(doc.id, doc.filename)} disabled={deletingId === doc.id}>{deletingId === doc.id ? "Removing..." : "Remove"}</button></div></article>) : <div className="empty-state"><b>↑</b><strong>No documents uploaded yet</strong><p>Start with your latest transcript and English-test report.</p></div>}</div></section></div></>;
 }
 
-function Profile({ profile, setProfile, consent, setConsent, documents, busy, aiConfigured, onSave, onRun }: { profile: StudentProfile; setProfile: (profile: StudentProfile) => void; consent: boolean; setConsent: (value: boolean) => void; documents: number; busy: boolean; aiConfigured: boolean; onSave: () => void; onRun: () => void }) {
+function LegacyProfile({ profile, setProfile, consent, setConsent, documents, busy, aiConfigured, onSave, onRun }: { profile: StudentProfile; setProfile: (profile: StudentProfile) => void; consent: boolean; setConsent: (value: boolean) => void; documents: number; busy: boolean; aiConfigured: boolean; onSave: () => void; onRun: () => void }) {
   const update = (key: keyof StudentProfile, value: string | string[]) => setProfile({ ...profile, [key]: value });
   return <section className="panel profile-panel"><div className="profile-intro"><div><span className="section-kicker">PROFILE BUILDER</span><h2>Tell us what a document cannot.</h2><p>Save your preferences first. When you choose AI review, extracted facts are combined with — but never silently replace — your answers.</p></div><span className={`ai-badge ${aiConfigured ? "" : "warning"}`}>{aiConfigured ? "AI document reading available" : "Profile matching available; document AI pending setup"}</span></div><div className="profile-grid"><label>Study level<select value={profile.studyLevel ?? ""} onChange={(e) => update("studyLevel", e.target.value)}><option value="">Select your target</option><option>Bachelor</option><option>Master</option><option>Doctoral</option></select></label><label>Target intake<input value={profile.intake ?? ""} onChange={(e) => update("intake", e.target.value)} placeholder="e.g. September 2027" /></label><label>Subject / field<input value={profile.field ?? ""} onChange={(e) => update("field", e.target.value)} placeholder="e.g. Data Science" /></label><label>Preferred countries<input value={profile.preferredCountries?.join(", ") ?? ""} onChange={(e) => update("preferredCountries", e.target.value.split(",").map((item) => item.trim()).filter(Boolean))} placeholder="UK, Germany, Finland" /></label><label>GPA / academic result<input value={profile.gpa ?? ""} onChange={(e) => update("gpa", e.target.value)} placeholder="e.g. 3.62 / 4.00" /></label><label>English test<select value={profile.englishTest ?? ""} onChange={(e) => update("englishTest", e.target.value)}><option value="">Not taken yet</option><option>IELTS</option><option>TOEFL</option><option>PTE</option><option>Duolingo</option></select></label><label>English score<input value={profile.englishScore ?? ""} onChange={(e) => update("englishScore", e.target.value)} placeholder="e.g. IELTS 7.0" /></label><label>Available budget<input value={profile.budget ?? ""} onChange={(e) => update("budget", e.target.value)} placeholder="BDT amount or range" /></label><label>Work experience<input value={profile.workExperience ?? ""} onChange={(e) => update("workExperience", e.target.value)} placeholder="e.g. 2 years in software" /></label><label>Priorities or constraints<input value={profile.notes ?? ""} onChange={(e) => update("notes", e.target.value)} placeholder="Funding priority, family needs, subject focus" /></label></div><label className={`consent-card ${consent ? "checked" : ""} ${!aiConfigured ? "disabled" : ""}`}><input type="checkbox" checked={consent} disabled={!aiConfigured || documents === 0} onChange={(e) => setConsent(e.target.checked)} /><span>✓</span><div><strong>Use my uploaded documents for this analysis</strong><p>With your consent, recent documents are sent securely to the configured AI provider to extract supported facts. Unnecessary account numbers and unrelated sensitive records should not be uploaded.</p><small>{documents} document{documents === 1 ? "" : "s"} available · {aiConfigured ? "AI service connected" : "AI service not yet connected"}</small></div></label><div className="profile-actions"><button className="button ghost" onClick={onSave} disabled={busy}>{busy ? "Saving..." : "Save profile"}</button><button className="button primary match-button" onClick={onRun} disabled={busy}>{busy ? "Analyzing profile..." : "Generate my Top Five"}<span>✦</span></button></div></section>;
+}
+
+function Profile({ profile, setProfile, consent, setConsent, documents, busy, analysisProgress, onSave, onRun }: { profile: StudentProfile; setProfile: (profile: StudentProfile) => void; consent: boolean; setConsent: (value: boolean) => void; documents: number; busy: boolean; analysisProgress: string; onSave: () => void; onRun: () => void }) {
+  const update = (key: keyof StudentProfile, value: string | string[]) => setProfile({ ...profile, [key]: value });
+  return <section className="panel profile-panel">
+    <div className="profile-intro"><div><span className="section-kicker">PROFILE BUILDER</span><h2>Tell us what a document cannot.</h2><p>Save your preferences first. Optional on-device reading can fill supported facts such as GPA and English-test results without sending document contents to a paid AI service.</p></div><span className="ai-badge">Private on-device document reading</span></div>
+    <div className="profile-grid">
+      <label>Study level<select value={profile.studyLevel ?? ""} onChange={(e) => update("studyLevel", e.target.value)}><option value="">Select your target</option><option>Bachelor</option><option>Master</option><option>Doctoral</option></select></label>
+      <label>Target intake<input value={profile.intake ?? ""} onChange={(e) => update("intake", e.target.value)} placeholder="e.g. September 2027" /></label>
+      <label>Subject / field<input value={profile.field ?? ""} onChange={(e) => update("field", e.target.value)} placeholder="e.g. Data Science" /></label>
+      <label>Preferred countries<input value={profile.preferredCountries?.join(", ") ?? ""} onChange={(e) => update("preferredCountries", e.target.value.split(",").map((item) => item.trim()).filter(Boolean))} placeholder="UK, Germany, Finland" /></label>
+      <label>GPA / academic result<input value={profile.gpa ?? ""} onChange={(e) => update("gpa", e.target.value)} placeholder="e.g. 3.62 / 4.00" /></label>
+      <label>English test<select value={profile.englishTest ?? ""} onChange={(e) => update("englishTest", e.target.value)}><option value="">Not taken yet</option><option>IELTS</option><option>TOEFL</option><option>PTE</option><option>Duolingo</option></select></label>
+      <label>English score<input value={profile.englishScore ?? ""} onChange={(e) => update("englishScore", e.target.value)} placeholder="e.g. IELTS 7.0" /></label>
+      <label>Available budget<input value={profile.budget ?? ""} onChange={(e) => update("budget", e.target.value)} placeholder="BDT amount or range" /></label>
+      <label>Work experience<input value={profile.workExperience ?? ""} onChange={(e) => update("workExperience", e.target.value)} placeholder="e.g. 2 years in software" /></label>
+      <label>Priorities or constraints<input value={profile.notes ?? ""} onChange={(e) => update("notes", e.target.value)} placeholder="Funding priority, family needs, subject focus" /></label>
+    </div>
+    <label className={`consent-card ${consent ? "checked" : ""} ${documents === 0 ? "disabled" : ""}`}>
+      <input type="checkbox" checked={consent} disabled={documents === 0 || busy} onChange={(e) => setConsent(e.target.checked)} />
+      <span>✓</span><div><strong>Read my recent documents on this device</strong><p>PDF, DOCX, JPG and PNG files are read inside your browser. Raw OCR text is not sent to OpenAI or another AI provider. Detected facts only fill blank profile fields and should be checked before applying.</p><small>{documents} document{documents === 1 ? "" : "s"} available · {documents ? "up to 4 recent files can be reviewed" : "upload a document first"}</small>{analysisProgress && <b className="analysis-progress" role="status">{analysisProgress}</b>}</div>
+    </label>
+    <div className="profile-actions"><button className="button ghost" onClick={onSave} disabled={busy}>{busy ? "Working..." : "Save profile"}</button><button className="button primary match-button" onClick={onRun} disabled={busy}>{busy ? analysisProgress || "Analyzing profile..." : "Generate my Top Five"}<span>✦</span></button></div>
+  </section>;
 }
 
 function Matches({ matches, notice, onProfile, onConsultant, onTrack }: { matches: ScholarshipMatch[]; notice: string; onProfile: () => void; onConsultant: () => void; onTrack: (id: string) => void }) {
