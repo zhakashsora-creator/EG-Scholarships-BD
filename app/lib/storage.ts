@@ -36,6 +36,20 @@ export async function ensureSchema() {
           created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
         )`),
         database().prepare(`CREATE INDEX IF NOT EXISTS documents_owner_idx ON documents(owner_email)`),
+        database().prepare(`CREATE TABLE IF NOT EXISTS document_uploads (
+          id TEXT PRIMARY KEY, owner_email TEXT NOT NULL, category TEXT NOT NULL,
+          filename TEXT NOT NULL, mime_type TEXT NOT NULL, size_bytes INTEGER NOT NULL,
+          storage_key TEXT NOT NULL, total_chunks INTEGER NOT NULL,
+          status TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )`),
+        database().prepare(`CREATE INDEX IF NOT EXISTS document_uploads_owner_idx ON document_uploads(owner_email)`),
+        database().prepare(`CREATE TABLE IF NOT EXISTS document_upload_parts (
+          upload_id TEXT NOT NULL, part_index INTEGER NOT NULL, size_bytes INTEGER NOT NULL,
+          storage_key TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          PRIMARY KEY (upload_id, part_index)
+        )`),
+        database().prepare(`CREATE INDEX IF NOT EXISTS document_upload_parts_upload_idx ON document_upload_parts(upload_id)`),
         database().prepare(`CREATE TABLE IF NOT EXISTS matches (
           id TEXT PRIMARY KEY, owner_email TEXT NOT NULL, scholarship_id TEXT NOT NULL,
           rank INTEGER NOT NULL, score INTEGER NOT NULL, rationale TEXT NOT NULL,

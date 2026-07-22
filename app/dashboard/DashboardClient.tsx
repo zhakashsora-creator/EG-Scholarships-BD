@@ -53,7 +53,12 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
 
   async function readJson(response: Response) {
     const payload = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(payload.error ?? "The request could not be completed");
+    if (!response.ok) {
+      const fallback = response.status === 413
+        ? "This file was too large for a single request. Please retry with the secure uploader."
+        : "The request could not be completed";
+      throw new Error(payload.error ?? fallback);
+    }
     return payload;
   }
 
@@ -79,13 +84,41 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
 
   async function uploadDocument(data: FormData) {
     setBusy(true);
+    let uploadId = "";
     try {
-      const payload = await readJson(await fetch("/api/documents", { method: "POST", body: data }));
+      const file = data.get("file");
+      if (!(file instanceof File)) throw new Error("Choose a document to upload");
+      const category = String(data.get("category") ?? "other");
+      const started = await readJson(await fetch("/api/document-uploads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ category, filename: file.name, mimeType: file.type, sizeBytes: file.size }),
+      }));
+      uploadId = started.uploadId;
+      for (let index = 0; index < started.totalChunks; index += 1) {
+        const from = index * started.chunkSize;
+        const chunk = file.slice(from, Math.min(from + started.chunkSize, file.size));
+        await readJson(await fetch(`/api/document-uploads/chunk?uploadId=${encodeURIComponent(uploadId)}&index=${index}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/octet-stream" },
+          body: chunk,
+        }));
+        setNotice(`Uploading ${file.name} securely — ${Math.round(((index + 1) / started.totalChunks) * 100)}%`);
+      }
+      const payload = await readJson(await fetch("/api/document-uploads/complete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ uploadId }),
+      }));
+      uploadId = "";
       setDocuments((current) => [payload.document, ...current]);
       setNotice(`${payload.document.filename} uploaded securely. It is ready for profile analysis.`);
       return true;
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Upload failed");
+      if (uploadId) {
+        void fetch(`/api/document-uploads?uploadId=${encodeURIComponent(uploadId)}`, { method: "DELETE" });
+      }
       return false;
     } finally { setBusy(false); }
   }

@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const students = sqliteTable("students", {
   email: text("email").primaryKey(),
@@ -37,6 +37,28 @@ export const documents = sqliteTable("documents", {
   status: text("status").notNull().default("uploaded"),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
+
+export const documentUploads = sqliteTable("document_uploads", {
+  id: text("id").primaryKey(),
+  ownerEmail: text("owner_email").notNull(),
+  category: text("category").notNull(),
+  filename: text("filename").notNull(),
+  mimeType: text("mime_type").notNull(),
+  sizeBytes: integer("size_bytes").notNull(),
+  storageKey: text("storage_key").notNull(),
+  totalChunks: integer("total_chunks").notNull(),
+  status: text("status").notNull().default("pending"),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const documentUploadParts = sqliteTable("document_upload_parts", {
+  uploadId: text("upload_id").notNull(),
+  partIndex: integer("part_index").notNull(),
+  sizeBytes: integer("size_bytes").notNull(),
+  storageKey: text("storage_key").notNull(),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [primaryKey({ columns: [table.uploadId, table.partIndex] })]);
 
 export const matches = sqliteTable("matches", {
   id: text("id").primaryKey(),
