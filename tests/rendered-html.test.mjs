@@ -18,9 +18,13 @@ test("EG Scholarships public landing source is complete", async () => {
 
 test("catalogue contains normalized, source-backed opportunities", async () => {
   const rows = JSON.parse(await readFile(new URL("../app/data/scholarships.json", import.meta.url), "utf8"));
-  assert.equal(rows.length, 116);
+  assert.equal(rows.length, 469);
   assert.ok(rows.every((row) => row.name && row.country && /^https?:\/\//.test(row.officialSource)));
+  assert.equal(new Set(rows.map((row) => row.id)).size, rows.length);
   assert.ok(rows.some((row) => /Erasmus Mundus/i.test(row.name)));
+  for (const source of ["UK Scholarship", "Europe Scholarship", "USA Scholarship", "Middle East Scholarship"]) {
+    assert.ok(rows.some((row) => row.sourceDataset.includes(source)), `missing imported source: ${source}`);
+  }
 });
 
 test("student access supports email-and-password sign in, registration and recovery", async () => {
