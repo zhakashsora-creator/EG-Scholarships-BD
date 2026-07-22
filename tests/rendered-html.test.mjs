@@ -22,3 +22,13 @@ test("catalogue contains normalized, source-backed opportunities", async () => {
   assert.ok(rows.every((row) => row.name && row.country && /^https?:\/\//.test(row.officialSource)));
   assert.ok(rows.some((row) => /Erasmus Mundus/i.test(row.name)));
 });
+
+test("student access only presents the enabled email sign-in method", async () => {
+  const [authClient, loginPage, landingPage] = await Promise.all([
+    readFile(new URL("../app/login/AuthClient.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/login/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+  ]);
+  assert.match(authClient, /Email me a sign-in link/);
+  assert.doesNotMatch(`${authClient}${loginPage}${landingPage}`, /signInWithOAuth|Continue with Google|Google \/ email sign in/);
+});

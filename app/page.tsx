@@ -19,7 +19,7 @@ export default async function Home() {
         <nav aria-label="Primary navigation">
           <a href="#how">How it works</a>
           <a href="#privacy">Privacy</a>
-          <a className="nav-cta" href={target}>{user ? "Open dashboard" : "Google / email sign in"}</a>
+          <a className="nav-cta" href={target}>{user ? "Open dashboard" : "Email sign in"}</a>
         </nav>
       </header>
 
@@ -63,14 +63,14 @@ export default async function Home() {
           {[
             ["01", "Build your profile", "Add study level, subject, destinations, intake, budget and English-test position."],
             ["02", "Upload documents", "Keep academic, language, financial and supporting records in private student storage."],
-            ["03", "Review extracted facts", "AI structures supported facts and flags missing information for your confirmation."],
+            ["03", "Review extracted facts", "On-device document reading structures supported facts and flags missing information for your confirmation."],
             ["04", "Receive your Top Five", "See match reasoning, gaps, official sources, deadlines and consultant next steps."],
           ].map(([number, title, text]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}
         </div>
       </section>
 
       <section id="privacy" className="privacy-strip">
-        <div><span className="privacy-icon">⌾</span><div><strong>Private by design</strong><p>Your files are isolated per signed-in student. AI document review happens only after explicit consent.</p></div></div>
+        <div><span className="privacy-icon">⌾</span><div><strong>Private by design</strong><p>Your files are isolated per signed-in student. Document reading runs in your browser only after explicit consent.</p></div></div>
         <div><span className="privacy-icon">✓</span><div><strong>Evidence, not promises</strong><p>Every result keeps its official source and verification note. Matches support decisions; they do not guarantee awards or admission.</p></div></div>
         <a href={target}>Enter student workspace →</a>
       </section>

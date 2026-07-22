@@ -6,17 +6,8 @@ import { FormEvent, useMemo, useState } from "react";
 export default function AuthClient({ config, next }: { config: { url: string; anonKey: string } | null; next: string }) {
   const supabase = useMemo(() => config ? createBrowserClient(config.url, config.anonKey) : null, [config]);
   const [email, setEmail] = useState("");
-  const [busy, setBusy] = useState<"google" | "email" | null>(null);
+  const [busy, setBusy] = useState<"email" | null>(null);
   const [message, setMessage] = useState("");
-
-  async function signInWithGoogle() {
-    if (!supabase) return;
-    setBusy("google");
-    setMessage("");
-    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
-    const { error } = await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo } });
-    if (error) { setMessage(error.message); setBusy(null); }
-  }
 
   async function sendEmailLink(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -37,10 +28,6 @@ export default function AuthClient({ config, next }: { config: { url: string; an
   }
 
   return <div className="auth-actions">
-    <button className="google-button" type="button" onClick={signInWithGoogle} disabled={Boolean(busy)}>
-      <span className="google-mark">G</span>{busy === "google" ? "Opening Google..." : "Continue with Google"}
-    </button>
-    <div className="auth-divider"><span>or continue with email</span></div>
     <form onSubmit={sendEmailLink}>
       <label>Email address<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="student@example.com" required autoComplete="email" /></label>
       <button className="button primary" disabled={Boolean(busy)}>{busy === "email" ? "Sending secure link..." : "Email me a sign-in link"}</button>
