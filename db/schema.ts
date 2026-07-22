@@ -10,6 +10,22 @@ export const students = sqliteTable("students", {
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
+export const studentAccounts = sqliteTable("student_accounts", {
+  email: text("email").primaryKey(),
+  fullName: text("full_name").notNull(),
+  address: text("address").notNull(),
+  mobile: text("mobile").notNull(),
+  dateOfBirth: text("date_of_birth"),
+  nationality: text("nationality").notNull().default("Bangladesh"),
+  currentInstitution: text("current_institution"),
+  photoStorageKey: text("photo_storage_key"),
+  photoMimeType: text("photo_mime_type"),
+  photoVersion: integer("photo_version").notNull().default(0),
+  onboardingComplete: integer("onboarding_complete", { mode: "boolean" }).notNull().default(false),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const documents = sqliteTable("documents", {
   id: text("id").primaryKey(),
   ownerEmail: text("owner_email").notNull(),

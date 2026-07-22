@@ -32,3 +32,18 @@ test("student access only presents the enabled email sign-in method", async () =
   assert.match(authClient, /Email me a sign-in link/);
   assert.doesNotMatch(`${authClient}${loginPage}${landingPage}`, /signInWithOAuth|Continue with Google|Google \/ email sign in/);
 });
+
+test("first-login account setup requires only core contact fields and remains editable", async () => {
+  const [dashboard, accountRoute, accountMigration] = await Promise.all([
+    readFile(new URL("../app/dashboard/DashboardClient.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/account/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../drizzle/0002_old_peter_parker.sql", import.meta.url), "utf8"),
+  ]);
+  assert.match(dashboard, /Create my student account/);
+  assert.match(dashboard, /Save account changes/);
+  assert.match(dashboard, /Profile photo/);
+  assert.match(dashboard, /Present address/);
+  assert.match(accountRoute, /normalizeBangladeshMobile/);
+  assert.match(accountRoute, /MAX_PHOTO_BYTES/);
+  assert.match(accountMigration, /CREATE TABLE `student_accounts`/);
+});

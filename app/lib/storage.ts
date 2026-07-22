@@ -21,6 +21,14 @@ export async function ensureSchema() {
           completeness INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
           updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
         )`),
+        database().prepare(`CREATE TABLE IF NOT EXISTS student_accounts (
+          email TEXT PRIMARY KEY, full_name TEXT NOT NULL, address TEXT NOT NULL, mobile TEXT NOT NULL,
+          date_of_birth TEXT, nationality TEXT NOT NULL DEFAULT 'Bangladesh', current_institution TEXT,
+          photo_storage_key TEXT, photo_mime_type TEXT, photo_version INTEGER NOT NULL DEFAULT 0,
+          onboarding_complete INTEGER NOT NULL DEFAULT 0,
+          created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )`),
         database().prepare(`CREATE TABLE IF NOT EXISTS documents (
           id TEXT PRIMARY KEY, owner_email TEXT NOT NULL, category TEXT NOT NULL,
           filename TEXT NOT NULL, mime_type TEXT NOT NULL, size_bytes INTEGER NOT NULL,

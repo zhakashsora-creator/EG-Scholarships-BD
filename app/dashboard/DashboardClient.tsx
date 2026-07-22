@@ -5,10 +5,21 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { scholarships, type ScholarshipMatch, type StudentProfile } from "../lib/matching";
 
-type Tab = "overview" | "documents" | "profile" | "matches" | "applications" | "consultant";
+type Tab = "overview" | "account" | "documents" | "profile" | "matches" | "applications" | "consultant";
 type DocumentItem = { id: string; category: string; filename: string; mimeType?: string; sizeBytes: number; status: string; createdAt?: string };
 type ApplicationItem = { scholarshipId: string; stage: string; nextAction: string; updatedAt?: string };
 type ProgressItem = { stage: string; note: string; createdAt: string };
+type AccountProfile = {
+  fullName: string;
+  address: string;
+  mobile: string;
+  dateOfBirth: string;
+  nationality: string;
+  currentInstitution: string;
+  hasPhoto: boolean;
+  photoVersion: number;
+  onboardingComplete: boolean;
+};
 
 const emptyProfile: StudentProfile = { studyLevel: "", preferredCountries: [], field: "", gpa: "", englishTest: "", englishScore: "", budget: "", intake: "", workExperience: "", notes: "" };
 const categories = [
@@ -25,6 +36,7 @@ function friendlyCategory(value: string) { return categories.find(([id]) => id =
 
 export default function DashboardClient({ user, signOutPath }: { user: { name: string; email: string }; signOutPath: string }) {
   const [tab, setTab] = useState<Tab>("overview");
+  const [account, setAccount] = useState<AccountProfile>({ fullName: user.name, address: "", mobile: "", dateOfBirth: "", nationality: "Bangladesh", currentInstitution: "", hasPhoto: false, photoVersion: 0, onboardingComplete: false });
   const [profile, setProfile] = useState<StudentProfile>(emptyProfile);
   const [matches, setMatches] = useState<ScholarshipMatch[]>([]);
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
@@ -48,6 +60,7 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
   useEffect(() => {
     Promise.all([fetch("/api/workspace").then(readJson), fetch("/api/documents").then(readJson)])
       .then(([workspace, documentData]) => {
+        setAccount(workspace.account ?? { fullName: user.name, address: "", mobile: "", dateOfBirth: "", nationality: "Bangladesh", currentInstitution: "", hasPhoto: false, photoVersion: 0, onboardingComplete: false });
         setProfile({ ...emptyProfile, ...(workspace.profile ?? {}) });
         setMatches(workspace.matches ?? []);
         setApplications(workspace.applications ?? []);
@@ -100,6 +113,19 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
     finally { setBusy(false); }
   }
 
+  async function saveAccount(data: FormData) {
+    setBusy(true);
+    try {
+      const payload = await readJson(await fetch("/api/account", { method: "PUT", body: data }));
+      setAccount(payload.account);
+      setNotice("Account information saved.");
+      return true;
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Account information could not be saved");
+      return false;
+    } finally { setBusy(false); }
+  }
+
   async function runMatch() {
     setBusy(true);
     setAnalysisProgress("");
@@ -142,8 +168,9 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
     finally { setBusy(false); }
   }
 
-  const navItems: Array<[Tab, string, string]> = [["overview", "01", "Overview"], ["documents", "02", "Documents"], ["profile", "03", "My profile"], ["matches", "04", "Top Five"], ["applications", "05", "Applications"], ["consultant", "06", "Consultant"]];
+  const navItems: Array<[Tab, string, string]> = [["overview", "01", "Overview"], ["account", "02", "My account"], ["documents", "03", "Documents"], ["profile", "04", "Study profile"], ["matches", "05", "Top Five"], ["applications", "06", "Applications"], ["consultant", "07", "Consultant"]];
   if (loading) return <main className="workspace-loading"><img className="brand-logo" src="/egc-emblem.png" alt="Excellence Global Consultancy" /><strong>Preparing your secure workspace</strong><i /></main>;
+  if (!account.onboardingComplete) return <AccountSetup account={account} email={user.email} busy={busy} notice={notice} onSave={saveAccount} signOutPath={signOutPath} />;
 
   return <main className="dashboard-shell">
     <aside className={`dashboard-sidebar ${sidebarOpen ? "open" : ""}`}>
@@ -156,10 +183,11 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
     </aside>
 
     <section className="dashboard-content">
-      <header className="dashboard-topbar"><button className="menu-button" onClick={() => setSidebarOpen(true)} aria-label="Open menu">☰</button><div><small>EG SCHOLARSHIPS BD</small><strong>{navItems.find(([id]) => id === tab)?.[2]}</strong></div><div className="top-actions"><div className="secure-pill"><span /> Secure workspace</div><div className="user-chip"><span>{initials(user.name)}</span><div><b>{user.name}</b><small>{user.email}</small></div></div><a href={signOutPath}>Sign out</a></div></header>
+      <header className="dashboard-topbar"><button className="menu-button" onClick={() => setSidebarOpen(true)} aria-label="Open menu">☰</button><div><small>EG SCHOLARSHIPS BD</small><strong>{navItems.find(([id]) => id === tab)?.[2]}</strong></div><div className="top-actions"><div className="secure-pill"><span /> Secure workspace</div><button className="user-chip" onClick={() => setTab("account")} aria-label="Edit my account">{account.hasPhoto ? <img src={`/api/account/photo?v=${account.photoVersion}`} alt="" /> : <span>{initials(account.fullName)}</span>}<div><b>{account.fullName}</b><small>{user.email}</small></div></button><a href={signOutPath}>Sign out</a></div></header>
       <div className="dashboard-body">
-        <div className="page-heading"><div><span className="eyebrow">{tab === "overview" ? "YOUR ACTION CENTRE" : "STUDENT WORKSPACE"}</span><h1>{tab === "overview" ? `Welcome back, ${user.name.split(" ")[0]}.` : navItems.find(([id]) => id === tab)?.[2]}</h1><p>{tab === "overview" ? "Your priorities, evidence and application progress in one place." : notice}</p></div>{tab === "overview" && <button className="button primary compact" onClick={() => setTab(completeness < 80 ? "profile" : "matches")}>{completeness < 80 ? "Complete my profile" : "Review my Top Five"}<span>→</span></button>}</div>
+        <div className="page-heading"><div><span className="eyebrow">{tab === "overview" ? "YOUR ACTION CENTRE" : "STUDENT WORKSPACE"}</span><h1>{tab === "overview" ? `Welcome back, ${account.fullName.split(" ")[0]}.` : navItems.find(([id]) => id === tab)?.[2]}</h1><p>{tab === "overview" ? "Your priorities, evidence and application progress in one place." : notice}</p></div>{tab === "overview" && <button className="button primary compact" onClick={() => setTab(completeness < 80 ? "profile" : "matches")}>{completeness < 80 ? "Complete my profile" : "Review my Top Five"}<span>→</span></button>}</div>
         {tab === "overview" && <Overview documents={documents} matches={matches} completeness={completeness} categoryCount={categoryCount} applications={applications} progress={progress} onNavigate={setTab} />}
+        {tab === "account" && <AccountEditor account={account} email={user.email} busy={busy} notice={notice} onSave={saveAccount} />}
         {tab === "documents" && <Documents documents={documents} busy={busy} deletingId={deletingId} notice={notice} onUpload={uploadDocument} onDelete={removeDocument} />}
         {tab === "profile" && <Profile profile={profile} setProfile={setProfile} consent={consent} setConsent={setConsent} documents={documents.length} busy={busy} analysisProgress={analysisProgress} onSave={saveProfile} onRun={runMatch} />}
         {tab === "matches" && <Matches matches={matches} notice={notice} onProfile={() => setTab("profile")} onConsultant={() => setTab("consultant")} onTrack={(id) => { updateApplication(id, "shortlisted"); setTab("applications"); }} />}
@@ -168,6 +196,67 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
       </div>
     </section>
   </main>;
+}
+
+function AccountSetup({ account, email, busy, notice, onSave, signOutPath }: { account: AccountProfile; email: string; busy: boolean; notice: string; onSave: (data: FormData) => Promise<boolean>; signOutPath: string }) {
+  return <main className="onboarding-shell">
+    <header className="onboarding-header"><Link className="brand" href="/"><img className="brand-logo" src="/egc-emblem.png" alt="Excellence Global Consultancy" /><span><strong>EG Scholarships</strong><small>Student account setup</small></span></Link><a href={signOutPath}>Sign out</a></header>
+    <section className="onboarding-card">
+      <div className="onboarding-intro"><span className="section-kicker">WELCOME TO YOUR WORKSPACE</span><h1>Let’s set up your student account.</h1><p>These details help EG Consultancy identify your profile and contact you about your scholarship journey. Only your name, address and Bangladesh mobile number are required.</p><ol><li className="active"><b>1</b><span><strong>Account details</strong><small>Tell us who you are</small></span></li><li><b>2</b><span><strong>Study profile</strong><small>Add academic preferences</small></span></li><li><b>3</b><span><strong>Top Five</strong><small>Review your strongest options</small></span></li></ol></div>
+      <div className="onboarding-form-wrap"><AccountForm account={account} email={email} busy={busy} notice={notice} onSave={onSave} submitLabel="Create my student account" /></div>
+    </section>
+    <p className="onboarding-foot">Your account information is private to your signed-in workspace and EG Consultancy support workflow.</p>
+  </main>;
+}
+
+function AccountEditor({ account, email, busy, notice, onSave }: { account: AccountProfile; email: string; busy: boolean; notice: string; onSave: (data: FormData) => Promise<boolean> }) {
+  return <section className="panel account-panel"><div className="profile-intro"><div><span className="section-kicker">ACCOUNT INFORMATION</span><h2>Keep your student details current.</h2><p>Edit your contact information or replace your profile photo at any time. Your sign-in email remains read-only.</p></div><span className="privacy-chip">Private to your account</span></div><AccountForm account={account} email={email} busy={busy} notice={notice} onSave={onSave} submitLabel="Save account changes" /></section>;
+}
+
+function AccountForm({ account, email, busy, notice, onSave, submitLabel }: { account: AccountProfile; email: string; busy: boolean; notice: string; onSave: (data: FormData) => Promise<boolean>; submitLabel: string }) {
+  const [draft, setDraft] = useState(account);
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+
+  useEffect(() => setDraft(account), [account]);
+  useEffect(() => {
+    if (!photo) { setPhotoPreview(null); return; }
+    const preview = URL.createObjectURL(photo);
+    setPhotoPreview(preview);
+    return () => URL.revokeObjectURL(preview);
+  }, [photo]);
+
+  function update(key: keyof AccountProfile, value: string) {
+    setDraft((current) => ({ ...current, [key]: value }));
+  }
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData();
+    data.set("fullName", draft.fullName);
+    data.set("address", draft.address);
+    data.set("mobile", draft.mobile);
+    data.set("dateOfBirth", draft.dateOfBirth);
+    data.set("nationality", draft.nationality);
+    data.set("currentInstitution", draft.currentInstitution);
+    if (photo) data.set("photo", photo);
+    if (await onSave(data)) setPhoto(null);
+  }
+
+  const photoSource = photoPreview ?? (account.hasPhoto ? `/api/account/photo?v=${account.photoVersion}` : null);
+  return <form className="account-form" onSubmit={submit}>
+    <div className="account-photo-field"><div className="account-avatar">{photoSource ? <img src={photoSource} alt="Profile preview" /> : <span>{initials(draft.fullName || email)}</span>}</div><div><strong>Profile photo</strong><p>Optional · JPG, PNG or WebP · maximum 5 MB</p><label className="photo-picker">{photo ? "Choose a different photo" : account.hasPhoto ? "Replace photo" : "Upload a photo"}<input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => setPhoto(event.target.files?.[0] ?? null)} /></label>{photo && <small>{photo.name} selected</small>}</div></div>
+    <div className="account-fields">
+      <label><span>Full name <b>*</b></span><input value={draft.fullName} onChange={(event) => update("fullName", event.target.value)} autoComplete="name" required maxLength={120} placeholder="Student's full name" /></label>
+      <label>Sign-in email<input value={email} readOnly aria-readonly="true" /></label>
+      <label className="wide"><span>Present address <b>*</b></span><textarea value={draft.address} onChange={(event) => update("address", event.target.value)} autoComplete="street-address" required maxLength={300} placeholder="House, road, area, city and postcode" /></label>
+      <label><span>Bangladesh mobile number <b>*</b></span><input value={draft.mobile} onChange={(event) => update("mobile", event.target.value)} autoComplete="tel" inputMode="tel" required maxLength={30} placeholder="01712-345678" /></label>
+      <label>Date of birth <small>Optional</small><input type="date" value={draft.dateOfBirth} onChange={(event) => update("dateOfBirth", event.target.value)} /></label>
+      <label>Nationality <small>Optional</small><input value={draft.nationality} onChange={(event) => update("nationality", event.target.value)} maxLength={80} placeholder="Bangladesh" /></label>
+      <label>Current institution <small>Optional</small><input value={draft.currentInstitution} onChange={(event) => update("currentInstitution", event.target.value)} maxLength={160} placeholder="School, college or university" /></label>
+    </div>
+    <div className="account-submit"><p className="form-notice" role="status">{notice}</p><button className="button primary" disabled={busy}>{busy ? "Saving securely..." : submitLabel}<span>→</span></button></div>
+  </form>;
 }
 
 function Overview({ documents, matches, completeness, categoryCount, applications, progress, onNavigate }: { documents: DocumentItem[]; matches: ScholarshipMatch[]; completeness: number; categoryCount: number; applications: ApplicationItem[]; progress: ProgressItem[]; onNavigate: (tab: Tab) => void }) {
