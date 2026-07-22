@@ -19,7 +19,7 @@ export default async function Home() {
         <nav aria-label="Primary navigation">
           <a href="#how">How it works</a>
           <a href="#privacy">Privacy</a>
-          <a className="nav-cta" href={target}>{user ? "Open dashboard" : "Email sign in"}</a>
+          <a className="nav-cta" href={target}>{user ? "Open dashboard" : "Sign in or sign up"}</a>
         </nav>
       </header>
 
@@ -29,7 +29,7 @@ export default async function Home() {
           <h1>Your scholarship search, finally built around <em>your profile.</em></h1>
           <p>Upload your academic, English-language and funding documents once. EG Scholarships builds a structured profile, compares it with our curated funding database, and gives you a consultant-ready Top Five.</p>
           <div className="hero-actions">
-            <a className="button primary" href={target}>{user ? "Continue to your dashboard" : "Sign in and build my profile"}<span>→</span></a>
+            <a className="button primary" href={target}>{user ? "Continue to your dashboard" : "Create or access my account"}<span>→</span></a>
             <a className="button ghost" href="#how">See the process</a>
           </div>
           <div className="trust-row">
