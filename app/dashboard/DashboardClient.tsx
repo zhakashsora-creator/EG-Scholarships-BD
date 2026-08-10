@@ -3,11 +3,27 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import ThemeToggle from "../components/ThemeToggle";
 import { scholarships, type ScholarshipMatch, type StudentProfile } from "../lib/matching";
 
 type Tab = "overview" | "account" | "documents" | "profile" | "matches" | "applications" | "consultant";
 type DocumentItem = { id: string; category: string; filename: string; mimeType?: string; sizeBytes: number; status: string; createdAt?: string };
-type ApplicationItem = { scholarshipId: string; stage: string; nextAction: string; updatedAt?: string };
+type ApplicationWorkflow = {
+  applicationSubmitted?: boolean;
+  admissionOfferReceived?: boolean;
+  visaApplicationSubmitted?: boolean;
+  visaDecisionReceived?: boolean;
+  tuitionPaid?: string;
+  outstandingFees?: string;
+  flightBooked?: boolean;
+  flightDetails?: string;
+  insuranceArranged?: boolean;
+  insuranceFee?: string;
+  accommodationArranged?: boolean;
+  accommodationDetails?: string;
+  notes?: string;
+};
+type ApplicationItem = { scholarshipId: string; stage: string; nextAction: string; workflow?: ApplicationWorkflow; updatedAt?: string };
 type ProgressItem = { stage: string; note: string; createdAt: string };
 type AccountProfile = {
   fullName: string;
@@ -34,8 +50,8 @@ function initials(name: string) { return name.split(/\s+/).map((part) => part[0]
 function fileSize(bytes: number) { return bytes > 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`; }
 function friendlyCategory(value: string) { return categories.find(([id]) => id === value)?.[1] ?? value; }
 
-export default function DashboardClient({ user, signOutPath }: { user: { name: string; email: string }; signOutPath: string }) {
-  const [tab, setTab] = useState<Tab>("overview");
+export default function DashboardClient({ user, signOutPath, initialTab = "overview" }: { user: { name: string; email: string }; signOutPath: string; initialTab?: string }) {
+  const [tab, setTab] = useState<Tab>(initialTab as Tab);
   const [account, setAccount] = useState<AccountProfile>({ fullName: user.name, address: "", mobile: "", dateOfBirth: "", nationality: "Bangladesh", currentInstitution: "", hasPhoto: false, photoVersion: 0, onboardingComplete: false });
   const [profile, setProfile] = useState<StudentProfile>(emptyProfile);
   const [matches, setMatches] = useState<ScholarshipMatch[]>([]);
@@ -74,7 +90,7 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
       })
       .catch((error) => setNotice(error instanceof Error ? error.message : "Workspace could not be loaded"))
       .finally(() => setLoading(false));
-  }, []);
+  }, [user.name]);
 
   const completeness = useMemo(() => {
     const fields = [profile.studyLevel, profile.field, profile.gpa, profile.englishScore, profile.intake, profile.preferredCountries?.length];
@@ -182,12 +198,19 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
     finally { setBusy(false); setAnalysisProgress(""); }
   }
 
-  async function updateApplication(scholarshipId: string, stage: string) {
-    const actions: Record<string, string> = { shortlisted: "Review eligibility", preparing: "Complete document checklist", submitted: "Track university response", decision: "Review offer and funding" };
+  async function updateApplication(scholarshipId: string, stage: string, workflow?: ApplicationWorkflow) {
+    const actions: Record<string, string> = {
+      shortlisted: "Review eligibility and the live deadline",
+      application: "Complete and submit the scholarship application",
+      admission: "Review the admission offer and award terms",
+      visa: "Complete visa, biometrics and health requirements",
+      predeparture: "Finalize fees, insurance, flight and accommodation",
+      arrived: "Complete enrolment and arrival formalities",
+    };
     try {
-      const payload = await readJson(await fetch("/api/applications", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scholarshipId, stage, nextAction: actions[stage] }) }));
+      const payload = await readJson(await fetch("/api/applications", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scholarshipId, stage, nextAction: actions[stage], workflow }) }));
       setApplications((current) => [payload.application, ...current.filter((item) => item.scholarshipId !== scholarshipId)]);
-      setNotice("Application stage updated.");
+      setNotice("Application plan saved.");
     } catch (error) { setNotice(error instanceof Error ? error.message : "Application could not be updated"); }
   }
 
@@ -216,7 +239,7 @@ export default function DashboardClient({ user, signOutPath }: { user: { name: s
     </aside>
 
     <section className="dashboard-content">
-      <header className="dashboard-topbar"><button className="menu-button" onClick={() => setSidebarOpen(true)} aria-label="Open menu">☰</button><div><small>EG SCHOLARSHIPS BD</small><strong>{navItems.find(([id]) => id === tab)?.[2]}</strong></div><div className="top-actions"><div className="secure-pill"><span /> Secure workspace</div><button className="user-chip" onClick={() => setTab("account")} aria-label="Edit my account">{account.hasPhoto ? <img src={`/api/account/photo?v=${account.photoVersion}`} alt="" /> : <span>{initials(account.fullName)}</span>}<div><b>{account.fullName}</b><small>{user.email}</small></div></button><a href={signOutPath}>Sign out</a></div></header>
+      <header className="dashboard-topbar"><button className="menu-button" onClick={() => setSidebarOpen(true)} aria-label="Open menu">☰</button><div><small>EG SCHOLARSHIPS BD</small><strong>{navItems.find(([id]) => id === tab)?.[2]}</strong></div><div className="top-actions"><div className="secure-pill"><span /> Secure workspace</div><ThemeToggle compact /><button className="user-chip" onClick={() => setTab("account")} aria-label="Edit my account">{account.hasPhoto ? <img src={`/api/account/photo?v=${account.photoVersion}`} alt="" /> : <span>{initials(account.fullName)}</span>}<div><b>{account.fullName}</b><small>{user.email}</small></div></button><a href={signOutPath}>Sign out</a></div></header>
       <div className="dashboard-body">
         <div className="page-heading"><div><span className="eyebrow">{tab === "overview" ? "YOUR ACTION CENTRE" : "STUDENT WORKSPACE"}</span><h1>{tab === "overview" ? `Welcome back, ${account.fullName.split(" ")[0]}.` : navItems.find(([id]) => id === tab)?.[2]}</h1><p>{tab === "overview" ? "Your priorities, evidence and application progress in one place." : notice}</p></div>{tab === "overview" && <button className="button primary compact" onClick={() => setTab(completeness < 80 ? "profile" : "matches")}>{completeness < 80 ? "Complete my profile" : "Review my Top Five"}<span>→</span></button>}</div>
         {tab === "overview" && <Overview documents={documents} matches={matches} completeness={completeness} categoryCount={categoryCount} applications={applications} progress={progress} onNavigate={setTab} />}
@@ -251,14 +274,6 @@ function AccountForm({ account, email, busy, notice, onSave, submitLabel }: { ac
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  useEffect(() => setDraft(account), [account]);
-  useEffect(() => {
-    if (!photo) { setPhotoPreview(null); return; }
-    const preview = URL.createObjectURL(photo);
-    setPhotoPreview(preview);
-    return () => URL.revokeObjectURL(preview);
-  }, [photo]);
-
   function update(key: keyof AccountProfile, value: string) {
     setDraft((current) => ({ ...current, [key]: value }));
   }
@@ -273,12 +288,22 @@ function AccountForm({ account, email, busy, notice, onSave, submitLabel }: { ac
     data.set("nationality", draft.nationality);
     data.set("currentInstitution", draft.currentInstitution);
     if (photo) data.set("photo", photo);
-    if (await onSave(data)) setPhoto(null);
+    if (await onSave(data)) {
+      if (photoPreview) URL.revokeObjectURL(photoPreview);
+      setPhoto(null);
+      setPhotoPreview(null);
+    }
+  }
+
+  function choosePhoto(file: File | null) {
+    if (photoPreview) URL.revokeObjectURL(photoPreview);
+    setPhoto(file);
+    setPhotoPreview(file ? URL.createObjectURL(file) : null);
   }
 
   const photoSource = photoPreview ?? (account.hasPhoto ? `/api/account/photo?v=${account.photoVersion}` : null);
   return <form className="account-form" onSubmit={submit}>
-    <div className="account-photo-field"><div className="account-avatar">{photoSource ? <img src={photoSource} alt="Profile preview" /> : <span>{initials(draft.fullName || email)}</span>}</div><div><strong>Profile photo</strong><p>Optional · JPG, PNG or WebP · maximum 5 MB</p><label className="photo-picker">{photo ? "Choose a different photo" : account.hasPhoto ? "Replace photo" : "Upload a photo"}<input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => setPhoto(event.target.files?.[0] ?? null)} /></label>{photo && <small>{photo.name} selected</small>}</div></div>
+    <div className="account-photo-field"><div className="account-avatar">{photoSource ? <img src={photoSource} alt="Profile preview" /> : <span>{initials(draft.fullName || email)}</span>}</div><div><strong>Profile photo</strong><p>Optional · JPG, PNG or WebP · maximum 5 MB</p><label className="photo-picker">{photo ? "Choose a different photo" : account.hasPhoto ? "Replace photo" : "Upload a photo"}<input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => choosePhoto(event.target.files?.[0] ?? null)} /></label>{photo && <small>{photo.name} selected</small>}</div></div>
     <div className="account-fields">
       <label><span>Full name <b>*</b></span><input value={draft.fullName} onChange={(event) => update("fullName", event.target.value)} autoComplete="name" required maxLength={120} placeholder="Student's full name" /></label>
       <label>Sign-in email<input value={email} readOnly aria-readonly="true" /></label>
@@ -314,6 +339,8 @@ function Documents({ documents, busy, deletingId, notice, onUpload, onDelete }: 
       <section className="panel"><div className="panel-head"><div><span className="section-kicker">YOUR FILES</span><h2>{documents.length} document{documents.length === 1 ? "" : "s"} stored</h2></div></div><div className="document-list">{documents.length ? documents.map((doc) => <article key={doc.id}><span>{doc.filename.split(".").pop()?.slice(0, 4).toUpperCase() || "FILE"}</span><div><strong>{doc.filename}</strong><small>{friendlyCategory(doc.category)} · {fileSize(doc.sizeBytes)}</small></div><i>{doc.status === "analyzed" ? "AI reviewed" : "Ready"}</i><div className="document-actions"><a href={`/api/documents/download?id=${encodeURIComponent(doc.id)}`} target="_blank" rel="noreferrer">Open</a><button type="button" onClick={() => onDelete(doc.id, doc.filename)} disabled={deletingId === doc.id}>{deletingId === doc.id ? "Removing..." : "Remove"}</button></div></article>) : <div className="empty-state"><b>↑</b><strong>No documents uploaded yet</strong><p>Start with your latest transcript and English-test report.</p></div>}</div></section></div></>;
 }
 
+// Kept temporarily for compatibility with earlier embedded portal builds.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function LegacyProfile({ profile, setProfile, consent, setConsent, documents, busy, aiConfigured, onSave, onRun }: { profile: StudentProfile; setProfile: (profile: StudentProfile) => void; consent: boolean; setConsent: (value: boolean) => void; documents: number; busy: boolean; aiConfigured: boolean; onSave: () => void; onRun: () => void }) {
   const update = (key: keyof StudentProfile, value: string | string[]) => setProfile({ ...profile, [key]: value });
   return <section className="panel profile-panel"><div className="profile-intro"><div><span className="section-kicker">PROFILE BUILDER</span><h2>Tell us what a document cannot.</h2><p>Save your preferences first. When you choose AI review, extracted facts are combined with — but never silently replace — your answers.</p></div><span className={`ai-badge ${aiConfigured ? "" : "warning"}`}>{aiConfigured ? "AI document reading available" : "Profile matching available; document AI pending setup"}</span></div><div className="profile-grid"><label>Study level<select value={profile.studyLevel ?? ""} onChange={(e) => update("studyLevel", e.target.value)}><option value="">Select your target</option><option>Bachelor</option><option>Master</option><option>Doctoral</option></select></label><label>Target intake<input value={profile.intake ?? ""} onChange={(e) => update("intake", e.target.value)} placeholder="e.g. September 2027" /></label><label>Subject / field<input value={profile.field ?? ""} onChange={(e) => update("field", e.target.value)} placeholder="e.g. Data Science" /></label><label>Preferred countries<input value={profile.preferredCountries?.join(", ") ?? ""} onChange={(e) => update("preferredCountries", e.target.value.split(",").map((item) => item.trim()).filter(Boolean))} placeholder="UK, Germany, Finland" /></label><label>GPA / academic result<input value={profile.gpa ?? ""} onChange={(e) => update("gpa", e.target.value)} placeholder="e.g. 3.62 / 4.00" /></label><label>English test<select value={profile.englishTest ?? ""} onChange={(e) => update("englishTest", e.target.value)}><option value="">Not taken yet</option><option>IELTS</option><option>TOEFL</option><option>PTE</option><option>Duolingo</option></select></label><label>English score<input value={profile.englishScore ?? ""} onChange={(e) => update("englishScore", e.target.value)} placeholder="e.g. IELTS 7.0" /></label><label>Available budget<input value={profile.budget ?? ""} onChange={(e) => update("budget", e.target.value)} placeholder="BDT amount or range" /></label><label>Work experience<input value={profile.workExperience ?? ""} onChange={(e) => update("workExperience", e.target.value)} placeholder="e.g. 2 years in software" /></label><label>Priorities or constraints<input value={profile.notes ?? ""} onChange={(e) => update("notes", e.target.value)} placeholder="Funding priority, family needs, subject focus" /></label></div><label className={`consent-card ${consent ? "checked" : ""} ${!aiConfigured ? "disabled" : ""}`}><input type="checkbox" checked={consent} disabled={!aiConfigured || documents === 0} onChange={(e) => setConsent(e.target.checked)} /><span>✓</span><div><strong>Use my uploaded documents for this analysis</strong><p>With your consent, recent documents are sent securely to the configured AI provider to extract supported facts. Unnecessary account numbers and unrelated sensitive records should not be uploaded.</p><small>{documents} document{documents === 1 ? "" : "s"} available · {aiConfigured ? "AI service connected" : "AI service not yet connected"}</small></div></label><div className="profile-actions"><button className="button ghost" onClick={onSave} disabled={busy}>{busy ? "Saving..." : "Save profile"}</button><button className="button primary match-button" onClick={onRun} disabled={busy}>{busy ? "Analyzing profile..." : "Generate my Top Five"}<span>✦</span></button></div></section>;
@@ -345,13 +372,44 @@ function Profile({ profile, setProfile, consent, setConsent, documents, busy, an
 
 function Matches({ matches, notice, onProfile, onConsultant, onTrack }: { matches: ScholarshipMatch[]; notice: string; onProfile: () => void; onConsultant: () => void; onTrack: (id: string) => void }) {
   if (!matches.length) return <section className="panel large-empty"><span>✦</span><h2>Your Top Five starts with your profile.</h2><p>Complete the core fields, upload any supporting evidence you want to use, then generate a ranked shortlist.</p><button className="button primary" onClick={onProfile}>Complete my profile</button></section>;
-  return <><div className="match-notice"><span>i</span><p>{notice} Match labels support decisions and do not guarantee admission, scholarships or visas.</p></div><div className="matches-list">{matches.map((match, index) => <article className="match-card" key={match.scholarship.id}><div className="rank-block"><span>#{index + 1}</span><div className="score-ring small"><b>{match.score}</b><small>/100</small></div></div><div className="match-details"><span className={`match-label ${match.label === "Strong match" ? "strong" : ""}`}>{match.label}</span><h2>{match.scholarship.name}</h2><p className="provider">{match.scholarship.provider} · {match.scholarship.country}</p><div className="match-meta"><span>{match.scholarship.studyLevel}</span><span>{match.scholarship.coverage || "Funding varies"}</span><span>{match.scholarship.status}</span></div><p>{match.rationale}</p>{match.gaps.length > 0 && <div className="gap-row"><b>Verify:</b>{match.gaps.map((gap) => <span key={gap}>{gap}</span>)}</div>}</div><div className="match-side"><strong>{match.scholarship.deadline || "Annual cycle"}</strong><small>deadline / cycle</small><a href={match.scholarship.officialSource} target="_blank" rel="noreferrer">Official source ↗</a><button onClick={() => onTrack(match.scholarship.id)}>Track option</button></div></article>)}</div><div className="consultant-cta"><div><span className="section-kicker">READY FOR A HUMAN CHECK?</span><h2>Send this shortlist to an EG consultant.</h2><p>A consultant can verify requirements, costs, document gaps and application timing.</p></div><button className="button primary" onClick={onConsultant}>Request consultant review →</button></div></>;
+  return <><div className="match-notice"><span>i</span><p>{notice} Open each result for a full profile comparison, award analysis, cost plan and step-by-step application route. Match labels support decisions and do not guarantee admission, scholarships or visas.</p></div><div className="matches-list">{matches.map((match, index) => <article className="match-card" key={match.scholarship.id}><div className="rank-block"><span>#{index + 1}</span><div className="score-ring small"><b>{match.score}</b><small>/100</small></div></div><div className="match-details"><span className={`match-label ${match.label === "Strong match" ? "strong" : ""}`}>{match.label}</span><h2>{match.scholarship.name}</h2><p className="provider">{match.scholarship.provider} · {match.scholarship.country}</p><div className="match-meta"><span>{match.scholarship.studyLevel}</span><span>{match.scholarship.coverage || "Funding varies"}</span><span>{match.scholarship.status}</span></div><p>{match.rationale}</p>{match.gaps.length > 0 && <div className="gap-row"><b>Verify:</b>{match.gaps.map((gap) => <span key={gap}>{gap}</span>)}</div>}</div><div className="match-side"><strong>{match.scholarship.deadline || "Annual cycle"}</strong><small>deadline / cycle</small><Link className="match-analysis-button" href={`/dashboard/scholarship/${encodeURIComponent(match.scholarship.id)}`}>View full match analysis →</Link><button onClick={() => onTrack(match.scholarship.id)}>Track option</button></div></article>)}</div><div className="consultant-cta"><div><span className="section-kicker">READY FOR A HUMAN CHECK?</span><h2>Send this shortlist to an EG consultant.</h2><p>A consultant can verify requirements, costs, document gaps and application timing.</p></div><button className="button primary" onClick={onConsultant}>Request consultant review →</button></div></>;
 }
 
-function Applications({ matches, applications, onUpdate }: { matches: ScholarshipMatch[]; applications: ApplicationItem[]; onUpdate: (id: string, stage: string) => void }) {
+function Applications({ matches, applications, onUpdate }: { matches: ScholarshipMatch[]; applications: ApplicationItem[]; onUpdate: (id: string, stage: string, workflow?: ApplicationWorkflow) => void }) {
   const tracked = applications.map((application) => ({ application, match: matches.find((item) => item.scholarship.id === application.scholarshipId) })).filter((item) => item.match);
   if (!tracked.length) return <section className="panel large-empty"><span>◎</span><h2>No applications tracked yet.</h2><p>Open your Top Five and choose “Track option” to start a live application workflow.</p></section>;
-  return <section className="panel"><div className="panel-head"><div><span className="section-kicker">APPLICATION TRACKER</span><h2>Move each option through a clear workflow.</h2></div><span>{tracked.length} active</span></div><div className="application-board">{tracked.map(({ application, match }) => <article key={application.scholarshipId}><div><span>{match!.scholarship.country}</span><h3>{match!.scholarship.name}</h3><p>{application.nextAction}</p></div><label>Current stage<select value={application.stage} onChange={(event) => onUpdate(application.scholarshipId, event.target.value)}><option value="shortlisted">Shortlisted</option><option value="preparing">Preparing</option><option value="submitted">Submitted</option><option value="decision">Decision received</option></select></label><a href={match!.scholarship.officialSource} target="_blank" rel="noreferrer">Check official source ↗</a></article>)}</div></section>;
+  return <section className="panel application-workspace"><div className="panel-head"><div><span className="section-kicker">APPLICATION & PRE-DEPARTURE TRACKER</span><h2>Manage every step through arrival.</h2><p>Save application, visa, payment, flight, insurance and accommodation details in one place.</p></div><span>{tracked.length} active</span></div><div className="application-board detailed">{tracked.map(({ application, match }) => <ApplicationCard key={application.scholarshipId} application={application} match={match!} onSave={onUpdate} />)}</div></section>;
+}
+
+function ApplicationCard({ application, match, onSave }: { application: ApplicationItem; match: ScholarshipMatch; onSave: (id: string, stage: string, workflow?: ApplicationWorkflow) => void }) {
+  const [stage, setStage] = useState(application.stage);
+  const [workflow, setWorkflow] = useState<ApplicationWorkflow>(application.workflow ?? {});
+  function update(key: keyof ApplicationWorkflow, value: string | boolean) { setWorkflow((current) => ({ ...current, [key]: value })); }
+  const phases = [["shortlisted", "Shortlist"], ["application", "Application"], ["admission", "Offer"], ["visa", "Visa"], ["predeparture", "Pre-departure"], ["arrived", "Arrived"]];
+  const currentIndex = Math.max(0, phases.findIndex(([id]) => id === stage));
+  return <article className="application-detail-card">
+    <header><div><span>{match.scholarship.country}</span><h3>{match.scholarship.name}</h3><p>{application.nextAction}</p></div><Link href={`/dashboard/scholarship/${encodeURIComponent(match.scholarship.id)}`}>View analysis →</Link></header>
+    <div className="application-phases">{phases.map(([id, label], index) => <button type="button" className={index < currentIndex ? "done" : index === currentIndex ? "current" : ""} key={id} onClick={() => setStage(id)}><b>{index < currentIndex ? "✓" : index + 1}</b><span>{label}</span></button>)}</div>
+    <label className="stage-picker">Current stage<select value={stage} onChange={(event) => setStage(event.target.value)}>{phases.map(([id, label]) => <option value={id} key={id}>{label}</option>)}</select></label>
+    <div className="workflow-grid">
+      <section><h4>Application & admission</h4><Check label="Application submitted" checked={workflow.applicationSubmitted} onChange={(value) => update("applicationSubmitted", value)} /><Check label="Admission / award offer received" checked={workflow.admissionOfferReceived} onChange={(value) => update("admissionOfferReceived", value)} /></section>
+      <section><h4>Fees paid / to pay</h4><Field label="Paid so far" value={workflow.tuitionPaid} placeholder="Amount, currency and date" onChange={(value) => update("tuitionPaid", value)} /><Field label="Still to pay" value={workflow.outstandingFees} placeholder="Amount, currency and deadline" onChange={(value) => update("outstandingFees", value)} /></section>
+      <section><h4>Visa processing</h4><Check label="Visa application submitted" checked={workflow.visaApplicationSubmitted} onChange={(value) => update("visaApplicationSubmitted", value)} /><Check label="Visa decision received" checked={workflow.visaDecisionReceived} onChange={(value) => update("visaDecisionReceived", value)} /></section>
+      <section><h4>Plane tickets</h4><Check label="Flight booked" checked={workflow.flightBooked} onChange={(value) => update("flightBooked", value)} /><Field label="Flight details" value={workflow.flightDetails} placeholder="Airline, date, route, booking reference" onChange={(value) => update("flightDetails", value)} /></section>
+      <section><h4>Health insurance</h4><Check label="Insurance arranged" checked={workflow.insuranceArranged} onChange={(value) => update("insuranceArranged", value)} /><Field label="Insurance fee / policy" value={workflow.insuranceFee} placeholder="Amount, provider and policy reference" onChange={(value) => update("insuranceFee", value)} /></section>
+      <section><h4>Accommodation</h4><Check label="Accommodation arranged" checked={workflow.accommodationArranged} onChange={(value) => update("accommodationArranged", value)} /><Field label="Housing details" value={workflow.accommodationDetails} placeholder="Address, rent, deposit and move-in date" onChange={(value) => update("accommodationDetails", value)} /></section>
+    </div>
+    <label className="workflow-notes">Notes<textarea value={workflow.notes ?? ""} onChange={(event) => update("notes", event.target.value)} placeholder="Deadlines, appointments, document gaps or consultant advice" /></label>
+    <footer><a href={match.scholarship.officialSource} target="_blank" rel="noreferrer">Check official source ↗</a><button className="button primary compact" onClick={() => onSave(application.scholarshipId, stage, workflow)}>Save application plan</button></footer>
+  </article>;
+}
+
+function Check({ label, checked, onChange }: { label: string; checked?: boolean; onChange: (value: boolean) => void }) {
+  return <label className="workflow-check"><input type="checkbox" checked={Boolean(checked)} onChange={(event) => onChange(event.target.checked)} /><span>{checked ? "✓" : ""}</span>{label}</label>;
+}
+
+function Field({ label, value, placeholder, onChange }: { label: string; value?: string; placeholder: string; onChange: (value: string) => void }) {
+  return <label className="workflow-field">{label}<input value={value ?? ""} placeholder={placeholder} onChange={(event) => onChange(event.target.value)} /></label>;
 }
 
 function Consultant({ sent, busy, onRequest }: { sent: boolean; busy: boolean; onRequest: () => void }) {

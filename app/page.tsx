@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { getStudentUser } from "./lib/auth";
 import { scholarships } from "./lib/matching";
+import ThemeToggle from "./components/ThemeToggle";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,7 @@ export default async function Home() {
         <nav aria-label="Primary navigation">
           <a href="#how">How it works</a>
           <a href="#privacy">Privacy</a>
+          <ThemeToggle />
           <a className="nav-cta" href={target}>{user ? "Open dashboard" : "Sign in or sign up"}</a>
         </nav>
       </header>

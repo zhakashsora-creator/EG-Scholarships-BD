@@ -57,3 +57,27 @@ test("first-login account setup requires only core contact fields and remains ed
   assert.match(accountRoute, /MAX_PHOTO_BYTES/);
   assert.match(accountMigration, /CREATE TABLE `student_accounts`/);
 });
+
+test("portal includes theme controls, personalized analysis pages and a complete travel workflow", async () => {
+  const [dashboard, analysisPage, analysisHelpers, themeToggle, applicationRoute, migration, css] = await Promise.all([
+    readFile(new URL("../app/dashboard/DashboardClient.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/dashboard/scholarship/[id]/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/scholarship-analysis.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/components/ThemeToggle.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/applications/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../drizzle/0004_application_journey.sql", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+  assert.match(themeToggle, /eg-theme/);
+  assert.match(css, /data-theme="dark"/);
+  assert.match(dashboard, /View full match analysis/);
+  assert.match(dashboard, /Fees paid \/ to pay/);
+  assert.match(dashboard, /Plane tickets/);
+  assert.match(dashboard, /Health insurance/);
+  assert.match(dashboard, /Accommodation/);
+  assert.match(analysisPage, /PROFILE VS REQUIREMENTS/);
+  assert.match(analysisPage, /DETAILED COST PLAN/);
+  assert.match(analysisHelpers, /buildNextSteps/);
+  assert.match(applicationRoute, /workflow_json/);
+  assert.match(migration, /workflow_json/);
+});

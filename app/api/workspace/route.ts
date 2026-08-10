@@ -20,7 +20,7 @@ export async function GET() {
         photoVersion: number; onboardingComplete: number;
       }>(),
     database().prepare(`SELECT scholarship_id AS scholarshipId, rank, score, rationale, gaps_json AS gapsJson FROM matches WHERE owner_email = ? ORDER BY rank`).bind(user.email).all<{ scholarshipId: string; rank: number; score: number; rationale: string; gapsJson: string }>(),
-    database().prepare(`SELECT scholarship_id AS scholarshipId, stage, next_action AS nextAction, updated_at AS updatedAt FROM applications WHERE owner_email = ? ORDER BY updated_at DESC`).bind(user.email).all(),
+    database().prepare(`SELECT scholarship_id AS scholarshipId, stage, next_action AS nextAction, workflow_json AS workflowJson, updated_at AS updatedAt FROM applications WHERE owner_email = ? ORDER BY updated_at DESC`).bind(user.email).all<{ scholarshipId: string; stage: string; nextAction: string; workflowJson: string; updatedAt: string }>(),
     database().prepare(`SELECT stage, note, created_at AS createdAt FROM progress_events WHERE owner_email = ? ORDER BY created_at DESC LIMIT 8`).bind(user.email).all(),
   ]);
   const byId = new Map(scholarships.map((item) => [item.id, item]));
@@ -46,7 +46,11 @@ export async function GET() {
     profile,
     completeness: student?.completeness ?? 0,
     matches,
-    applications: applicationRows.results ?? [],
+    applications: (applicationRows.results ?? []).map((application) => {
+      let workflow = {};
+      try { workflow = application.workflowJson ? JSON.parse(application.workflowJson) : {}; } catch { workflow = {}; }
+      return { scholarshipId: application.scholarshipId, stage: application.stage, nextAction: application.nextAction, workflow, updatedAt: application.updatedAt };
+    }),
     progress: progressRows.results ?? [],
     analysisMode: "on-device",
   });

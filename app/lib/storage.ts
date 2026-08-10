@@ -67,13 +67,19 @@ export async function ensureSchema() {
         database().prepare(`CREATE TABLE IF NOT EXISTS applications (
           id TEXT PRIMARY KEY, owner_email TEXT NOT NULL, scholarship_id TEXT NOT NULL,
           stage TEXT NOT NULL DEFAULT 'shortlisted', next_action TEXT NOT NULL DEFAULT 'Review eligibility',
+          workflow_json TEXT NOT NULL DEFAULT '{}',
           updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
           UNIQUE(owner_email, scholarship_id)
         )`),
         database().prepare(`CREATE INDEX IF NOT EXISTS applications_owner_idx ON applications(owner_email)`),
         database().prepare(`CREATE UNIQUE INDEX IF NOT EXISTS applications_owner_scholarship_idx ON applications(owner_email, scholarship_id)`),
       ])
-      .then(() => undefined)
+      .then(async () => {
+        const columns = await database().prepare(`PRAGMA table_info(applications)`).all<{ name: string }>();
+        if (!(columns.results ?? []).some((column) => column.name === "workflow_json")) {
+          await database().prepare(`ALTER TABLE applications ADD COLUMN workflow_json TEXT NOT NULL DEFAULT '{}'`).run();
+        }
+      })
       .catch((error) => {
         schemaReady = null;
         throw error;

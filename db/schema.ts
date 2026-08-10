@@ -93,5 +93,6 @@ export const applications = sqliteTable("applications", {
   scholarshipId: text("scholarship_id").notNull(),
   stage: text("stage").notNull().default("shortlisted"),
   nextAction: text("next_action").notNull().default("Review eligibility"),
+  workflowJson: text("workflow_json").notNull().default("{}"),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
