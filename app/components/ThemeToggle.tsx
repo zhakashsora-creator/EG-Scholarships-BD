@@ -11,20 +11,20 @@ function applyTheme(theme: Theme) {
 }
 
 export default function ThemeToggle({ compact = false }: { compact?: boolean }) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "light";
-    const saved = localStorage.getItem("eg-theme");
-    if (saved === "dark" || saved === "light") return saved;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  });
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
+    const saved = localStorage.getItem("eg-theme");
+    const preferred = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    const initial = saved === "dark" || saved === "light" ? saved : preferred;
+    applyTheme(initial);
+    queueMicrotask(() => setTheme(initial));
+  }, []);
 
   function toggle() {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
+    applyTheme(next);
   }
 
   return (
