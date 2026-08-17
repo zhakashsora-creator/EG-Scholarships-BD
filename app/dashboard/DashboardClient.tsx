@@ -21,7 +21,25 @@ type ApplicationWorkflow = {
   insuranceFee?: string;
   accommodationArranged?: boolean;
   accommodationDetails?: string;
+  applicationGuidelineUrl?: string;
+  applicationGuidelineCheck?: string;
+  visaGuidelineUrl?: string;
+  visaGuidelineCheck?: string;
   notes?: string;
+};
+type GuidelineResult = {
+  sourceUrl: string;
+  phase: "application" | "visa";
+  summary: string;
+  requirements: Array<{ requirement: string; status: "matched" | "missing" | "review"; matchedDocuments: string[]; note: string }>;
+  warnings: string[];
+  disclaimer: string;
+};
+type CourseResult = {
+  summary: string;
+  courses: Array<{ name: string; level: string; university: string; url: string; why: string }>;
+  officialSource: string;
+  disclaimer: string;
 };
 type ApplicationItem = { scholarshipId: string; stage: string; nextAction: string; workflow?: ApplicationWorkflow; updatedAt?: string };
 type ProgressItem = { stage: string; note: string; createdAt: string };
@@ -256,7 +274,7 @@ export default function DashboardClient({ user, signOutPath, initialTab = "overv
         {tab === "documents" && <Documents documents={documents} busy={busy} deletingId={deletingId} notice={notice} onUpload={uploadDocument} onDelete={removeDocument} />}
         {tab === "profile" && <Profile profile={profile} setProfile={setProfile} consent={consent} setConsent={setConsent} documents={documents.length} busy={busy} analysisProgress={analysisProgress} aiConfigured={aiConfigured} onSave={saveProfile} onRun={runMatch} />}
         {tab === "matches" && <Matches matches={matches} notice={notice} onProfile={() => setTab("profile")} onConsultant={() => setTab("consultant")} onTrack={(id) => { updateApplication(id, "shortlisted"); setTab("applications"); }} />}
-        {tab === "applications" && <Applications matches={matches} applications={applications} onUpdate={updateApplication} />}
+        {tab === "applications" && <Applications matches={matches} applications={applications} recordCount={documents.length} onUpdate={updateApplication} />}
         {tab === "consultant" && <Consultant sent={consultantSent} busy={busy} onRequest={requestConsultant} />}
       </div>
     </section>
@@ -432,23 +450,55 @@ function campusImage(provider: string) { return CAMPUS_IMAGES[[...provider].redu
 
 function Matches({ matches, notice, onProfile, onConsultant, onTrack }: { matches: ScholarshipMatch[]; notice: string; onProfile: () => void; onConsultant: () => void; onTrack: (id: string) => void }) {
   const rail = useRef<HTMLDivElement>(null);
+  const [courseTarget, setCourseTarget] = useState<ScholarshipMatch | null>(null);
   const move = (direction: number) => rail.current?.scrollBy({ left: direction * Math.min(390, rail.current.clientWidth * .86), behavior: "smooth" });
   if (!matches.length) return <section className="panel large-empty"><span>✦</span><h2>Your Best Finds start with your study profile.</h2><p>Complete your academic results and preferred destinations. Documents are optional.</p><button className="button primary" onClick={onProfile}>Complete my profile</button></section>;
   return <><div className="match-notice"><span>i</span><p>{notice} Browse every matching opportunity from your preferred destinations—there is no five-result cap. Always confirm live eligibility and deadlines on the official page.</p></div><div className="finds-heading"><div><span className="section-kicker">TAILORED TO YOUR PROFILE</span><h2>{matches.length} Best Find{matches.length === 1 ? "" : "s"}</h2><p>Swipe, trackpad-scroll or use the arrows to browse.</p></div><div className="carousel-controls"><button type="button" onClick={() => move(-1)} aria-label="Previous opportunity">←</button><button type="button" onClick={() => move(1)} aria-label="Next opportunity">→</button></div></div>
-    <div className="best-finds-rail" ref={rail} tabIndex={0} aria-label="Best Finds scholarship carousel">{matches.map((match, index) => <article className="find-card" key={match.scholarship.id}><div className="find-cover"><img src={campusImage(match.scholarship.provider)} alt={`${match.scholarship.provider} campus`} loading="lazy" /><span>{match.scholarship.country}</span><b>#{index + 1}</b><div className="find-score"><strong>{match.score}</strong><small>match</small></div></div><div className="find-body"><span className={`match-label ${match.label === "Strong match" ? "strong" : ""}`}>{match.label}</span><h3>{match.scholarship.name}</h3><p className="provider">{match.scholarship.provider}</p><div className="match-meta"><span>{match.scholarship.studyLevel}</span><span>{match.scholarship.coverage || "Funding varies"}</span></div><p className="find-rationale">{match.rationale}</p>{match.gaps.length > 0 && <div className="find-gap"><b>Check:</b> {match.gaps[0]}</div>}<div className="find-deadline"><span>Deadline / cycle</span><strong>{match.scholarship.deadline || "Annual / rolling"}</strong></div></div><footer><Link className="match-analysis-button" href={`/dashboard/scholarship/${encodeURIComponent(match.scholarship.id)}`}>View full match analysis</Link><button type="button" onClick={() => onTrack(match.scholarship.id)}>Track</button></footer></article>)}</div>
-    <div className="consultant-cta"><div><span className="section-kicker">READY FOR A HUMAN CHECK?</span><h2>Send your Best Finds to an EG consultant.</h2><p>A consultant can verify requirements, costs, optional document gaps and application timing.</p></div><button className="button primary" onClick={onConsultant}>Request consultant review →</button></div></>;
+    <div className="best-finds-rail" ref={rail} tabIndex={0} aria-label="Best Finds scholarship carousel">{matches.map((match, index) => <article className="find-card" key={match.scholarship.id}><div className="find-cover"><img src={campusImage(match.scholarship.provider)} alt={`${match.scholarship.provider} campus`} loading="lazy" /><span>{match.scholarship.country}</span><b>#{index + 1}</b><div className="find-score"><strong>{match.score}</strong><small>match</small></div></div><div className="find-body"><span className={`match-label ${match.label === "Strong match" ? "strong" : ""}`}>{match.label}</span><h3>{match.scholarship.name}</h3><p className="provider">{match.scholarship.provider}</p><div className="match-meta"><span>{match.scholarship.studyLevel}</span><span>{match.scholarship.coverage || "Funding varies"}</span></div><p className="find-rationale">{match.rationale}</p>{match.gaps.length > 0 && <div className="find-gap"><b>Check:</b> {match.gaps[0]}</div>}<div className="find-deadline"><span>Deadline / cycle</span><strong>{match.scholarship.deadline || "Annual / rolling"}</strong></div><button className="course-discovery-button" type="button" onClick={() => setCourseTarget(match)}><span>✦</span> Find subjects & courses <b>Official links</b></button></div><footer><Link className="match-analysis-button" href={`/dashboard/scholarship/${encodeURIComponent(match.scholarship.id)}`}>View full match analysis</Link><button type="button" onClick={() => onTrack(match.scholarship.id)}>Track</button></footer></article>)}</div>
+    <div className="consultant-cta"><div><span className="section-kicker">READY FOR A HUMAN CHECK?</span><h2>Send your Best Finds to an EG consultant.</h2><p>A consultant can verify requirements, costs, optional document gaps and application timing.</p></div><button className="button primary" onClick={onConsultant}>Request consultant review →</button></div>
+    {courseTarget && <CourseDialog match={courseTarget} onClose={() => setCourseTarget(null)} />}</>;
 }
 
-function Applications({ matches, applications, onUpdate }: { matches: ScholarshipMatch[]; applications: ApplicationItem[]; onUpdate: (id: string, stage: string, workflow?: ApplicationWorkflow) => void }) {
+function CourseDialog({ match, onClose }: { match: ScholarshipMatch; onClose: () => void }) {
+  const [result, setResult] = useState<CourseResult | null>(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/courses", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ scholarshipId: match.scholarship.id }), signal: controller.signal,
+    }).then(async (response) => {
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.error ?? "Courses could not be loaded");
+      setResult(payload);
+    }).catch((reason) => {
+      if (reason instanceof Error && reason.name !== "AbortError") setError(reason.message);
+    }).finally(() => setLoading(false));
+    return () => controller.abort();
+  }, [match.scholarship.id]);
+  return <div className="course-dialog-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}><section className="course-dialog" role="dialog" aria-modal="true" aria-labelledby="course-dialog-title"><header><div><span className="section-kicker">PROFILE-RELEVANT STUDY OPTIONS</span><h2 id="course-dialog-title">Subjects & courses for this Best Find</h2><p>{match.scholarship.name} · {match.scholarship.country}</p></div><button type="button" onClick={onClose} aria-label="Close course list">×</button></header>
+    {loading && <div className="course-loading"><span>✦</span><strong>Searching official course pages…</strong><p>Gemini is grounding suggestions against current web results.</p></div>}
+    {error && <div className="course-error"><strong>Course discovery is unavailable right now.</strong><p>{error}</p><a href={match.scholarship.officialSource} target="_blank" rel="noreferrer">Open the official scholarship source ↗</a></div>}
+    {result && <><div className="course-summary"><span>i</span><p>{result.summary}</p></div>{result.courses.length ? <div className="course-list">{result.courses.map((course) => <a key={`${course.url}-${course.name}`} href={course.url} target="_blank" rel="noreferrer"><div><span>{course.level}</span><h3>{course.name}</h3><strong>{course.university}</strong><p>{course.why}</p></div><b>Official page ↗</b></a>)}</div> : <div className="course-error"><strong>No safely verifiable course links were returned.</strong><p>Use the official award page to choose a participating university or programme.</p><a href={result.officialSource} target="_blank" rel="noreferrer">Open official source ↗</a></div>}<small className="course-disclaimer">{result.disclaimer}</small></>}
+  </section></div>;
+}
+
+function Applications({ matches, applications, recordCount, onUpdate }: { matches: ScholarshipMatch[]; applications: ApplicationItem[]; recordCount: number; onUpdate: (id: string, stage: string, workflow?: ApplicationWorkflow) => void }) {
   const tracked = applications.map((application) => ({ application, match: matches.find((item) => item.scholarship.id === application.scholarshipId) })).filter((item) => item.match);
   if (!tracked.length) return <section className="panel large-empty"><span>◎</span><h2>No applications tracked yet.</h2><p>Open Best Finds and choose “Track” to start a live application workflow.</p></section>;
-  return <section className="panel application-workspace"><div className="panel-head"><div><span className="section-kicker">APPLICATION & PRE-DEPARTURE TRACKER</span><h2>Manage every step through arrival.</h2><p>Save application, admission, visa, payment, flight, insurance and accommodation details in one place.</p></div><span>{tracked.length} active</span></div><div className="application-hub-note"><span>▣</span><div><strong>Your tracker and records hub work together</strong><p>Record each milestone here, then store the related email, offer letter, invoice or receipt in Student Records so nothing is lost across inboxes and devices.</p></div><Link href="/dashboard?tab=documents">Open Student Records →</Link></div><div className="application-board detailed">{tracked.map(({ application, match }) => <ApplicationCard key={application.scholarshipId} application={application} match={match!} onSave={onUpdate} />)}</div></section>;
+  return <section className="panel application-workspace"><div className="panel-head"><div><span className="section-kicker">APPLICATION & PRE-DEPARTURE TRACKER</span><h2>Manage every step through arrival.</h2><p>Save application, admission, visa, payment, flight, insurance and accommodation details in one place.</p></div><span>{tracked.length} active</span></div><div className="application-hub-note"><span>▣</span><div><strong>Your tracker and records hub work together</strong><p>Record each milestone here, then store the related email, offer letter, invoice or receipt in Student Records so nothing is lost across inboxes and devices. Records remain optional, but keeping them here makes guideline checks and handovers easier.</p></div><Link href="/dashboard?tab=documents">Open Student Records · {recordCount} saved →</Link></div><div className="application-board detailed">{tracked.map(({ application, match }) => <ApplicationCard key={application.scholarshipId} application={application} match={match!} recordCount={recordCount} onSave={onUpdate} />)}</div></section>;
 }
 
-function ApplicationCard({ application, match, onSave }: { application: ApplicationItem; match: ScholarshipMatch; onSave: (id: string, stage: string, workflow?: ApplicationWorkflow) => void }) {
+function ApplicationCard({ application, match, recordCount, onSave }: { application: ApplicationItem; match: ScholarshipMatch; recordCount: number; onSave: (id: string, stage: string, workflow?: ApplicationWorkflow) => void }) {
   const [stage, setStage] = useState(application.stage);
   const [workflow, setWorkflow] = useState<ApplicationWorkflow>(application.workflow ?? {});
   function update(key: keyof ApplicationWorkflow, value: string | boolean) { setWorkflow((current) => ({ ...current, [key]: value })); }
+  function saveGuidelineResult(key: "applicationGuidelineCheck" | "visaGuidelineCheck", result: GuidelineResult) {
+    const next = { ...workflow, [key]: JSON.stringify(result) };
+    setWorkflow(next);
+    onSave(application.scholarshipId, stage, next);
+  }
   const phases = [["shortlisted", "Shortlist"], ["application", "Application"], ["admission", "Offer"], ["visa", "Visa"], ["predeparture", "Pre-departure"], ["arrived", "Arrived"]];
   const currentIndex = Math.max(0, phases.findIndex(([id]) => id === stage));
   return <article className="application-detail-card">
@@ -463,9 +513,37 @@ function ApplicationCard({ application, match, onSave }: { application: Applicat
       <section><h4>Health insurance</h4><Check label="Insurance arranged" checked={workflow.insuranceArranged} onChange={(value) => update("insuranceArranged", value)} /><Field label="Insurance fee / policy" value={workflow.insuranceFee} placeholder="Amount, provider and policy reference" onChange={(value) => update("insuranceFee", value)} /></section>
       <section><h4>Accommodation</h4><Check label="Accommodation arranged" checked={workflow.accommodationArranged} onChange={(value) => update("accommodationArranged", value)} /><Field label="Housing details" value={workflow.accommodationDetails} placeholder="Address, rent, deposit and move-in date" onChange={(value) => update("accommodationDetails", value)} /></section>
     </div>
+    <div className="guideline-matching"><div className="guideline-heading"><div><span className="section-kicker">AI DOCUMENT ORGANIZER</span><h4>Compare official guidelines with Student Records</h4><p>Paste the exact official page or PDF for each phase. The check compares its requirements with your {recordCount} saved record{recordCount === 1 ? "" : "s"}; files are still optional and their contents are not judged.</p></div><Link href="/dashboard?tab=documents">Manage Student Records →</Link></div><div className="guideline-grid">
+      <GuidelineMatcher phase="application" scholarshipId={application.scholarshipId} url={workflow.applicationGuidelineUrl ?? match.scholarship.officialSource} saved={workflow.applicationGuidelineCheck} recordCount={recordCount} onUrlChange={(value) => update("applicationGuidelineUrl", value)} onResult={(result) => saveGuidelineResult("applicationGuidelineCheck", result)} />
+      <GuidelineMatcher phase="visa" scholarshipId={application.scholarshipId} url={workflow.visaGuidelineUrl ?? ""} saved={workflow.visaGuidelineCheck} recordCount={recordCount} onUrlChange={(value) => update("visaGuidelineUrl", value)} onResult={(result) => saveGuidelineResult("visaGuidelineCheck", result)} />
+    </div></div>
     <label className="workflow-notes">Notes<textarea value={workflow.notes ?? ""} onChange={(event) => update("notes", event.target.value)} placeholder="Deadlines, appointments, document gaps or consultant advice" /></label>
     <footer><div className="application-record-links"><a href={match.scholarship.officialSource} target="_blank" rel="noreferrer">Check official source ↗</a><Link href="/dashboard?tab=documents">Store related email or receipt →</Link></div><button className="button primary compact" onClick={() => onSave(application.scholarshipId, stage, workflow)}>Save application plan</button></footer>
   </article>;
+}
+
+function GuidelineMatcher({ phase, scholarshipId, url, saved, recordCount, onUrlChange, onResult }: { phase: "application" | "visa"; scholarshipId: string; url: string; saved?: string; recordCount: number; onUrlChange: (value: string) => void; onResult: (result: GuidelineResult) => void }) {
+  const [result, setResult] = useState<GuidelineResult | null>(() => {
+    try { return saved ? JSON.parse(saved) : null; } catch { return null; }
+  });
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const title = phase === "application" ? "University application guidelines" : "Visa document guidelines";
+  async function check() {
+    if (!url.trim()) { setError("Paste the exact public HTTPS guideline page or PDF first."); return; }
+    setBusy(true); setError("");
+    try {
+      const response = await fetch("/api/guideline-check", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scholarshipId, phase, guidelineUrl: url.trim() }) });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.error ?? "Guideline check failed");
+      setResult(payload); onResult(payload);
+    } catch (reason) { setError(reason instanceof Error ? reason.message : "Guideline check failed"); }
+    finally { setBusy(false); }
+  }
+  const counts = result?.requirements.reduce((total, item) => ({ ...total, [item.status]: total[item.status] + 1 }), { matched: 0, missing: 0, review: 0 }) ?? { matched: 0, missing: 0, review: 0 };
+  return <section className="guideline-card"><header><span>{phase === "application" ? "A" : "V"}</span><div><h5>{title}</h5><p>{phase === "application" ? "Admission and university checklist" : "Embassy or immigration checklist"}</p></div></header><label>Official guideline link<input type="url" value={url} onChange={(event) => onUrlChange(event.target.value)} placeholder="https://official-site.example/guidelines" /></label><button className="button guideline-check-button" type="button" disabled={busy} onClick={check}>{busy ? "Checking official page…" : `Check ${recordCount ? "my records" : "requirements"} with AI`}<span>✦</span></button>{error && <p className="guideline-error" role="alert">{error}</p>}
+    {result && <div className="guideline-result"><div className="guideline-counts"><span className="matched">{counts.matched} organized</span><span className="missing">{counts.missing} missing</span><span className="review">{counts.review} review</span></div><p>{result.summary}</p><ul>{result.requirements.map((item, index) => <li key={`${item.requirement}-${index}`} className={item.status}><b>{item.status === "matched" ? "✓" : item.status === "missing" ? "!" : "?"}</b><div><strong>{item.requirement}</strong><p>{item.note}</p>{item.matchedDocuments.length > 0 && <small>Possible record: {item.matchedDocuments.join(", ")}</small>}</div></li>)}</ul>{result.warnings.length > 0 && <details><summary>Important cautions</summary>{result.warnings.map((warning) => <p key={warning}>{warning}</p>)}</details>}<small>{result.disclaimer}</small></div>}
+  </section>;
 }
 
 function Check({ label, checked, onChange }: { label: string; checked?: boolean; onChange: (value: boolean) => void }) {

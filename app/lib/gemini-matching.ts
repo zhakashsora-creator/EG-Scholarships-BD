@@ -1,10 +1,5 @@
-import { env } from "cloudflare:workers";
 import type { ScholarshipMatch, StudentProfile } from "./matching";
-
-type GeminiRuntime = {
-  GEMINI_API_KEY?: string;
-  GEMINI_MODEL?: string;
-};
+import { extractGeminiJson, geminiGenerateContent, geminiText, isGeminiConfigured } from "./gemini-client";
 
 type GeminiRankedItem = {
   id?: string;
@@ -18,18 +13,7 @@ type GeminiRanking = {
   summary?: string;
 };
 
-export function isGeminiConfigured() {
-  const runtime = env as unknown as GeminiRuntime;
-  return Boolean(runtime.GEMINI_API_KEY || process.env.GEMINI_API_KEY);
-}
-
-function runtimeConfig() {
-  const runtime = env as unknown as GeminiRuntime;
-  return {
-    key: runtime.GEMINI_API_KEY ?? process.env.GEMINI_API_KEY,
-    model: runtime.GEMINI_MODEL ?? process.env.GEMINI_MODEL ?? "gemini-2.5-flash",
-  };
-}
+export { isGeminiConfigured } from "./gemini-client";
 
 function safeProfile(profile: StudentProfile) {
   const {
@@ -56,20 +40,13 @@ function safeProfile(profile: StudentProfile) {
   ]));
 }
 
-function extractJson(text: string) {
-  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i)?.[1];
-  const candidate = fenced ?? text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1);
-  return JSON.parse(candidate) as GeminiRanking;
-}
-
 /**
  * Gemini is a bounded second-pass reranker. Deterministic eligibility and
  * destination filtering stay authoritative, so quota or provider failures
  * never prevent students from receiving results.
  */
 export async function enhanceMatchesWithGemini(profile: StudentProfile, matches: ScholarshipMatch[]) {
-  const { key, model } = runtimeConfig();
-  if (!key || !matches.length) return { matches, used: false, summary: "" };
+  if (!isGeminiConfigured() || !matches.length) return { matches, used: false, summary: "" };
 
   const shortlist = matches.slice(0, 40);
   const opportunities = shortlist.map((match) => ({
@@ -103,19 +80,11 @@ OPPORTUNITIES:
 ${JSON.stringify(opportunities)}`;
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-goog-api-key": key },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.15, maxOutputTokens: 5000, responseMimeType: "application/json" },
-      }),
-      signal: AbortSignal.timeout(15_000),
-    });
-    if (!response.ok) throw new Error(`Gemini request failed (${response.status})`);
-    const payload = await response.json() as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
-    const text = payload.candidates?.[0]?.content?.parts?.map((part) => part.text ?? "").join("") ?? "";
-    const ranking = extractJson(text);
+    const payload = await geminiGenerateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.15, maxOutputTokens: 5000, responseMimeType: "application/json" },
+    }, 15_000);
+    const ranking = extractGeminiJson<GeminiRanking>(geminiText(payload));
     const byId = new Map((ranking.ranked ?? []).map((item) => [item.id, item]));
     const enhanced = matches.map((match) => {
       const suggestion = byId.get(match.scholarship.id);

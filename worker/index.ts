@@ -8,6 +8,7 @@ interface Env {
   DOCUMENTS: R2Bucket;
   OPENAI_API_KEY?: string;
   GEMINI_API_KEY?: string;
+  GEMINI_API_KEYS?: string;
   GEMINI_MODEL?: string;
   IMAGES: {
     input(stream: ReadableStream): {
