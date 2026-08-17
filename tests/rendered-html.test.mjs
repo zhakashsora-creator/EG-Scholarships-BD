@@ -129,7 +129,8 @@ test("study profile, optional documents, qualified Best Finds and resilient offi
   assert.match(guidelineRoute, /baselineGuideline/);
   assert.match(officialGuidelines, /TB test certificate from a Home Office-approved clinic in Bangladesh/);
   assert.match(officialGuidelines, /No document upload is required|SSC\/O-level and HSC\/A-level/);
-  assert.match(courseRoute, /google_search/);
+  assert.match(courseRoute, /url_context/);
+  assert.match(courseRoute, /OFFICIAL URLS/);
   assert.match(courseRoute, /officialCourseFallback/);
   assert.match(courseFallback, /Official programme catalogue/);
   assert.match(envExample, /GEMINI_API_KEY=/);

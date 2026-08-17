@@ -77,12 +77,14 @@ export async function geminiGenerateContent(body: unknown, timeoutMs = 20_000): 
   let finalStatus = 503;
   for (let attempt = 0; attempt < candidates.length; attempt += 1) {
     const key = candidates[attempt];
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-goog-api-key": key },
         body: JSON.stringify(body),
-        signal: AbortSignal.timeout(timeoutMs),
+        signal: controller.signal,
       });
       finalStatus = response.status;
       if (response.ok) return await response.json() as GeminiResponse;
@@ -97,6 +99,8 @@ export async function geminiGenerateContent(body: unknown, timeoutMs = 20_000): 
       if (error instanceof Error && /rejected/.test(error.message)) throw error;
       finalStatus = 408;
       if (attempt < candidates.length - 1) await delay(250 + Math.floor(Math.random() * 120));
+    } finally {
+      clearTimeout(timeout);
     }
   }
   throw new Error(`Gemini key pool is temporarily unavailable (${finalStatus})`);

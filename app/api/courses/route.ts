@@ -40,18 +40,19 @@ export async function POST(request: Request) {
     disclaimer: "Official catalogue fallback is always available. Course availability, scholarship coverage and entry requirements must be confirmed on the linked institution pages.",
   });
   if (!isGeminiConfigured()) return fallback("AI web enhancement is not configured.");
-  const prompt = `Find up to 8 currently published subjects, degrees or courses that fit this student's target profile and are relevant to the named scholarship or discount. Use Google Search grounding. Return only direct HTTPS links on official university, government or recognized programme websites; never return aggregators, agents, social media, search-result pages or invented URLs. If the award spans multiple universities, include a balanced set of official course pages from participating institutions only when participation is supported by an official source. If exact course eligibility is uncertain, say so in "why".
+  const prompt = `Read the supplied official course catalogue and scholarship URLs using URL Context. Find up to 8 currently published subjects, degrees or courses that fit this student's target profile and are relevant to the named scholarship or discount. Return only direct HTTPS links on the supplied official university or programme domains; never return aggregators, agents, social media, search-result pages or invented URLs. If the award spans multiple universities, return the official award-covered programme directory unless participation is established on the supplied source. If exact course eligibility is uncertain, say so in "why".
 
 Return JSON only:
 {"summary":"short scope note","courses":[{"name":"official programme title","level":"study level","university":"institution","url":"direct official course URL","why":"one profile-specific reason and any uncertainty"}]}
 
 PROFILE: ${JSON.stringify(searchProfile)}
-SCHOLARSHIP: ${JSON.stringify({ name: scholarship.name, provider: scholarship.provider, country: scholarship.country, level: scholarship.studyLevel, subjectRestrictions: scholarship.subjectRestrictions, officialSource: scholarship.officialSource })}`;
+SCHOLARSHIP: ${JSON.stringify({ name: scholarship.name, provider: scholarship.provider, country: scholarship.country, level: scholarship.studyLevel, subjectRestrictions: scholarship.subjectRestrictions, officialSource: scholarship.officialSource })}
+OFFICIAL URLS: ${JSON.stringify(fallbackCourses.map((course) => course.url))}`;
 
   try {
     const payload = await geminiGenerateContent({
       contents: [{ role: "user", parts: [{ text: prompt }] }],
-      tools: [{ google_search: {} }],
+      tools: [{ url_context: {} }],
       generationConfig: { temperature: 0.1, maxOutputTokens: 3500, responseMimeType: "application/json" },
     }, 25_000);
     const parsed = extractGeminiJson<CourseResult>(geminiText(payload));
