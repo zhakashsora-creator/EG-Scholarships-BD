@@ -44,6 +44,36 @@ export type ScholarshipMatch = {
   gaps: string[];
 };
 
+/**
+ * Preserve score order while spreading equal-scoring opportunities across
+ * destinations. A student sees one option per country before a second option
+ * from the same country at that exact score.
+ */
+export function prioritizeDestinationDiversity(matches: ScholarshipMatch[]) {
+  const ordered: ScholarshipMatch[] = [];
+  for (let index = 0; index < matches.length;) {
+    const score = matches[index].score;
+    const scoreGroup: ScholarshipMatch[] = [];
+    while (index < matches.length && matches[index].score === score) {
+      scoreGroup.push(matches[index]);
+      index += 1;
+    }
+    const countries = new Map<string, ScholarshipMatch[]>();
+    for (const match of scoreGroup) {
+      const country = match.scholarship.country || match.scholarship.destination || "Other";
+      countries.set(country, [...(countries.get(country) ?? []), match]);
+    }
+    const queues = [...countries.values()];
+    while (queues.some((queue) => queue.length)) {
+      for (const queue of queues) {
+        const next = queue.shift();
+        if (next) ordered.push(next);
+      }
+    }
+  }
+  return ordered;
+}
+
 export function profileCompleteness(profile: StudentProfile) {
   const core: unknown[] = [
     profile.secondaryQualification,

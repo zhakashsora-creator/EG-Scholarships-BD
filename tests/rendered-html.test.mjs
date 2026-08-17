@@ -82,15 +82,18 @@ test("portal includes theme controls, personalized analysis pages and a complete
   assert.match(migration, /workflow_json/);
 });
 
-test("study profile, optional documents, unlimited Best Finds and Gemini enhancement are wired together", async () => {
-  const [dashboard, matching, analyze, gemini, geminiClient, guidelineRoute, courseRoute, envExample] = await Promise.all([
+test("study profile, optional documents, qualified Best Finds and resilient official discovery are wired together", async () => {
+  const [dashboard, matching, analyze, workspaceRoute, gemini, geminiClient, guidelineRoute, officialGuidelines, courseRoute, courseFallback, envExample] = await Promise.all([
     readFile(new URL("../app/dashboard/DashboardClient.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/lib/matching.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/analyze/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/workspace/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/lib/gemini-matching.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/lib/gemini-client.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/guideline-check/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/official-guidelines.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/courses/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/course-discovery.ts", import.meta.url), "utf8"),
     readFile(new URL("../.env.example", import.meta.url), "utf8"),
   ]);
   assert.match(dashboard, /\["profile", "03", "Study profile"\]/);
@@ -108,14 +111,27 @@ test("study profile, optional documents, unlimited Best Finds and Gemini enhance
   assert.match(dashboard, /Generate my Best Finds/);
   assert.doesNotMatch(dashboard, /Generate my Top Five/);
   assert.match(matching, /typeof limit === "number"/);
+  assert.match(matching, /prioritizeDestinationDiversity/);
   assert.match(analyze, /enhanceMatchesWithGemini/);
+  assert.match(analyze, /match\.score >= 50/);
+  assert.match(analyze, /prioritizeDestinationDiversity/);
+  assert.match(workspaceRoute, /row\.score < 50/);
+  assert.match(workspaceRoute, /prioritizeDestinationDiversity/);
   assert.match(gemini, /geminiGenerateContent/);
   assert.match(geminiClient, /x-goog-api-key/);
   assert.match(geminiClient, /response\.status === 429/);
-  assert.match(dashboard, /Compare official guidelines with Student Records/);
+  assert.match(geminiClient, /gemini-3\.5-flash/);
+  assert.match(dashboard, /Official checklists—even with zero uploads/);
+  assert.match(dashboard, /PROFILE VS REQUIREMENTS/);
+  assert.match(dashboard, /DETAILED COST PLAN/);
   assert.match(dashboard, /Find subjects & courses/);
   assert.match(guidelineRoute, /url_context/);
-  assert.match(courseRoute, /googleSearch/);
+  assert.match(guidelineRoute, /baselineGuideline/);
+  assert.match(officialGuidelines, /TB test certificate from a Home Office-approved clinic in Bangladesh/);
+  assert.match(officialGuidelines, /No document upload is required|SSC\/O-level and HSC\/A-level/);
+  assert.match(courseRoute, /google_search/);
+  assert.match(courseRoute, /officialCourseFallback/);
+  assert.match(courseFallback, /Official programme catalogue/);
   assert.match(envExample, /GEMINI_API_KEY=/);
   assert.match(envExample, /GEMINI_API_KEYS=/);
 });

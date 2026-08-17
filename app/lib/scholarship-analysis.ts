@@ -36,6 +36,9 @@ export function buildFitChecks(profile: StudentProfile, scholarship: Scholarship
   const destinationAligned = Boolean(profile.preferredCountries?.some((country) => includesAny(`${scholarship.country} ${scholarship.destination}`, [country])));
   const fieldText = `${scholarship.subjectRestrictions} ${scholarship.category}`;
   const fieldAligned = Boolean(profile.field && (includesAny(fieldText, profile.field.split(/\s+/).filter((part) => part.length > 3)) || /all fields|all eligible|unrestricted/i.test(fieldText)));
+  const academicResult = profile.hasBachelorDegree === "yes"
+    ? profile.bachelorCgpa || profile.gpa
+    : profile.higherSecondaryResult || profile.gpa;
 
   return [
     {
@@ -58,9 +61,9 @@ export function buildFitChecks(profile: StudentProfile, scholarship: Scholarship
     },
     {
       label: "Academic result",
-      student: profile.gpa || "Not specified",
+      student: academicResult || "Not specified",
       requirement: scholarship.academicCriteria || "Manual academic review required",
-      status: profile.gpa ? "Check required" : "Missing detail",
+      status: academicResult ? "Check required" : "Missing detail",
     },
     {
       label: "English evidence",

@@ -30,7 +30,7 @@ export default async function ScholarshipAnalysisPage({ params }: { params: Prom
   let gaps: string[] = [];
   try { profile = student?.profileJson ? JSON.parse(student.profileJson) : {}; } catch { profile = {}; }
   try { gaps = JSON.parse(row.gapsJson); } catch { gaps = []; }
-  const label: ScholarshipMatch["label"] = row.score >= 78 ? "Strong match" : row.score >= 62 ? "Possible match" : "Review required";
+  const label: ScholarshipMatch["label"] = row.score >= 80 ? "Strong match" : row.score >= 64 ? "Possible match" : "Review required";
   const fitChecks = buildFitChecks(profile, scholarship);
   const costPlan = buildCostPlan(scholarship);
   const nextSteps = buildNextSteps(scholarship);

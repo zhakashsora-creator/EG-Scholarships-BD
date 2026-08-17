@@ -40,7 +40,7 @@ function runtimeConfig() {
   const keys = Array.from(new Set([...pooled, ...(legacy?.trim() ? [legacy.trim()] : [])]));
   return {
     keys,
-    model: runtime.GEMINI_MODEL ?? localValue("GEMINI_MODEL") ?? "gemini-2.5-flash",
+    model: runtime.GEMINI_MODEL ?? localValue("GEMINI_MODEL") ?? "gemini-3.5-flash",
   };
 }
 

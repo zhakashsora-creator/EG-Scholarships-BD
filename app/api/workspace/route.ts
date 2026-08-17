@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
-import { profileCompleteness, scholarships, type StudentProfile } from "../../lib/matching";
+import { prioritizeDestinationDiversity, profileCompleteness, scholarships, type StudentProfile } from "../../lib/matching";
 import { isGeminiConfigured } from "../../lib/gemini-matching";
 import { database, ensureSchema } from "../../lib/storage";
 
@@ -25,11 +25,12 @@ export async function GET() {
     database().prepare(`SELECT stage, note, created_at AS createdAt FROM progress_events WHERE owner_email = ? ORDER BY created_at DESC LIMIT 8`).bind(user.email).all(),
   ]);
   const byId = new Map(scholarships.map((item) => [item.id, item]));
-  const matches = (matchRows.results ?? []).flatMap((row) => {
+  const matches = prioritizeDestinationDiversity((matchRows.results ?? []).flatMap((row) => {
+    if (row.score < 50) return [];
     const scholarship = byId.get(row.scholarshipId);
     if (!scholarship) return [];
     return [{ scholarship, score: row.score, rationale: row.rationale, gaps: JSON.parse(row.gapsJson), label: row.score >= 80 ? "Strong match" : row.score >= 64 ? "Possible match" : "Review required" }];
-  });
+  }));
   let profile: StudentProfile = {};
   try { profile = student?.profileJson ? JSON.parse(student.profileJson) : {}; } catch { profile = {}; }
   return NextResponse.json({

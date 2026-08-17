@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
-import { profileCompleteness, rankScholarships, type StudentProfile } from "../../lib/matching";
+import { prioritizeDestinationDiversity, profileCompleteness, rankScholarships, type StudentProfile } from "../../lib/matching";
 import { enhanceMatchesWithGemini } from "../../lib/gemini-matching";
 import { database, ensureSchema } from "../../lib/storage";
 
@@ -54,12 +54,12 @@ export async function POST(request: Request) {
 
   const ruleResults = rankScholarships(profile);
   const enhanced = await enhanceMatchesWithGemini(profile, ruleResults);
-  const results = enhanced.matches;
+  const results = prioritizeDestinationDiversity(enhanced.matches.filter((match) => match.score >= 50));
   const completeness = profileCompleteness(profile);
   const aiNotice = enhanced.used
     ? ` Gemini AI personalized the leading results while eligibility rules and official catalogue facts remained authoritative.${enhanced.summary ? ` ${enhanced.summary}` : ""}`
     : " Results use the verified catalogue and eligibility scoring; AI enhancement will activate when the Gemini site secret is available.";
-  const notice = `${documentNotice}${aiNotice}`;
+  const notice = `${documentNotice}${aiNotice} Only opportunities scoring 50% or higher are shown; equal scores prioritize destination variety.`;
   await database()
     .prepare(`INSERT INTO students (email, full_name, profile_json, completeness, updated_at)
       VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
