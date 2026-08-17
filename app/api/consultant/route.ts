@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   const user = await getStudentUser();
   if (!user) return NextResponse.json({ error: "Sign in required" }, { status: 401 });
   const body = (await request.json()) as { message?: string };
-  const message = (body.message ?? "Please review my Top Five scholarship shortlist.").trim().slice(0, 1200);
+  const message = (body.message ?? "Please review my Best Finds scholarship shortlist.").trim().slice(0, 1200);
   await ensureSchema();
   const id = crypto.randomUUID();
   await database()

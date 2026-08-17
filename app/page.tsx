@@ -29,7 +29,7 @@ export default async function Home() {
         <div className="hero-copy">
           <span className="eyebrow"><span className="status-dot" /> Verified opportunities · Profile-led guidance</span>
           <h1>Your scholarship search, finally built around <em>your profile.</em></h1>
-          <p>Upload your academic, English-language and funding documents once. EG Scholarships builds a structured profile, compares it with our curated funding database, and gives you a consultant-ready Top Five.</p>
+          <p>Build one detailed study profile. EG Scholarships compares it with our curated funding database and gives you unlimited, consultant-ready Best Finds. Documents stay completely optional.</p>
           <div className="hero-actions">
             <a className="button primary" href={target}>{user ? "Continue to your dashboard" : "Create or access my account"}<span>→</span></a>
             <a className="button ghost" href="#how">See the process</a>
@@ -44,7 +44,7 @@ export default async function Home() {
         <div className="hero-product" aria-label="Dashboard preview">
           <div className="product-top"><img className="mini-logo" src="/egc-emblem.png" alt="" /><span>Student workspace</span><i>Profile 82%</i></div>
           <div className="product-grid">
-            <aside><b>OVERVIEW</b><span className="active">Dashboard</span><span>Documents <i>8</i></span><span>AI profile</span><span>Top Five <i>5</i></span><span>Applications</span></aside>
+            <aside><b>OVERVIEW</b><span className="active">Dashboard</span><span>Study profile</span><span>Documents · optional <i>8</i></span><span>Best Finds <i>24</i></span><span>Applications</span></aside>
             <div className="product-main">
               <div className="mini-heading"><div><small>GOOD EVENING</small><h2>Your strongest options are ready.</h2></div><span>Updated today</span></div>
               <div className="match-preview">
@@ -52,7 +52,7 @@ export default async function Home() {
                 <div><span className="match-label">STRONG MATCH</span><h3>Erasmus Mundus Joint Masters</h3><p>Study level, funding priority and Bangladesh eligibility align.</p></div>
                 <b>#1</b>
               </div>
-              <div className="mini-cards"><article><small>DOCUMENTS</small><strong>8 verified</strong><span>2 need review</span></article><article><small>DEADLINES</small><strong>3 upcoming</strong><span>Next in 41 days</span></article><article><small>CONSULTANT</small><strong>Ready to review</strong><span>Top Five prepared</span></article></div>
+              <div className="mini-cards"><article><small>PROFILE</small><strong>92% ready</strong><span>Academic pathway added</span></article><article><small>DEADLINES</small><strong>3 upcoming</strong><span>Next in 41 days</span></article><article><small>CONSULTANT</small><strong>Ready to review</strong><span>Best Finds prepared</span></article></div>
             </div>
           </div>
         </div>
@@ -66,7 +66,7 @@ export default async function Home() {
             ["01", "Build your profile", "Add study level, subject, destinations, intake, budget and English-test position."],
             ["02", "Upload documents", "Keep academic, language, financial and supporting records in private student storage."],
             ["03", "Review extracted facts", "On-device document reading structures supported facts and flags missing information for your confirmation."],
-            ["04", "Receive your Top Five", "See match reasoning, gaps, official sources, deadlines and consultant next steps."],
+            ["04", "Browse your Best Finds", "Swipe through every destination match with reasoning, gaps, official sources, deadlines and consultant next steps."],
           ].map(([number, title, text]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}
         </div>
       </section>

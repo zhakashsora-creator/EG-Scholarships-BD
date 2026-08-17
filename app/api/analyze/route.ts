@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
-import { rankScholarships, type StudentProfile } from "../../lib/matching";
+import { profileCompleteness, rankScholarships, type StudentProfile } from "../../lib/matching";
+import { enhanceMatchesWithGemini } from "../../lib/gemini-matching";
 import { database, ensureSchema } from "../../lib/storage";
 
 type LocalExtraction = {
@@ -15,7 +16,7 @@ type AnalyzeBody = {
   localExtraction?: LocalExtraction | null;
 };
 
-const DOCUMENT_FACT_KEYS: Array<keyof StudentProfile> = ["gpa", "englishTest", "englishScore", "workExperience"];
+const DOCUMENT_FACT_KEYS: Array<keyof StudentProfile> = ["gpa", "bachelorCgpa", "englishTest", "englishScore", "workExperience"];
 
 function mergeDocumentFacts(submitted: StudentProfile, extracted?: StudentProfile) {
   const merged: StudentProfile = { ...submitted };
@@ -47,13 +48,18 @@ export async function POST(request: Request) {
 
   const evidenceCount = (extraction?.evidenceNotes ?? []).filter((note) => typeof note === "string" && note.trim()).length;
   const warningCount = (extraction?.warnings ?? []).filter((warning) => typeof warning === "string" && warning.trim()).length;
-  const notice = analyzedIds.length
+  const documentNotice = analyzedIds.length
     ? `On-device document reading reviewed ${analyzedIds.length} file${analyzedIds.length === 1 ? "" : "s"}${evidenceCount ? ` and detected ${evidenceCount} supported profile fact${evidenceCount === 1 ? "" : "s"}` : ""}. Raw document text was not sent to an AI service.${warningCount ? ` ${warningCount} file${warningCount === 1 ? "" : "s"} need manual review.` : ""}`
     : "Matches use the verified catalogue and the profile fields you entered.";
 
-  const results = rankScholarships(profile, 5);
-  const completenessFields = [profile.studyLevel, profile.field, profile.gpa, profile.englishScore, profile.intake];
-  const completeness = Math.round((completenessFields.filter(Boolean).length / completenessFields.length) * 100);
+  const ruleResults = rankScholarships(profile);
+  const enhanced = await enhanceMatchesWithGemini(profile, ruleResults);
+  const results = enhanced.matches;
+  const completeness = profileCompleteness(profile);
+  const aiNotice = enhanced.used
+    ? ` Gemini AI personalized the leading results while eligibility rules and official catalogue facts remained authoritative.${enhanced.summary ? ` ${enhanced.summary}` : ""}`
+    : " Results use the verified catalogue and eligibility scoring; AI enhancement will activate when the Gemini site secret is available.";
+  const notice = `${documentNotice}${aiNotice}`;
   await database()
     .prepare(`INSERT INTO students (email, full_name, profile_json, completeness, updated_at)
       VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
@@ -64,8 +70,7 @@ export async function POST(request: Request) {
 
   await database().prepare(`DELETE FROM matches WHERE owner_email = ?`).bind(user.email).run();
   if (results.length) {
-    await database().batch(
-      results.map((result, index) =>
+    const statements = results.map((result, index) =>
         database()
           .prepare(`INSERT INTO matches (id, owner_email, scholarship_id, rank, score, rationale, gaps_json)
             VALUES (?, ?, ?, ?, ?, ?, ?)`)
@@ -73,9 +78,11 @@ export async function POST(request: Request) {
             crypto.randomUUID(), user.email, result.scholarship.id, index + 1,
             result.score, result.rationale, JSON.stringify(result.gaps),
           ),
-      ),
-    );
+      );
+    for (let offset = 0; offset < statements.length; offset += 50) {
+      await database().batch(statements.slice(offset, offset + 50));
+    }
   }
 
-  return NextResponse.json({ mode: analyzedIds.length ? "on-device" : "rules", notice, profile, completeness, results, analyzedIds });
+  return NextResponse.json({ mode: enhanced.used ? "hybrid-gemini" : analyzedIds.length ? "on-device" : "rules", notice, profile, completeness, results, analyzedIds, aiEnhanced: enhanced.used });
 }

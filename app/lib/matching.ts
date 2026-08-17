@@ -7,11 +7,32 @@ export type StudentProfile = {
   preferredCountries?: string[];
   field?: string;
   gpa?: string;
+  secondaryQualification?: string;
+  secondaryBoard?: string;
+  secondaryYear?: string;
+  secondaryResult?: string;
+  higherSecondaryQualification?: string;
+  higherSecondaryBoard?: string;
+  higherSecondaryYear?: string;
+  higherSecondaryResult?: string;
+  hasBachelorDegree?: "yes" | "no" | "";
+  bachelorDegree?: string;
+  bachelorInstitution?: string;
+  bachelorSubject?: string;
+  bachelorCgpa?: string;
+  bachelorCgpaScale?: string;
+  bachelorGraduationYear?: string;
+  wantsBachelorAbroad?: "yes" | "no" | "";
   englishTest?: string;
   englishScore?: string;
   budget?: string;
+  fundingNeed?: string;
+  studyMode?: string;
   intake?: string;
   workExperience?: string;
+  researchExperience?: string;
+  extracurriculars?: string;
+  careerGoals?: string;
   notes?: string;
 };
 
@@ -22,6 +43,26 @@ export type ScholarshipMatch = {
   rationale: string;
   gaps: string[];
 };
+
+export function profileCompleteness(profile: StudentProfile) {
+  const core: unknown[] = [
+    profile.secondaryQualification,
+    profile.secondaryResult,
+    profile.higherSecondaryQualification,
+    profile.higherSecondaryResult,
+    profile.studyLevel,
+    profile.field,
+    profile.preferredCountries?.length,
+    profile.intake,
+    profile.budget,
+    profile.fundingNeed,
+    profile.englishTest,
+    profile.englishTest && !/not taken|planning/i.test(profile.englishTest) ? profile.englishScore : "not required yet",
+  ];
+  if (profile.hasBachelorDegree === "yes") core.push(profile.bachelorDegree, profile.bachelorCgpa);
+  if (profile.hasBachelorDegree === "no") core.push(profile.wantsBachelorAbroad);
+  return Math.round((core.filter(Boolean).length / core.length) * 100);
+}
 
 function normalize(value?: string) {
   return (value ?? "").toLocaleLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9.]+/g, " ").trim();
@@ -49,6 +90,22 @@ function levelTerms(level?: string) {
   return tokens(level);
 }
 
+const COUNTRY_ALIASES: string[][] = [
+  ["uk", "united kingdom", "england", "scotland", "wales", "northern ireland"],
+  ["usa", "us", "united states", "united states of america", "america"],
+  ["uae", "united arab emirates", "emirates"],
+  ["south korea", "republic of korea", "korea"],
+];
+
+function countryTerms(country: string) {
+  const value = normalize(country);
+  return COUNTRY_ALIASES.find((group) => group.some((alias) => normalize(alias) === value)) ?? [country];
+}
+
+function countryMatches(countryText: string, preference: string) {
+  return containsAny(countryText, countryTerms(preference));
+}
+
 function explicitRequirement(text: string, label: "gpa" | "ielts") {
   const pattern = label === "gpa"
     ? /(?:gpa|cgpa)[^0-9]{0,18}(\d(?:\.\d+)?)/i
@@ -67,12 +124,26 @@ function deadlineState(scholarship: Scholarship, now: Date) {
   return { date, closed: explicitlyClosed || past };
 }
 
-export function rankScholarships(profile: StudentProfile, limit = 5, now = new Date()): ScholarshipMatch[] {
-  const profileGpa = numericValue(profile.gpa);
+export function rankScholarships(profile: StudentProfile, limit?: number, now = new Date()): ScholarshipMatch[] {
+  const academicResult = profile.hasBachelorDegree === "yes"
+    ? profile.bachelorCgpa || profile.gpa
+    : profile.higherSecondaryResult || profile.gpa;
+  const bachelorResult = numericValue(profile.bachelorCgpa || profile.gpa);
+  const bachelorScale = numericValue(profile.bachelorCgpaScale) ?? 4;
+  const profileGpa = profile.hasBachelorDegree === "yes" && bachelorResult !== null && bachelorScale > 0
+    ? (bachelorResult / bachelorScale) * 4
+    : profile.gpa
+      ? numericValue(profile.gpa)
+      : null;
   const profileEnglish = numericValue(profile.englishScore);
   const intakeYear = profile.intake?.match(/20\d{2}/)?.[0];
+  const preferred = (profile.preferredCountries ?? []).map((country) => country.trim()).filter(Boolean);
+  const locationMatches = preferred.length
+    ? scholarshipData.filter((scholarship) => preferred.some((country) => countryMatches(`${scholarship.country} ${scholarship.destination}`, country)))
+    : scholarshipData;
+  const candidates = locationMatches.length ? locationMatches : scholarshipData;
 
-  return scholarshipData
+  const ranked = candidates
     .map((scholarship) => {
       let score = 30;
       let hardGap = false;
@@ -105,7 +176,7 @@ export function rankScholarships(profile: StudentProfile, limit = 5, now = new D
       }
 
       if (profile.preferredCountries?.length) {
-        if (profile.preferredCountries.some((country) => containsAny(countryText, [country]))) {
+        if (profile.preferredCountries.some((country) => countryMatches(countryText, country))) {
           score += 15;
           reasons.push("preferred destination aligns");
         } else {
@@ -150,7 +221,7 @@ export function rankScholarships(profile: StudentProfile, limit = 5, now = new D
           hardGap = true;
           gaps.push(`stated GPA threshold appears to be ${gpaRequirement}`);
         }
-      } else if (profile.gpa) {
+      } else if (academicResult) {
         gaps.push("academic competitiveness requires manual review");
       }
 
@@ -174,6 +245,14 @@ export function rankScholarships(profile: StudentProfile, limit = 5, now = new D
         reasons.push("strong funding coverage");
       } else if (/partial|tuition|stipend/i.test(fundingText)) {
         score += 5;
+      }
+      if (/fully funded only/i.test(profile.fundingNeed ?? "") && !/fully funded/i.test(fundingText)) {
+        score -= 8;
+        gaps.push("funding may not meet the fully funded preference");
+      }
+      if (profile.researchExperience && /research|phd|doctoral/i.test(levelText)) {
+        score += 4;
+        reasons.push("research background supports the target route");
       }
 
       if (deadline.closed) {
@@ -213,8 +292,9 @@ export function rankScholarships(profile: StudentProfile, limit = 5, now = new D
         gaps: Array.from(new Set(gaps)).slice(0, 4),
       } satisfies ScholarshipMatch;
     })
-    .sort((a, b) => b.score - a.score || a.scholarship.name.localeCompare(b.scholarship.name))
-    .slice(0, limit);
+    .sort((a, b) => b.score - a.score || a.scholarship.name.localeCompare(b.scholarship.name));
+
+  return typeof limit === "number" ? ranked.slice(0, Math.max(0, limit)) : ranked;
 }
 
 export const scholarships = scholarshipData;

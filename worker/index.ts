@@ -7,6 +7,8 @@ interface Env {
   DB: D1Database;
   DOCUMENTS: R2Bucket;
   OPENAI_API_KEY?: string;
+  GEMINI_API_KEY?: string;
+  GEMINI_MODEL?: string;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {

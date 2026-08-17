@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title,
     description,
     icons: { icon: "/og.png", shortcut: "/og.png" },
-    openGraph: { title, description, type: "website", url: origin, images: [{ url: `${origin}/og.png`, width: 1745, height: 909, alt: "EG Scholarships BD — Your profile. Your Top Five. A clearer path forward." }] },
+    openGraph: { title, description, type: "website", url: origin, images: [{ url: `${origin}/og.png`, width: 1745, height: 909, alt: "EG Scholarships BD — Your profile. Your Best Finds. A clearer path forward." }] },
     twitter: { card: "summary_large_image", title, description, images: [`${origin}/og.png`] },
   };
 }

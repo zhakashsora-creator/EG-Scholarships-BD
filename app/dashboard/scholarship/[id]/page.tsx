@@ -39,12 +39,12 @@ export default async function ScholarshipAnalysisPage({ params }: { params: Prom
     <main className="analysis-page">
       <header className="analysis-header">
         <Link className="brand" href="/dashboard"><img className="brand-logo" src="/egc-emblem.png" alt="Excellence Global Consultancy" /><span><strong>EG Scholarships</strong><small>Personal match analysis</small></span></Link>
-        <div><ThemeToggle /><Link className="button ghost compact" href="/dashboard">← Back to Top Five</Link></div>
+        <div><ThemeToggle /><Link className="button ghost compact" href="/dashboard?tab=matches">← Back to Best Finds</Link></div>
       </header>
 
       <section className="analysis-hero">
         <div>
-          <span className="eyebrow">TOP FIVE · #{row.rank} FOR YOUR PROFILE</span>
+          <span className="eyebrow">BEST FINDS · #{row.rank} FOR YOUR PROFILE</span>
           <h1>{scholarship.name}</h1>
           <p>{scholarship.provider} · {scholarship.country}</p>
           <div className="analysis-tags"><span>{scholarship.studyLevel}</span><span>{scholarship.coverage || "Funding varies"}</span><span>{scholarship.status}</span></div>

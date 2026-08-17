@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
-import { scholarships, type StudentProfile } from "../../lib/matching";
+import { profileCompleteness, scholarships, type StudentProfile } from "../../lib/matching";
+import { isGeminiConfigured } from "../../lib/gemini-matching";
 import { database, ensureSchema } from "../../lib/storage";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +28,7 @@ export async function GET() {
   const matches = (matchRows.results ?? []).flatMap((row) => {
     const scholarship = byId.get(row.scholarshipId);
     if (!scholarship) return [];
-    return [{ scholarship, score: row.score, rationale: row.rationale, gaps: JSON.parse(row.gapsJson), label: row.score >= 78 ? "Strong match" : row.score >= 62 ? "Possible match" : "Review required" }];
+    return [{ scholarship, score: row.score, rationale: row.rationale, gaps: JSON.parse(row.gapsJson), label: row.score >= 80 ? "Strong match" : row.score >= 64 ? "Possible match" : "Review required" }];
   });
   let profile: StudentProfile = {};
   try { profile = student?.profileJson ? JSON.parse(student.profileJson) : {}; } catch { profile = {}; }
@@ -52,7 +53,8 @@ export async function GET() {
       return { scholarshipId: application.scholarshipId, stage: application.stage, nextAction: application.nextAction, workflow, updatedAt: application.updatedAt };
     }),
     progress: progressRows.results ?? [],
-    analysisMode: "on-device",
+    analysisMode: isGeminiConfigured() ? "hybrid-gemini" : "on-device",
+    aiConfigured: isGeminiConfigured(),
   });
 }
 
@@ -60,8 +62,7 @@ export async function PUT(request: Request) {
   const user = await getStudentUser();
   if (!user) return NextResponse.json({ error: "Sign in required" }, { status: 401 });
   const profile = (await request.json()) as StudentProfile;
-  const fields = [profile.studyLevel, profile.field, profile.gpa, profile.englishScore, profile.intake, profile.preferredCountries?.length];
-  const completeness = Math.round((fields.filter(Boolean).length / fields.length) * 100);
+  const completeness = profileCompleteness(profile);
   await ensureSchema();
   const account = await database().prepare(`SELECT full_name AS fullName FROM student_accounts WHERE email = ?`)
     .bind(user.email).first<{ fullName: string }>();

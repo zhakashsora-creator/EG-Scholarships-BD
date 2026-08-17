@@ -81,3 +81,31 @@ test("portal includes theme controls, personalized analysis pages and a complete
   assert.match(applicationRoute, /workflow_json/);
   assert.match(migration, /workflow_json/);
 });
+
+test("study profile, optional documents, unlimited Best Finds and Gemini enhancement are wired together", async () => {
+  const [dashboard, matching, analyze, gemini, envExample] = await Promise.all([
+    readFile(new URL("../app/dashboard/DashboardClient.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/matching.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/analyze/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/gemini-matching.ts", import.meta.url), "utf8"),
+    readFile(new URL("../.env.example", import.meta.url), "utf8"),
+  ]);
+  assert.match(dashboard, /\["profile", "03", "Study profile"\]/);
+  assert.match(dashboard, /SSC \/ O-level qualification/);
+  assert.match(dashboard, /HSC \/ A-level qualification/);
+  assert.match(dashboard, /Have you completed a Bachelor/);
+  assert.match(dashboard, /Bachelor&apos;s CGPA/);
+  assert.match(dashboard, /Optional for matching/);
+  assert.match(dashboard, /STUDENT RECORDS HUB/);
+  assert.match(dashboard, /Emails & letters/);
+  assert.match(dashboard, /Receipts/);
+  assert.match(dashboard, /Open Student Records/);
+  assert.match(dashboard, /APPLICATION & PRE-DEPARTURE TRACKER/);
+  assert.match(dashboard, /best-finds-rail/);
+  assert.match(dashboard, /Generate my Best Finds/);
+  assert.doesNotMatch(dashboard, /Generate my Top Five/);
+  assert.match(matching, /typeof limit === "number"/);
+  assert.match(analyze, /enhanceMatchesWithGemini/);
+  assert.match(gemini, /x-goog-api-key/);
+  assert.match(envExample, /GEMINI_API_KEY=/);
+});
