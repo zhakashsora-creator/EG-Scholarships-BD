@@ -82,12 +82,15 @@ test("portal includes theme controls, personalized analysis pages and a complete
   assert.match(migration, /workflow_json/);
 });
 
-test("study profile, optional documents, qualified Best Finds and resilient official discovery are wired together", async () => {
-  const [dashboard, matching, analyze, workspaceRoute, gemini, geminiClient, guidelineRoute, officialGuidelines, courseRoute, courseFallback, envExample] = await Promise.all([
+test("study profile, optional documents, top-ten reports and resilient official discovery are wired together", async () => {
+  const [dashboard, matching, analyze, workspaceRoute, reportRoute, reportBuilder, reportMigration, gemini, geminiClient, guidelineRoute, officialGuidelines, courseRoute, courseFallback, envExample] = await Promise.all([
     readFile(new URL("../app/dashboard/DashboardClient.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/lib/matching.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/analyze/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/workspace/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/report/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/scholarship-report.ts", import.meta.url), "utf8"),
+    readFile(new URL("../drizzle/0005_scholarship_reports.sql", import.meta.url), "utf8"),
     readFile(new URL("../app/lib/gemini-matching.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/lib/gemini-client.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/guideline-check/route.ts", import.meta.url), "utf8"),
@@ -108,15 +111,25 @@ test("study profile, optional documents, qualified Best Finds and resilient offi
   assert.match(dashboard, /Open Student Records/);
   assert.match(dashboard, /APPLICATION & PRE-DEPARTURE TRACKER/);
   assert.match(dashboard, /best-finds-rail/);
-  assert.match(dashboard, /Generate my Best Finds/);
+  assert.match(dashboard, /Find my top 10/);
+  assert.match(dashboard, /Email the report to/);
+  assert.match(dashboard, /Download PDF/);
   assert.doesNotMatch(dashboard, /Generate my Top Five/);
   assert.match(matching, /typeof limit === "number"/);
   assert.match(matching, /prioritizeDestinationDiversity/);
   assert.match(analyze, /enhanceMatchesWithGemini/);
-  assert.match(analyze, /match\.score >= 50/);
+  assert.match(analyze, /slice\(0, 10\)/);
   assert.match(analyze, /prioritizeDestinationDiversity/);
-  assert.match(workspaceRoute, /row\.score < 50/);
+  assert.match(analyze, /emailScholarshipReport/);
   assert.match(workspaceRoute, /prioritizeDestinationDiversity/);
+  assert.match(workspaceRoute, /scholarship_reports/);
+  assert.match(reportRoute, /Content-Type": "application\/pdf/);
+  assert.match(reportBuilder, /StandardFonts\.Helvetica/);
+  assert.match(reportBuilder, /api\.resend\.com\/emails/);
+  assert.match(reportBuilder, /GMAIL_REPORT_WEBHOOK_URL/);
+  assert.match(reportBuilder, /GMAIL_REPORT_WEBHOOK_SECRET/);
+  assert.match(reportBuilder, /Idempotency-Key/);
+  assert.match(reportMigration, /follow_up_consent/);
   assert.match(gemini, /geminiGenerateContent/);
   assert.match(geminiClient, /x-goog-api-key/);
   assert.match(geminiClient, /response\.status === 429/);
@@ -135,4 +148,7 @@ test("study profile, optional documents, qualified Best Finds and resilient offi
   assert.match(courseFallback, /Official programme catalogue/);
   assert.match(envExample, /GEMINI_API_KEY=/);
   assert.match(envExample, /GEMINI_API_KEYS=/);
+  assert.match(envExample, /RESEND_API_KEY=/);
+  assert.match(envExample, /GMAIL_REPORT_WEBHOOK_URL=/);
+  assert.match(envExample, /CONSULTATION_BOOKING_URL=/);
 });

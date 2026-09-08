@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
 import { prioritizeDestinationDiversity, profileCompleteness, scholarships, type StudentProfile } from "../../lib/matching";
 import { isGeminiConfigured } from "../../lib/gemini-matching";
+import { isReportEmailConfigured } from "../../lib/scholarship-report";
 import { database, ensureSchema } from "../../lib/storage";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +11,7 @@ export async function GET() {
   const user = await getStudentUser();
   if (!user) return NextResponse.json({ error: "Sign in required" }, { status: 401 });
   await ensureSchema();
-  const [student, account, matchRows, applicationRows, progressRows] = await Promise.all([
+  const [student, account, matchRows, applicationRows, progressRows, reportRow] = await Promise.all([
     database().prepare(`SELECT profile_json AS profileJson, completeness FROM students WHERE email = ?`).bind(user.email).first<{ profileJson: string; completeness: number }>(),
     database().prepare(`SELECT full_name AS fullName, address, mobile, date_of_birth AS dateOfBirth,
       nationality, current_institution AS currentInstitution, photo_storage_key AS photoStorageKey,
@@ -23,14 +24,17 @@ export async function GET() {
     database().prepare(`SELECT scholarship_id AS scholarshipId, rank, score, rationale, gaps_json AS gapsJson FROM matches WHERE owner_email = ? ORDER BY rank`).bind(user.email).all<{ scholarshipId: string; rank: number; score: number; rationale: string; gapsJson: string }>(),
     database().prepare(`SELECT scholarship_id AS scholarshipId, stage, next_action AS nextAction, workflow_json AS workflowJson, updated_at AS updatedAt FROM applications WHERE owner_email = ? ORDER BY updated_at DESC`).bind(user.email).all<{ scholarshipId: string; stage: string; nextAction: string; workflowJson: string; updatedAt: string }>(),
     database().prepare(`SELECT stage, note, created_at AS createdAt FROM progress_events WHERE owner_email = ? ORDER BY created_at DESC LIMIT 8`).bind(user.email).all(),
+    database().prepare(`SELECT id, recipient_email AS recipientEmail, status, created_at AS createdAt, sent_at AS sentAt
+      FROM scholarship_reports WHERE owner_email = ? ORDER BY created_at DESC LIMIT 1`).bind(user.email).first<{
+        id: string; recipientEmail: string; status: string; createdAt: string; sentAt: string | null;
+      }>(),
   ]);
   const byId = new Map(scholarships.map((item) => [item.id, item]));
   const matches = prioritizeDestinationDiversity((matchRows.results ?? []).flatMap((row) => {
-    if (row.score < 50) return [];
     const scholarship = byId.get(row.scholarshipId);
     if (!scholarship) return [];
     return [{ scholarship, score: row.score, rationale: row.rationale, gaps: JSON.parse(row.gapsJson), label: row.score >= 80 ? "Strong match" : row.score >= 64 ? "Possible match" : "Review required" }];
-  }));
+  })).slice(0, 10);
   let profile: StudentProfile = {};
   try { profile = student?.profileJson ? JSON.parse(student.profileJson) : {}; } catch { profile = {}; }
   return NextResponse.json({
@@ -54,6 +58,16 @@ export async function GET() {
       return { scholarshipId: application.scholarshipId, stage: application.stage, nextAction: application.nextAction, workflow, updatedAt: application.updatedAt };
     }),
     progress: progressRows.results ?? [],
+    report: reportRow ? {
+      ...reportRow,
+      downloadUrl: `/api/report?id=${encodeURIComponent(reportRow.id)}`,
+      emailConfigured: isReportEmailConfigured(),
+      message: reportRow.status === "sent"
+        ? `Your detailed report was emailed to ${reportRow.recipientEmail}.`
+        : reportRow.status === "failed"
+          ? "Your report is ready to download, but email delivery needs attention."
+          : "Your report is ready to download. Email delivery is waiting for site setup.",
+    } : null,
     analysisMode: isGeminiConfigured() ? "hybrid-gemini" : "on-device",
     aiConfigured: isGeminiConfigured(),
   });

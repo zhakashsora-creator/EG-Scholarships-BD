@@ -29,7 +29,7 @@ export default async function Home() {
         <div className="hero-copy">
           <span className="eyebrow"><span className="status-dot" /> Verified opportunities · Profile-led guidance</span>
           <h1>Your scholarship search, finally built around <em>your profile.</em></h1>
-          <p>Build one detailed study profile. EG Scholarships compares it with our curated funding database and gives you unlimited, consultant-ready Best Finds. Documents stay completely optional.</p>
+          <p>Build one detailed study profile. EG Scholarships compares it with our curated funding database, shows your 10 best options, and emails a practical report you can bring to a consultation. Documents stay completely optional.</p>
           <div className="hero-actions">
             <a className="button primary" href={target}>{user ? "Continue to your dashboard" : "Create or access my account"}<span>→</span></a>
             <a className="button ghost" href="#how">See the process</a>
@@ -37,14 +37,14 @@ export default async function Home() {
           <div className="trust-row">
             <span><b>{scholarships.length}</b> curated records</span>
             <span><b>{countries}</b> destinations</span>
-            <span><b>Top 5</b> consultant-ready options</span>
+            <span><b>Top 10</b> consultant-ready options</span>
           </div>
         </div>
 
         <div className="hero-product" aria-label="Dashboard preview">
           <div className="product-top"><img className="mini-logo" src="/egc-emblem.png" alt="" /><span>Student workspace</span><i>Profile 82%</i></div>
           <div className="product-grid">
-            <aside><b>OVERVIEW</b><span className="active">Dashboard</span><span>Study profile</span><span>Documents · optional <i>8</i></span><span>Best Finds <i>24</i></span><span>Applications</span></aside>
+            <aside><b>OVERVIEW</b><span className="active">Dashboard</span><span>Study profile</span><span>Documents · optional <i>8</i></span><span>Best Finds <i>10</i></span><span>My report</span></aside>
             <div className="product-main">
               <div className="mini-heading"><div><small>GOOD EVENING</small><h2>Your strongest options are ready.</h2></div><span>Updated today</span></div>
               <div className="match-preview">
@@ -64,9 +64,9 @@ export default async function Home() {
         <div className="process-grid">
           {[
             ["01", "Build your profile", "Add study level, subject, destinations, intake, budget and English-test position."],
-            ["02", "Upload documents", "Keep academic, language, financial and supporting records in private student storage."],
-            ["03", "Review extracted facts", "On-device document reading structures supported facts and flags missing information for your confirmation."],
-            ["04", "Browse your Best Finds", "Swipe through every destination match with reasoning, gaps, official sources, deadlines and consultant next steps."],
+            ["02", "See your best 10", "Review ranked options with match reasoning, gaps, official sources, deadlines and cost planning."],
+            ["03", "Receive your report", "Get a branded PDF with your profile summary, match realities and a focused action plan."],
+            ["04", "Plan with a consultant", "Bring the report to a free at-office consultation and turn the strongest options into an application plan."],
           ].map(([number, title, text]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}
         </div>
       </section>

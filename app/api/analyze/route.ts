@@ -3,6 +3,7 @@ import { getStudentUser } from "../../lib/auth";
 import { prioritizeDestinationDiversity, profileCompleteness, rankScholarships, type StudentProfile } from "../../lib/matching";
 import { enhanceMatchesWithGemini } from "../../lib/gemini-matching";
 import { database, ensureSchema } from "../../lib/storage";
+import { buildScholarshipReportPdf, consultationUrl, emailScholarshipReport, isReportEmailConfigured, type ReportSnapshot } from "../../lib/scholarship-report";
 
 type LocalExtraction = {
   profile?: StudentProfile;
@@ -14,6 +15,8 @@ type LocalExtraction = {
 type AnalyzeBody = {
   profile?: StudentProfile;
   localExtraction?: LocalExtraction | null;
+  emailReport?: boolean;
+  followUpConsent?: boolean;
 };
 
 const DOCUMENT_FACT_KEYS: Array<keyof StudentProfile> = ["gpa", "bachelorCgpa", "englishTest", "englishScore", "workExperience"];
@@ -54,12 +57,12 @@ export async function POST(request: Request) {
 
   const ruleResults = rankScholarships(profile);
   const enhanced = await enhanceMatchesWithGemini(profile, ruleResults);
-  const results = prioritizeDestinationDiversity(enhanced.matches.filter((match) => match.score >= 50));
+  const results = prioritizeDestinationDiversity(enhanced.matches).slice(0, 10);
   const completeness = profileCompleteness(profile);
   const aiNotice = enhanced.used
     ? ` Gemini AI personalized the leading results while eligibility rules and official catalogue facts remained authoritative.${enhanced.summary ? ` ${enhanced.summary}` : ""}`
     : " Results use the verified catalogue and eligibility scoring; AI enhancement will activate when the Gemini site secret is available.";
-  const notice = `${documentNotice}${aiNotice} Only opportunities scoring 50% or higher are shown; equal scores prioritize destination variety.`;
+  const notice = `${documentNotice}${aiNotice} Your 10 highest-ranked options are shown; lower-confidence choices are clearly marked for review, and equal scores prioritize destination variety.`;
   await database()
     .prepare(`INSERT INTO students (email, full_name, profile_json, completeness, updated_at)
       VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
@@ -84,5 +87,61 @@ export async function POST(request: Request) {
     }
   }
 
-  return NextResponse.json({ mode: enhanced.used ? "hybrid-gemini" : analyzedIds.length ? "on-device" : "rules", notice, profile, completeness, results, analyzedIds, aiEnhanced: enhanced.used });
+  const account = await database().prepare(`SELECT full_name AS fullName FROM student_accounts WHERE email = ?`)
+    .bind(user.email).first<{ fullName: string }>();
+  const reportId = crypto.randomUUID();
+  const createdAt = new Date().toISOString();
+  const snapshot: ReportSnapshot = {
+    id: reportId,
+    createdAt,
+    student: { fullName: account?.fullName ?? user.fullName, email: user.email },
+    profile,
+    matches: results,
+    followUpConsent: body.followUpConsent === true,
+  };
+  let reportStatus: "ready" | "sent" | "failed" = "ready";
+  let reportSentAt: string | null = null;
+  let providerId = "";
+  let deliveryError = "";
+  if (body.emailReport !== false && isReportEmailConfigured()) {
+    try {
+      const bookingUrl = consultationUrl(new URL(request.url).origin);
+      const pdf = await buildScholarshipReportPdf(snapshot, bookingUrl);
+      const delivery = await emailScholarshipReport(snapshot, pdf, bookingUrl);
+      reportStatus = delivery.status;
+      providerId = delivery.providerId;
+      deliveryError = delivery.error;
+      if (delivery.status === "sent") reportSentAt = new Date().toISOString();
+    } catch (error) {
+      console.error("Scholarship report delivery failed", error);
+      reportStatus = "failed";
+      deliveryError = "Report email could not be delivered";
+    }
+  }
+  await database().prepare(`INSERT INTO scholarship_reports
+    (id, owner_email, recipient_email, status, snapshot_json, provider_id, error_message, follow_up_consent, created_at, sent_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    .bind(reportId, user.email, user.email, reportStatus, JSON.stringify(snapshot), providerId || null,
+      deliveryError || null, body.followUpConsent === true ? 1 : 0, createdAt, reportSentAt).run();
+  await database().prepare(`INSERT INTO progress_events (id, owner_email, stage, note) VALUES (?, ?, 'Scholarship report prepared', ?)`)
+    .bind(crypto.randomUUID(), user.email, reportStatus === "sent" ? "Top 10 report emailed to the student" : "Top 10 report ready to download").run();
+
+  const report = {
+    id: reportId,
+    status: reportStatus,
+    recipientEmail: user.email,
+    createdAt,
+    sentAt: reportSentAt,
+    downloadUrl: `/api/report?id=${encodeURIComponent(reportId)}`,
+    emailConfigured: isReportEmailConfigured(),
+    message: reportStatus === "sent"
+      ? `Your detailed report was emailed to ${user.email}.`
+      : reportStatus === "failed"
+        ? "Your report is ready to download, but email delivery needs attention."
+        : body.emailReport === false
+          ? "Your report is ready to download."
+          : "Your report is ready to download. Email delivery is waiting for site setup.",
+  };
+
+  return NextResponse.json({ mode: enhanced.used ? "hybrid-gemini" : analyzedIds.length ? "on-device" : "rules", notice, profile, completeness, results, analyzedIds, aiEnhanced: enhanced.used, report });
 }

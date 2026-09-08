@@ -10,6 +10,13 @@ interface Env {
   GEMINI_API_KEY?: string;
   GEMINI_API_KEYS?: string;
   GEMINI_MODEL?: string;
+  GMAIL_REPORT_WEBHOOK_URL?: string;
+  GMAIL_REPORT_WEBHOOK_SECRET?: string;
+  RESEND_API_KEY?: string;
+  REPORT_FROM_EMAIL?: string;
+  REPORT_ADMIN_EMAIL?: string;
+  CONSULTANT_REPLY_TO?: string;
+  CONSULTATION_BOOKING_URL?: string;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {

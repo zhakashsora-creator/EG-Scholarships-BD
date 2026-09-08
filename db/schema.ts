@@ -87,6 +87,19 @@ export const consultantRequests = sqliteTable("consultant_requests", {
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
+export const scholarshipReports = sqliteTable("scholarship_reports", {
+  id: text("id").primaryKey(),
+  ownerEmail: text("owner_email").notNull(),
+  recipientEmail: text("recipient_email").notNull(),
+  status: text("status").notNull().default("ready"),
+  snapshotJson: text("snapshot_json").notNull(),
+  providerId: text("provider_id"),
+  errorMessage: text("error_message"),
+  followUpConsent: integer("follow_up_consent", { mode: "boolean" }).notNull().default(false),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  sentAt: text("sent_at"),
+});
+
 export const applications = sqliteTable("applications", {
   id: text("id").primaryKey(),
   ownerEmail: text("owner_email").notNull(),

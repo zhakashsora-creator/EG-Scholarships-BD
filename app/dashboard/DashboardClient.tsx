@@ -50,6 +50,16 @@ type CourseResult = {
 };
 type ApplicationItem = { scholarshipId: string; stage: string; nextAction: string; workflow?: ApplicationWorkflow; updatedAt?: string };
 type ProgressItem = { stage: string; note: string; createdAt: string };
+type ReportDelivery = {
+  id: string;
+  status: "ready" | "sent" | "failed";
+  recipientEmail: string;
+  createdAt: string;
+  sentAt?: string | null;
+  downloadUrl: string;
+  emailConfigured: boolean;
+  message: string;
+};
 type AccountProfile = {
   fullName: string;
   address: string;
@@ -102,6 +112,9 @@ export default function DashboardClient({ user, signOutPath, initialTab = "overv
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [analysisProgress, setAnalysisProgress] = useState("");
   const [aiConfigured, setAiConfigured] = useState(false);
+  const [report, setReport] = useState<ReportDelivery | null>(null);
+  const [emailReport, setEmailReport] = useState(true);
+  const [followUpConsent, setFollowUpConsent] = useState(false);
 
   async function readJson(response: Response) {
     const payload = await response.json().catch(() => ({}));
@@ -123,6 +136,7 @@ export default function DashboardClient({ user, signOutPath, initialTab = "overv
         setApplications(workspace.applications ?? []);
         setProgress(workspace.progress ?? []);
         setAiConfigured(Boolean(workspace.aiConfigured));
+        setReport(workspace.report ?? null);
         setDocuments(documentData.documents ?? []);
       })
       .catch((error) => setNotice(error instanceof Error ? error.message : "Workspace could not be loaded"))
@@ -219,9 +233,10 @@ export default function DashboardClient({ user, signOutPath, initialTab = "overv
         const { analyzeDocumentsOnDevice } = await import("../lib/local-document-analysis");
         localExtraction = await analyzeDocumentsOnDevice(documents, setAnalysisProgress);
       }
-      const payload = await readJson(await fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ profile, localExtraction }) }));
+      const payload = await readJson(await fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ profile, localExtraction, emailReport, followUpConsent }) }));
       setProfile({ ...emptyProfile, ...payload.profile });
       setMatches(payload.results ?? []);
+      setReport(payload.report ?? null);
       if (payload.analyzedIds?.length) {
         const reviewed = new Set<string>(payload.analyzedIds);
         setDocuments((current) => current.map((document) => reviewed.has(document.id) ? { ...document, status: "analyzed" } : document));
@@ -258,6 +273,17 @@ export default function DashboardClient({ user, signOutPath, initialTab = "overv
     finally { setBusy(false); }
   }
 
+  async function retryReportEmail() {
+    if (!report) return;
+    setBusy(true);
+    try {
+      const payload = await readJson(await fetch("/api/report", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: report.id }) }));
+      setReport(payload);
+      setNotice(payload.message);
+    } catch (error) { setNotice(error instanceof Error ? error.message : "Report email could not be retried"); }
+    finally { setBusy(false); }
+  }
+
   const navItems: Array<[Tab, string, string]> = [["overview", "01", "Overview"], ["account", "02", "My account"], ["profile", "03", "Study profile"], ["documents", "04", "Documents · optional"], ["matches", "05", "Best Finds"], ["applications", "06", "Applications"], ["consultant", "07", "Consultant"]];
   if (loading) return <main className="workspace-loading"><img className="brand-logo" src="/egc-emblem.png" alt="Excellence Global Consultancy" /><strong>Preparing your secure workspace</strong><i /></main>;
   if (!account.onboardingComplete) return <AccountSetup account={account} email={user.email} busy={busy} notice={notice} onSave={saveAccount} signOutPath={signOutPath} />;
@@ -279,8 +305,8 @@ export default function DashboardClient({ user, signOutPath, initialTab = "overv
         {tab === "overview" && <Overview documents={documents} matches={matches} completeness={completeness} categoryCount={categoryCount} applications={applications} progress={progress} onNavigate={setTab} />}
         {tab === "account" && <AccountEditor account={account} email={user.email} busy={busy} notice={notice} onSave={saveAccount} />}
         {tab === "documents" && <Documents documents={documents} busy={busy} deletingId={deletingId} notice={notice} onUpload={uploadDocument} onDelete={removeDocument} />}
-        {tab === "profile" && <Profile profile={profile} setProfile={setProfile} consent={consent} setConsent={setConsent} documents={documents.length} busy={busy} analysisProgress={analysisProgress} aiConfigured={aiConfigured} onSave={saveProfile} onRun={runMatch} />}
-        {tab === "matches" && <Matches matches={matches} profile={profile} notice={notice} onProfile={() => setTab("profile")} onConsultant={() => setTab("consultant")} onTrack={(id) => { updateApplication(id, "shortlisted"); setTab("applications"); }} />}
+        {tab === "profile" && <Profile profile={profile} setProfile={setProfile} consent={consent} setConsent={setConsent} emailReport={emailReport} setEmailReport={setEmailReport} followUpConsent={followUpConsent} setFollowUpConsent={setFollowUpConsent} email={user.email} documents={documents.length} busy={busy} analysisProgress={analysisProgress} aiConfigured={aiConfigured} onSave={saveProfile} onRun={runMatch} />}
+        {tab === "matches" && <Matches matches={matches} profile={profile} report={report} busy={busy} notice={notice} onRetryReport={retryReportEmail} onProfile={() => setTab("profile")} onConsultant={() => setTab("consultant")} onTrack={(id) => { updateApplication(id, "shortlisted"); setTab("applications"); }} />}
         {tab === "applications" && <Applications matches={matches} applications={applications} recordCount={documents.length} onUpdate={updateApplication} />}
         {tab === "consultant" && <Consultant sent={consultantSent} busy={busy} onRequest={requestConsultant} />}
       </div>
@@ -292,7 +318,7 @@ function AccountSetup({ account, email, busy, notice, onSave, signOutPath }: { a
   return <main className="onboarding-shell">
     <header className="onboarding-header"><Link className="brand" href="/"><img className="brand-logo" src="/egc-emblem.png" alt="Excellence Global Consultancy" /><span><strong>EG Scholarships</strong><small>Student account setup</small></span></Link><a href={signOutPath}>Sign out</a></header>
     <section className="onboarding-card">
-      <div className="onboarding-intro"><span className="section-kicker">WELCOME TO YOUR WORKSPACE</span><h1>Let’s set up your student account.</h1><p>These details help EG Consultancy identify your profile and contact you about your scholarship journey. Only your name, address and Bangladesh mobile number are required.</p><ol><li className="active"><b>1</b><span><strong>Account details</strong><small>Tell us who you are</small></span></li><li><b>2</b><span><strong>Study profile</strong><small>Add academic preferences</small></span></li><li><b>3</b><span><strong>Best Finds</strong><small>Browse your strongest options</small></span></li></ol></div>
+      <div className="onboarding-intro"><span className="section-kicker">WELCOME TO YOUR WORKSPACE</span><h1>Let’s set up your student account.</h1><p>These details help EG Consultancy identify your profile and deliver your personal scholarship report. Only your name, address and Bangladesh mobile number are required.</p><ol><li className="active"><b>1</b><span><strong>Account details</strong><small>Tell us who you are</small></span></li><li><b>2</b><span><strong>Study profile</strong><small>Add academic preferences</small></span></li><li><b>3</b><span><strong>Best 10 + report</strong><small>Review your strongest options</small></span></li></ol></div>
       <div className="onboarding-form-wrap"><AccountForm account={account} email={email} busy={busy} notice={notice} onSave={onSave} submitLabel="Create my student account" /></div>
     </section>
     <p className="onboarding-foot">Your account information is private to your signed-in workspace and EG Consultancy support workflow.</p>
@@ -393,7 +419,7 @@ function CountryField({ value, onChange }: { value: string[]; onChange: (countri
   </label>;
 }
 
-function Profile({ profile, setProfile, consent, setConsent, documents, busy, analysisProgress, aiConfigured, onSave, onRun }: { profile: StudentProfile; setProfile: (profile: StudentProfile) => void; consent: boolean; setConsent: (value: boolean) => void; documents: number; busy: boolean; analysisProgress: string; aiConfigured: boolean; onSave: () => void; onRun: () => void }) {
+function Profile({ profile, setProfile, consent, setConsent, emailReport, setEmailReport, followUpConsent, setFollowUpConsent, email, documents, busy, analysisProgress, aiConfigured, onSave, onRun }: { profile: StudentProfile; setProfile: (profile: StudentProfile) => void; consent: boolean; setConsent: (value: boolean) => void; emailReport: boolean; setEmailReport: (value: boolean) => void; followUpConsent: boolean; setFollowUpConsent: (value: boolean) => void; email: string; documents: number; busy: boolean; analysisProgress: string; aiConfigured: boolean; onSave: () => void; onRun: () => void }) {
   const update = (key: keyof StudentProfile, value: string | string[]) => setProfile({ ...profile, [key]: value });
   const bachelorAnswer = (answer: "yes" | "no") => setProfile({
     ...profile,
@@ -441,9 +467,10 @@ function Profile({ profile, setProfile, consent, setConsent, documents, busy, an
       <label className="wide">Priorities or constraints<textarea value={profile.notes ?? ""} onChange={(e) => update("notes", e.target.value)} placeholder="Funding priority, family needs, location constraints or anything matching should consider" /></label>
     </div></fieldset>
 
-    <div className="ai-explainer"><span>✦</span><div><strong>{aiConfigured ? "Hybrid AI matching is active" : "Hybrid AI matching is prepared"}</strong><p>Eligibility rules first filter and score the full catalogue at your preferred destinations. Gemini then personalizes the leading order and explanations. Your name, email and raw document text are never included in that request.</p></div></div>
+    <div className="ai-explainer"><span>✦</span><div><strong>{aiConfigured ? "Hybrid AI matching is active" : "Hybrid AI matching is prepared"}</strong><p>Eligibility rules score the catalogue first. Gemini then personalizes the leading order and explanations. Your name, email and raw document text are never included in that AI request. The portal returns only your 10 strongest options.</p></div></div>
     <label className={`consent-card ${consent ? "checked" : ""} ${documents === 0 ? "disabled" : ""}`}><input type="checkbox" checked={consent} disabled={documents === 0 || busy} onChange={(e) => setConsent(e.target.checked)} /><span>✓</span><div><strong>Optionally read my recent documents on this device</strong><p>This is not required for Best Finds. PDF, DOCX, JPG and PNG files are read inside your browser; detected facts only fill blank profile fields.</p><small>{documents} document{documents === 1 ? "" : "s"} available · {documents ? "up to 4 recent files can be reviewed" : "you can continue without documents"}</small>{analysisProgress && <b className="analysis-progress" role="status">{analysisProgress}</b>}</div></label>
-    <div className="profile-actions"><button className="button ghost" onClick={onSave} disabled={busy}>{busy ? "Working..." : "Save profile"}</button><button className="button primary match-button" onClick={onRun} disabled={busy}>{busy ? analysisProgress || "Finding opportunities..." : "Generate my Best Finds"}<span>✦</span></button></div>
+    <section className="report-delivery-choice" aria-labelledby="report-delivery-title"><div className="report-choice-head"><span>PDF</span><div><strong id="report-delivery-title">Your detailed EG Consultancy report</strong><p>Alongside the 10 results shown here, we prepare a branded PDF with your profile summary, match realities, official links and next-step plan.</p></div></div><label><input type="checkbox" checked={emailReport} onChange={(event) => setEmailReport(event.target.checked)} disabled={busy} /><span><strong>Email the report to {email}</strong><small>You can also download it securely from Best Finds.</small></span></label><label><input type="checkbox" checked={followUpConsent} onChange={(event) => setFollowUpConsent(event.target.checked)} disabled={busy} /><span><strong>EG Consultancy may contact me about this shortlist</strong><small>Optional. This helps a consultant follow up about a future office or home consultation.</small></span></label></section>
+    <div className="profile-actions"><button className="button ghost" onClick={onSave} disabled={busy}>{busy ? "Working..." : "Save profile"}</button><button className="button primary match-button" onClick={onRun} disabled={busy}>{busy ? analysisProgress || "Finding opportunities..." : emailReport ? "Find my top 10 & email report" : "Find my top 10"}<span>✦</span></button></div>
   </section>;
 }
 
@@ -455,15 +482,15 @@ const CAMPUS_IMAGES = [
 ];
 function campusImage(provider: string) { return CAMPUS_IMAGES[[...provider].reduce((sum, character) => sum + character.charCodeAt(0), 0) % CAMPUS_IMAGES.length]; }
 
-function Matches({ matches, profile, notice, onProfile, onConsultant, onTrack }: { matches: ScholarshipMatch[]; profile: StudentProfile; notice: string; onProfile: () => void; onConsultant: () => void; onTrack: (id: string) => void }) {
+function Matches({ matches, profile, report, busy, notice, onRetryReport, onProfile, onConsultant, onTrack }: { matches: ScholarshipMatch[]; profile: StudentProfile; report: ReportDelivery | null; busy: boolean; notice: string; onRetryReport: () => void; onProfile: () => void; onConsultant: () => void; onTrack: (id: string) => void }) {
   const rail = useRef<HTMLDivElement>(null);
   const [courseTarget, setCourseTarget] = useState<ScholarshipMatch | null>(null);
   const move = (direction: number) => rail.current?.scrollBy({ left: direction * Math.min(390, rail.current.clientWidth * .86), behavior: "smooth" });
   if (!matches.length) return <section className="panel large-empty"><span>✦</span><h2>Your Best Finds start with your study profile.</h2><p>Complete your academic results and preferred destinations. Documents are optional.</p><button className="button primary" onClick={onProfile}>Complete my profile</button></section>;
-  return <><div className="match-notice"><span>i</span><p>{notice} Every result is at least a 50% profile match. Browse all qualifying opportunities—there is no five-result cap. Equal scores prioritize different destinations before repeating one.</p></div><div className="finds-heading"><div><span className="section-kicker">TAILORED TO YOUR PROFILE</span><h2>{matches.length} Best Find{matches.length === 1 ? "" : "s"}</h2><p>Swipe, trackpad-scroll or use the arrows to browse.</p></div><div className="carousel-controls"><button type="button" onClick={() => move(-1)} aria-label="Previous opportunity">←</button><button type="button" onClick={() => move(1)} aria-label="Next opportunity">→</button></div></div>
+  return <>{report && <section className={`report-status-card ${report.status}`}><div className="report-status-icon">{report.status === "sent" ? "✓" : "PDF"}</div><div><span className="section-kicker">YOUR PERSONAL SCHOLARSHIP REPORT</span><h2>{report.status === "sent" ? "Your report is in your inbox." : "Your report is ready."}</h2><p>{report.message} It includes your profile summary, all 10 ranked options, reality checks, an action plan and the consultation bridge.</p></div><div className="report-status-actions"><a className="button primary compact" href={report.downloadUrl}>Download PDF</a>{report.status !== "sent" && report.emailConfigured && <button className="button ghost compact" onClick={onRetryReport} disabled={busy}>{busy ? "Sending..." : "Retry email"}</button>}</div></section>}<div className="match-notice"><span>i</span><p>{notice} Scores guide prioritization; they do not guarantee eligibility, admission, funding or a visa. Recheck the official source before acting.</p></div><div className="finds-heading"><div><span className="section-kicker">YOUR TEN BEST OPTIONS</span><h2>{matches.length} Best Find{matches.length === 1 ? "" : "s"}</h2><p>Swipe, trackpad-scroll or use the arrows to compare your shortlist.</p></div><div className="carousel-controls"><button type="button" onClick={() => move(-1)} aria-label="Previous opportunity">←</button><button type="button" onClick={() => move(1)} aria-label="Next opportunity">→</button></div></div>
     <div className="best-finds-rail" ref={rail} tabIndex={0} aria-label="Best Finds scholarship carousel">{matches.map((match, index) => <article className="find-card" key={match.scholarship.id}><div className="find-cover"><img src={campusImage(match.scholarship.provider)} alt={`${match.scholarship.provider} campus`} loading="lazy" /><span>{match.scholarship.country}</span><b>#{index + 1}</b><div className="find-score"><strong>{match.score}</strong><small>match</small></div></div><div className="find-body"><span className={`match-label ${match.label === "Strong match" ? "strong" : ""}`}>{match.label}</span><h3>{match.scholarship.name}</h3><p className="provider">{match.scholarship.provider}</p><div className="match-meta"><span>{match.scholarship.studyLevel}</span><span>{match.scholarship.coverage || "Funding varies"}</span></div><p className="find-rationale">{match.rationale}</p>{match.gaps.length > 0 && <div className="find-gap"><b>Check:</b> {match.gaps[0]}</div>}<div className="find-deadline"><span>Deadline / cycle</span><strong>{match.scholarship.deadline || "Annual / rolling"}</strong></div><button className="course-discovery-button" type="button" onClick={() => setCourseTarget(match)}><span>✦</span> Find subjects & courses <b>Official links</b></button></div><footer><Link className="match-analysis-button" href={`/dashboard/scholarship/${encodeURIComponent(match.scholarship.id)}`}>View full match analysis</Link><button type="button" onClick={() => onTrack(match.scholarship.id)}>Track</button></footer></article>)}</div>
-    <section className="top-five-analysis"><div className="finds-heading"><div><span className="section-kicker">FIRST FIVE · DECISION DETAIL</span><h2>Profile fit and cost planning</h2><p>The first five choices include a full comparison and planning breakdown. Open each panel to review it.</p></div></div>{matches.slice(0, 5).map((match, index) => { const fitChecks = buildFitChecks(profile, match.scholarship); const costPlan = buildCostPlan(match.scholarship); return <details key={match.scholarship.id} open={index === 0}><summary><b>#{index + 1}</b><span><strong>{match.scholarship.name}</strong><small>{match.scholarship.country} · {match.score}% match</small></span><i>＋</i></summary><div className="top-five-detail-body"><section><span className="section-kicker">PROFILE VS REQUIREMENTS</span><div className="compact-fit-grid">{fitChecks.map((check) => <article key={check.label}><b>{check.label}</b><span>{check.student}</span><p>{check.requirement}</p><i className={check.status.toLowerCase().replace(" ", "-")}>{check.status}</i></article>)}</div></section><section><span className="section-kicker">DETAILED COST PLAN</span><div className="compact-cost-grid">{costPlan.map((cost) => <article key={cost.item}><b>{cost.item}</b><span>{cost.awardPosition}</span><p>{cost.planningAction}</p></article>)}</div></section><Link className="button primary compact" href={`/dashboard/scholarship/${encodeURIComponent(match.scholarship.id)}`}>Open full match analysis →</Link></div></details>; })}</section>
-    <div className="consultant-cta"><div><span className="section-kicker">READY FOR A HUMAN CHECK?</span><h2>Send your Best Finds to an EG consultant.</h2><p>A consultant can verify requirements, costs, optional document gaps and application timing.</p></div><button className="button primary" onClick={onConsultant}>Request consultant review →</button></div>
+    <section className="top-five-analysis"><div className="finds-heading"><div><span className="section-kicker">ALL TEN · DECISION DETAIL</span><h2>Profile fit and cost planning</h2><p>Every shortlisted option includes a comparison and planning breakdown. Open a panel to review it.</p></div></div>{matches.map((match, index) => { const fitChecks = buildFitChecks(profile, match.scholarship); const costPlan = buildCostPlan(match.scholarship); return <details key={match.scholarship.id} open={index === 0}><summary><b>#{index + 1}</b><span><strong>{match.scholarship.name}</strong><small>{match.scholarship.country} · {match.score}% match</small></span><i>＋</i></summary><div className="top-five-detail-body"><section><span className="section-kicker">PROFILE VS REQUIREMENTS</span><div className="compact-fit-grid">{fitChecks.map((check) => <article key={check.label}><b>{check.label}</b><span>{check.student}</span><p>{check.requirement}</p><i className={check.status.toLowerCase().replace(" ", "-")}>{check.status}</i></article>)}</div></section><section><span className="section-kicker">DETAILED COST PLAN</span><div className="compact-cost-grid">{costPlan.map((cost) => <article key={cost.item}><b>{cost.item}</b><span>{cost.awardPosition}</span><p>{cost.planningAction}</p></article>)}</div></section><Link className="button primary compact" href={`/dashboard/scholarship/${encodeURIComponent(match.scholarship.id)}`}>Open full match analysis →</Link></div></details>; })}</section>
+    <div className="consultant-cta"><div><span className="section-kicker">TURN THE REPORT INTO A PLAN</span><h2>Book a free at-office consultation.</h2><p>An EG consultant can verify the live rules, narrow your report to two or three application priorities, and map the deadlines. A BDT 1,000 Home Consultation option is planned for a future release.</p></div><button className="button primary" onClick={onConsultant}>Request consultation →</button></div>
     {courseTarget && <CourseDialog match={courseTarget} onClose={() => setCourseTarget(null)} />}</>;
 }
 
@@ -562,5 +589,5 @@ function Field({ label, value, placeholder, onChange }: { label: string; value?:
 }
 
 function Consultant({ sent, busy, onRequest }: { sent: boolean; busy: boolean; onRequest: () => void }) {
-  return <div className="dashboard-two-col"><section className="panel consultant-panel"><span className="consultant-avatar">EG</span><span className="section-kicker">EXCELLENCE GLOBAL CONSULTANCY</span><h2>Turn your shortlist into an application plan.</h2><p>A consultant review checks profile evidence, current official requirements, budget fit, deadlines and application sequencing.</p><ul><li>Best Finds eligibility and risk review</li><li>Optional document gap checklist</li><li>Safe, Match and Ambitious balance</li><li>Next-step consultation plan</li></ul><button className="button primary" disabled={busy || sent} onClick={onRequest}>{sent ? "Review requested ✓" : busy ? "Sending..." : "Request consultant review"}</button></section><section className="panel contact-card"><span className="section-kicker">CONTACT</span><h2>EG Consultancy, Dhaka</h2><p>House 22, Road 1, Block Ta, Pallabi, Mirpur, Dhaka 1216, Bangladesh</p><a href="tel:+8801928207111">+880 1928-207111</a><a href="https://wa.me/8801601247111">WhatsApp +880 1601-247111</a><a href="mailto:ceo.egconsulting@gmail.com">ceo.egconsulting@gmail.com</a><small>Consultants verify live requirements before advising. No admission, scholarship or visa outcome is guaranteed.</small></section></div>;
+  return <div className="dashboard-two-col"><section className="panel consultant-panel"><span className="consultant-avatar">EG</span><span className="section-kicker">FREE AT-OFFICE CONSULTATION</span><h2>Turn your report into an application plan.</h2><p>A consultant review checks profile evidence, current official requirements, budget fit, deadlines and application sequencing.</p><ul><li>Top-10 eligibility and risk review</li><li>Optional document gap checklist</li><li>Strong, Possible and Review-required balance</li><li>Priority application and deadline plan</li></ul><button className="button primary" disabled={busy || sent} onClick={onRequest}>{sent ? "Consultation requested ✓" : busy ? "Sending..." : "Request free consultation"}</button><small className="future-consultation-note">Home Consultation · BDT 1,000 · coming in a future release. The fee will be adjusted against a subscribed package.</small></section><section className="panel contact-card"><span className="section-kicker">CONTACT</span><h2>EG Consultancy, Dhaka</h2><p>House 22, Road 1, Block Ta, Pallabi, Mirpur, Dhaka 1216, Bangladesh</p><a href="tel:+8801928207111">+880 1928-207111</a><a href="https://wa.me/8801601247111">WhatsApp +880 1601-247111</a><a href="mailto:ceo.egconsulting@gmail.com">ceo.egconsulting@gmail.com</a><small>Consultants verify live requirements before advising. No admission, scholarship or visa outcome is guaranteed.</small></section></div>;
 }
