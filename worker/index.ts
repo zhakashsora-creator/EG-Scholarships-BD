@@ -17,6 +17,7 @@ interface Env {
   REPORT_ADMIN_EMAIL?: string;
   CONSULTANT_REPLY_TO?: string;
   CONSULTATION_BOOKING_URL?: string;
+  CONSULTATION_ALERT_EMAIL?: string;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {

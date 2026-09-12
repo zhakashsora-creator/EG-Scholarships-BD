@@ -1,4 +1,4 @@
-import type { Scholarship, StudentProfile } from "./matching";
+import { countryMatches, studyLevelCompatibility, subjectCompatibility, type Scholarship, type StudentProfile } from "./matching";
 
 export type FitCheck = {
   label: string;
@@ -13,29 +13,12 @@ export type CostItem = {
   planningAction: string;
 };
 
-function normalized(value?: string) {
-  return (value ?? "").toLowerCase();
-}
-
-function includesAny(value: string, terms: string[]) {
-  const text = normalized(value);
-  return terms.some((term) => text.includes(normalized(term)));
-}
-
-function profileLevelTerms(level?: string) {
-  if (includesAny(level ?? "", ["bachelor", "undergraduate"])) return ["bachelor", "undergraduate"];
-  if (includesAny(level ?? "", ["master", "postgraduate"])) return ["master", "postgraduate"];
-  if (includesAny(level ?? "", ["doctoral", "doctorate", "phd"])) return ["doctoral", "doctorate", "phd", "research"];
-  return level ? [level] : [];
-}
-
 export function buildFitChecks(profile: StudentProfile, scholarship: Scholarship): FitCheck[] {
   const preferred = profile.preferredCountries?.join(", ") ?? "Not specified";
-  const levelTerms = profileLevelTerms(profile.studyLevel);
-  const levelAligned = levelTerms.length > 0 && includesAny(`${scholarship.studyLevel} ${scholarship.academicCriteria}`, levelTerms);
-  const destinationAligned = Boolean(profile.preferredCountries?.some((country) => includesAny(`${scholarship.country} ${scholarship.destination}`, [country])));
+  const levelFit = studyLevelCompatibility(profile.studyLevel, scholarship.studyLevel);
+  const destinationAligned = Boolean(profile.preferredCountries?.some((country) => countryMatches(`${scholarship.country} ${scholarship.destination}`, country)));
   const fieldText = `${scholarship.subjectRestrictions} ${scholarship.category}`;
-  const fieldAligned = Boolean(profile.field && (includesAny(fieldText, profile.field.split(/\s+/).filter((part) => part.length > 3)) || /all fields|all eligible|unrestricted/i.test(fieldText)));
+  const fieldFit = subjectCompatibility(profile.field, fieldText);
   const academicResult = profile.hasBachelorDegree === "yes"
     ? profile.bachelorCgpa || profile.gpa
     : profile.higherSecondaryResult || profile.gpa;
@@ -51,7 +34,7 @@ export function buildFitChecks(profile: StudentProfile, scholarship: Scholarship
       label: "Study level",
       student: profile.studyLevel || "Not specified",
       requirement: scholarship.studyLevel || "Not stated",
-      status: !profile.studyLevel ? "Missing detail" : levelAligned ? "Aligned" : "Check required",
+      status: !profile.studyLevel ? "Missing detail" : levelFit === "aligned" ? "Aligned" : "Check required",
     },
     {
       label: "Destination",
@@ -75,7 +58,7 @@ export function buildFitChecks(profile: StudentProfile, scholarship: Scholarship
       label: "Subject direction",
       student: profile.field || "Not specified",
       requirement: scholarship.subjectRestrictions || "No restriction recorded",
-      status: !profile.field ? "Missing detail" : fieldAligned ? "Aligned" : "Check required",
+      status: !profile.field ? "Missing detail" : fieldFit === "direct" ? "Aligned" : "Check required",
     },
   ];
 }

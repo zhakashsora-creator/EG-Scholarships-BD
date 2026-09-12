@@ -83,13 +83,15 @@ test("portal includes theme controls, personalized analysis pages and a complete
 });
 
 test("study profile, optional documents, top-ten reports and resilient official discovery are wired together", async () => {
-  const [dashboard, matching, analyze, workspaceRoute, reportRoute, reportBuilder, reportMigration, gemini, geminiClient, guidelineRoute, officialGuidelines, courseRoute, courseFallback, envExample] = await Promise.all([
+  const [dashboard, matching, analyze, workspaceRoute, reportRoute, reportBuilder, consultationRoute, consultationNotification, reportMigration, gemini, geminiClient, guidelineRoute, officialGuidelines, courseRoute, courseFallback, envExample] = await Promise.all([
     readFile(new URL("../app/dashboard/DashboardClient.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/lib/matching.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/analyze/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/workspace/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/report/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/lib/scholarship-report.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/consultant/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/consultation-notification.ts", import.meta.url), "utf8"),
     readFile(new URL("../drizzle/0005_scholarship_reports.sql", import.meta.url), "utf8"),
     readFile(new URL("../app/lib/gemini-matching.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/lib/gemini-client.ts", import.meta.url), "utf8"),
@@ -128,6 +130,10 @@ test("study profile, optional documents, top-ten reports and resilient official 
   assert.match(reportBuilder, /api\.resend\.com\/emails/);
   assert.match(reportBuilder, /GMAIL_REPORT_WEBHOOK_URL/);
   assert.match(reportBuilder, /GMAIL_REPORT_WEBHOOK_SECRET/);
+  assert.match(consultationRoute, /emailConsultationRequest/);
+  assert.match(consultationNotification, /consultation_request/);
+  assert.match(consultationNotification, /hello\.excellenceglobal@gmail\.com/);
+  assert.match(dashboard, /Also message EGC on WhatsApp/);
   assert.match(reportBuilder, /Idempotency-Key/);
   assert.match(reportMigration, /follow_up_consent/);
   assert.match(gemini, /geminiGenerateContent/);
@@ -151,4 +157,32 @@ test("study profile, optional documents, top-ten reports and resilient official 
   assert.match(envExample, /RESEND_API_KEY=/);
   assert.match(envExample, /GMAIL_REPORT_WEBHOOK_URL=/);
   assert.match(envExample, /CONSULTATION_BOOKING_URL=/);
+  assert.match(envExample, /CONSULTATION_ALERT_EMAIL=/);
+});
+
+test("portal fix brief is represented in scoring, controls, copy and routes", async () => {
+  const [dashboard, matching, analysis, analyzeRoute, workspaceRoute, css, report] = await Promise.all([
+    readFile(new URL("../app/dashboard/DashboardClient.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/matching.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/scholarship-analysis.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/analyze/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/workspace/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/scholarship-report.ts", import.meta.url), "utf8"),
+  ]);
+  assert.match(matching, /subjectFit/);
+  assert.match(matching, /englishHeadroom/);
+  assert.match(matching, /No \$\{country\} records matched your level and subject/);
+  assert.match(matching, /calibrateBestFindBands/);
+  assert.match(analysis, /countryMatches/);
+  assert.match(dashboard, /AI-assisted ranking, verified against our catalogue/);
+  assert.match(dashboard, /Catalogue checked/);
+  assert.match(dashboard, /budgetCurrency/);
+  assert.match(dashboard, /catalogueCountries/);
+  assert.match(dashboard, /catalogueIntakes/);
+  assert.match(dashboard, /showOpenFilePicker/);
+  assert.match(dashboard, /href=\{`\/dashboard\?tab=\$\{id\}`\}/);
+  assert.match(css, /min-height:44px/);
+  assert.doesNotMatch(`${dashboard}${analyzeRoute}${workspaceRoute}${report}`, /Home Consultation|BDT 1,000/);
+  assert.doesNotMatch(dashboard, />[^<{]*Gemini[^<{]*</);
 });

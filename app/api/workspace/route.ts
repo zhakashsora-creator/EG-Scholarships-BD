@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
-import { prioritizeDestinationDiversity, profileCompleteness, scholarships, type StudentProfile } from "../../lib/matching";
+import { buildCountryCoverageNotices, calibrateBestFindBands, prioritizeDestinationDiversity, profileCompleteness, rankScholarships, scholarships, type StudentProfile } from "../../lib/matching";
 import { isGeminiConfigured } from "../../lib/gemini-matching";
 import { isReportEmailConfigured } from "../../lib/scholarship-report";
 import { database, ensureSchema } from "../../lib/storage";
@@ -29,14 +29,19 @@ export async function GET() {
         id: string; recipientEmail: string; status: string; createdAt: string; sentAt: string | null;
       }>(),
   ]);
-  const byId = new Map(scholarships.map((item) => [item.id, item]));
-  const matches = prioritizeDestinationDiversity((matchRows.results ?? []).flatMap((row) => {
-    const scholarship = byId.get(row.scholarshipId);
-    if (!scholarship) return [];
-    return [{ scholarship, score: row.score, rationale: row.rationale, gaps: JSON.parse(row.gapsJson), label: row.score >= 80 ? "Strong match" : row.score >= 64 ? "Possible match" : "Review required" }];
-  })).slice(0, 10);
   let profile: StudentProfile = {};
   try { profile = student?.profileJson ? JSON.parse(student.profileJson) : {}; } catch { profile = {}; }
+  const byId = new Map(scholarships.map((item) => [item.id, item]));
+  const liveScoring = new Map(rankScholarships(profile).map((match) => [match.scholarship.id, match]));
+  const matches = calibrateBestFindBands(prioritizeDestinationDiversity((matchRows.results ?? []).flatMap((row) => {
+    const scholarship = byId.get(row.scholarshipId);
+    if (!scholarship) return [];
+    const computed = liveScoring.get(row.scholarshipId);
+    if (!computed) return [];
+    let gaps = computed.gaps;
+    try { gaps = JSON.parse(row.gapsJson); } catch { /* retain computed gaps */ }
+    return [{ ...computed, scholarship, score: row.score, rationale: row.rationale, gaps }];
+  })).slice(0, 10));
   return NextResponse.json({
     account: account ? {
       fullName: account.fullName,
@@ -52,6 +57,7 @@ export async function GET() {
     profile,
     completeness: student?.completeness ?? 0,
     matches,
+    countryNotices: buildCountryCoverageNotices(profile, matches),
     applications: (applicationRows.results ?? []).map((application) => {
       let workflow = {};
       try { workflow = application.workflowJson ? JSON.parse(application.workflowJson) : {}; } catch { workflow = {}; }
@@ -68,7 +74,7 @@ export async function GET() {
           ? "Your report is ready to download, but email delivery needs attention."
           : "Your report is ready to download. Email delivery is waiting for site setup.",
     } : null,
-    analysisMode: isGeminiConfigured() ? "hybrid-gemini" : "on-device",
+    analysisMode: isGeminiConfigured() ? "ai-assisted" : "on-device",
     aiConfigured: isGeminiConfigured(),
   });
 }

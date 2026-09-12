@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
-import { prioritizeDestinationDiversity, profileCompleteness, rankScholarships, type StudentProfile } from "../../lib/matching";
+import { buildCountryCoverageNotices, calibrateBestFindBands, prioritizeDestinationDiversity, profileCompleteness, rankScholarships, type StudentProfile } from "../../lib/matching";
 import { enhanceMatchesWithGemini } from "../../lib/gemini-matching";
 import { database, ensureSchema } from "../../lib/storage";
 import { buildScholarshipReportPdf, consultationUrl, emailScholarshipReport, isReportEmailConfigured, type ReportSnapshot } from "../../lib/scholarship-report";
@@ -57,12 +57,13 @@ export async function POST(request: Request) {
 
   const ruleResults = rankScholarships(profile);
   const enhanced = await enhanceMatchesWithGemini(profile, ruleResults);
-  const results = prioritizeDestinationDiversity(enhanced.matches).slice(0, 10);
+  const results = calibrateBestFindBands(prioritizeDestinationDiversity(enhanced.matches).slice(0, 10));
+  const countryNotices = buildCountryCoverageNotices(profile, results);
   const completeness = profileCompleteness(profile);
   const aiNotice = enhanced.used
-    ? ` Gemini AI personalized the leading results while eligibility rules and official catalogue facts remained authoritative.${enhanced.summary ? ` ${enhanced.summary}` : ""}`
-    : " Results use the verified catalogue and eligibility scoring; AI enhancement will activate when the Gemini site secret is available.";
-  const notice = `${documentNotice}${aiNotice} Your 10 highest-ranked options are shown; lower-confidence choices are clearly marked for review, and equal scores prioritize destination variety.`;
+    ? ` AI-assisted explanations were verified against the catalogue; deterministic eligibility, subscores and score bands remained authoritative.${enhanced.summary ? ` ${enhanced.summary}` : ""}`
+    : " Results use catalogue-verified eligibility scoring; optional AI-assisted explanations are currently unavailable.";
+  const notice = `${documentNotice}${aiNotice} Your 10 highest-ranked options are shown with Strong, Possible and Reach bands; lower-confidence choices are marked for review.`;
   await database()
     .prepare(`INSERT INTO students (email, full_name, profile_json, completeness, updated_at)
       VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
@@ -143,5 +144,5 @@ export async function POST(request: Request) {
           : "Your report is ready to download. Email delivery is waiting for site setup.",
   };
 
-  return NextResponse.json({ mode: enhanced.used ? "hybrid-gemini" : analyzedIds.length ? "on-device" : "rules", notice, profile, completeness, results, analyzedIds, aiEnhanced: enhanced.used, report });
+  return NextResponse.json({ mode: enhanced.used ? "ai-assisted" : analyzedIds.length ? "on-device" : "rules", notice, profile, completeness, results, countryNotices, analyzedIds, aiEnhanced: enhanced.used, report });
 }

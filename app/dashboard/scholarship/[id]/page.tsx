@@ -4,7 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import ThemeToggle from "../../../components/ThemeToggle";
 import { getStudentUser } from "../../../lib/auth";
 import { buildCostPlan, buildFitChecks, buildNextSteps } from "../../../lib/scholarship-analysis";
-import { scholarships, type ScholarshipMatch, type StudentProfile } from "../../../lib/matching";
+import { calibrateBestFindBands, prioritizeDestinationDiversity, rankScholarships, scholarships, type ScholarshipMatch, type StudentProfile } from "../../../lib/matching";
 import { database, ensureSchema } from "../../../lib/storage";
 
 export const dynamic = "force-dynamic";
@@ -30,7 +30,8 @@ export default async function ScholarshipAnalysisPage({ params }: { params: Prom
   let gaps: string[] = [];
   try { profile = student?.profileJson ? JSON.parse(student.profileJson) : {}; } catch { profile = {}; }
   try { gaps = JSON.parse(row.gapsJson); } catch { gaps = []; }
-  const label: ScholarshipMatch["label"] = row.score >= 80 ? "Strong match" : row.score >= 64 ? "Possible match" : "Review required";
+  const computed = calibrateBestFindBands(prioritizeDestinationDiversity(rankScholarships(profile)).slice(0, 10)).find((match) => match.scholarship.id === scholarship.id);
+  const label: ScholarshipMatch["label"] = computed?.label ?? "Reach";
   const fitChecks = buildFitChecks(profile, scholarship);
   const costPlan = buildCostPlan(scholarship);
   const nextSteps = buildNextSteps(scholarship);
@@ -72,9 +73,15 @@ export default async function ScholarshipAnalysisPage({ params }: { params: Prom
           <span className="section-kicker">DECISION CHECK</span>
           <h2>What still needs verification</h2>
           {gaps.length ? <ul>{gaps.map((gap) => <li key={gap}>{gap}</li>)}</ul> : <p>No specific scoring gaps were recorded. Live eligibility and availability still require a final check.</p>}
-          <div className="budget-note"><b>Your stated budget</b><span>{profile.budget || "Not added to the profile"}</span></div>
+          <div className="budget-note"><b>Your stated budget</b><span>{profile.budget ? `${profile.budgetCurrency || "BDT"} ${profile.budget}` : "Not added to the profile"}</span></div>
         </aside>
       </section>
+
+      {computed && <section className="analysis-card">
+        <span className="section-kicker">WEIGHTED MATCH SCORE</span>
+        <h2>Where the {row.score}/100 score comes from</h2>
+        <div className="subscore-grid">{Object.entries(computed.subScores).map(([key, value]) => <div key={key}><span>{key.replace(/([A-Z])/g, " $1")}</span><strong>{value}</strong></div>)}</div>
+      </section>}
 
       <section className="analysis-card">
         <span className="section-kicker">PROFILE VS REQUIREMENTS</span>

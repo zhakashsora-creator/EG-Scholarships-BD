@@ -103,7 +103,7 @@ BASELINE THAT MUST NOT BE SILENTLY DROPPED: ${JSON.stringify(baseline.requiremen
     const requirements = cleanRequirements(Array.isArray(result.requirements) && result.requirements.length ? result.requirements : baseline.requirements);
     return NextResponse.json({
       sourceUrl, sourceLabel: baseline.sourceLabel, phase, checkedAt,
-      liveCheck: retrieved ? "Gemini URL Context read the linked official page at request time." : "The official source was analyzed, but its live-retrieval metadata was incomplete; re-open the source before submission.",
+      liveCheck: retrieved ? "The AI-assisted check read the linked official page at request time." : "The official source was analyzed, but its live-retrieval metadata was incomplete; re-open the source before submission.",
       summary: String(result.summary ?? "Current official guidance reviewed.").slice(0, 500), requirements,
       warnings: [
         ...(Array.isArray(result.warnings) ? result.warnings : []).map(String).map((value) => value.slice(0, 400)).slice(0, 8),

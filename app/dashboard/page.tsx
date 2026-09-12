@@ -11,5 +11,5 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   if (!user) redirect("/login?next=/dashboard");
   const requested = (await searchParams).tab ?? "overview";
   const initialTab = tabs.has(requested) ? requested : "overview";
-  return <DashboardClient user={{ name: user.displayName, email: user.email }} signOutPath="/auth/signout" initialTab={initialTab} />;
+  return <DashboardClient key={initialTab} user={{ name: user.displayName, email: user.email }} signOutPath="/auth/signout" initialTab={initialTab} />;
 }
