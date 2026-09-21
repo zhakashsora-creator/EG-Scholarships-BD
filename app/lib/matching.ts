@@ -217,9 +217,19 @@ function scoreOne(profile: StudentProfile, scholarship: Scholarship, now: Date):
   const deadline = deadlineState(scholarship, now);
   const statusText = normalize(scholarship.status);
   const fundingText = `${scholarship.coverage} ${scholarship.fundingSummary}`;
+  const fundingScore = /fully funded/i.test(fundingText)
+    ? 4
+    : /100% tuition|full tuition/i.test(fundingText)
+      ? 3
+      : /stipend|partial|waiver|toward tuition|up to/i.test(fundingText)
+        ? 2
+        : /discount|reduction/i.test(fundingText)
+          ? 1
+          : 0;
   const intakeYear = profile.intake?.match(/20\d{2}/)?.[0];
   const stale = verificationAgeDays(scholarship, now) > 60;
-  const lowConfidence = !/high/i.test(scholarship.confidence ?? "");
+  const confidence = normalize(scholarship.confidence);
+  const lowConfidence = !/high/.test(confidence);
 
   const subScores: MatchSubScores = {
     eligibility: bangladeshEligible ? 16 : 0,
@@ -229,8 +239,8 @@ function scoreOne(profile: StudentProfile, scholarship: Scholarship, now: Date):
     academics: gpaRequirement === null || profileGpa === null ? 7 : profileGpa >= gpaRequirement + .35 ? 12 : profileGpa >= gpaRequirement ? 10 : 0,
     destination: !preferred.length || preferred.some((country) => countryMatches(`${scholarship.country} ${scholarship.destination}`, country)) ? 8 : 0,
     timing: deadline.closed ? 0 : intakeYear && containsAny(`${scholarship.intake} ${scholarship.status}`, [intakeYear]) ? 5 : /open|active|rolling/.test(statusText) ? 4 : 2,
-    funding: /fully funded/i.test(fundingText) ? 4 : /tuition|waiver|stipend|partial|discount/i.test(fundingText) ? 2 : 0,
-    evidence: stale || lowConfidence ? 1 : 3,
+    funding: fundingScore,
+    evidence: stale ? 0 : confidence === "high" ? 3 : /medium/.test(confidence) ? 2 : 1,
   };
 
   if (bangladeshEligible) reasons.push("Bangladesh eligibility is documented");
@@ -256,7 +266,6 @@ function scoreOne(profile: StudentProfile, scholarship: Scholarship, now: Date):
   if (lowConfidence) gaps.push("catalogue entry is lower-confidence; verify every material fact");
 
   let score = Object.values(subScores).reduce((total, value) => total + value, 0);
-  if (hardGaps.length) score = Math.min(score, 58);
   score = Math.max(18, Math.min(96, Math.round(score)));
   return {
     scholarship, score,
@@ -290,7 +299,6 @@ export function calibrateBestFindBands(matches: ScholarshipMatch[]) {
 export function buildCountryCoverageNotices(profile: StudentProfile, selected: ScholarshipMatch[]): CountryCoverageNotice[] {
   return (profile.preferredCountries ?? []).flatMap((country) => {
     const countrySelections = selected.filter((match) => countryMatches(`${match.scholarship.country} ${match.scholarship.destination}`, country));
-    if (countrySelections.some((match) => match.label !== "Reach")) return [];
     const specific = scholarshipData.filter((row) => countryMatches(`${row.country} ${row.destination}`, country))
       .filter((row) => studyLevelCompatibility(profile.studyLevel, row.studyLevel) === "aligned" && subjectCompatibility(profile.field, `${row.subjectRestrictions} ${row.category}`) === "direct");
     if (specific.length) return [];

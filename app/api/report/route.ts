@@ -24,7 +24,7 @@ function publicReport(row: Pick<ReportRow, "id" | "recipientEmail" | "status" | 
     ? `Your detailed report was emailed to ${row.recipientEmail}.`
     : row.status === "failed"
       ? "Your report is ready to download, but email delivery needs attention."
-      : "Your report is ready to download. Email delivery is waiting for site setup.";
+      : "Your report is ready to download.";
   return {
     id: row.id,
     status: row.status,
@@ -88,4 +88,3 @@ export async function POST(request: Request) {
     .bind(delivery.status, delivery.providerId || null, delivery.error || null, delivery.status, row.id, user.email).run();
   return NextResponse.json(publicReport({ ...row, status: delivery.status, sentAt: delivery.status === "sent" ? new Date().toISOString() : row.sentAt }));
 }
-

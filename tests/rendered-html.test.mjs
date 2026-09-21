@@ -186,3 +186,21 @@ test("portal fix brief is represented in scoring, controls, copy and routes", as
   assert.doesNotMatch(`${dashboard}${analyzeRoute}${workspaceRoute}${report}`, /Home Consultation|BDT 1,000/);
   assert.doesNotMatch(dashboard, />[^<{]*Gemini[^<{]*</);
 });
+
+test("tracked applications survive rematching and report email actions reflect configuration", async () => {
+  const [dashboard, analyzeRoute, workspaceRoute, reportRoute] = await Promise.all([
+    readFile(new URL("../app/dashboard/DashboardClient.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/analyze/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/workspace/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/report/route.ts", import.meta.url), "utf8"),
+  ]);
+  assert.match(dashboard, /scholarships\.find\(\(item\) => item\.id === application\.scholarshipId\)/);
+  assert.match(dashboard, /No longer in your current top ten/);
+  assert.doesNotMatch(dashboard, /filter\(\(item\) => item\.match\)/);
+  assert.doesNotMatch(analyzeRoute, /DELETE FROM applications/);
+  assert.match(workspaceRoute, /reportEmailConfigured/);
+  assert.match(dashboard, /report\.status === "failed" && report\.emailConfigured/);
+  assert.doesNotMatch(`${analyzeRoute}${workspaceRoute}${reportRoute}`, /Email delivery is waiting for site setup/);
+  assert.doesNotMatch(dashboard, /\{notice\} Scores guide prioritization/);
+  assert.doesNotMatch(dashboard, /function Matches\(\{[^}]*notice/);
+});

@@ -139,9 +139,7 @@ export async function POST(request: Request) {
       ? `Your detailed report was emailed to ${user.email}.`
       : reportStatus === "failed"
         ? "Your report is ready to download, but email delivery needs attention."
-        : body.emailReport === false
-          ? "Your report is ready to download."
-          : "Your report is ready to download. Email delivery is waiting for site setup.",
+        : "Your report is ready to download.",
   };
 
   return NextResponse.json({ mode: enhanced.used ? "ai-assisted" : analyzedIds.length ? "on-device" : "rules", notice, profile, completeness, results, countryNotices, analyzedIds, aiEnhanced: enhanced.used, report });

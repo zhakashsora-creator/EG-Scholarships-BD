@@ -42,6 +42,7 @@ export async function GET() {
     try { gaps = JSON.parse(row.gapsJson); } catch { /* retain computed gaps */ }
     return [{ ...computed, scholarship, score: row.score, rationale: row.rationale, gaps }];
   })).slice(0, 10));
+  const reportEmailConfigured = isReportEmailConfigured();
   return NextResponse.json({
     account: account ? {
       fullName: account.fullName,
@@ -67,13 +68,14 @@ export async function GET() {
     report: reportRow ? {
       ...reportRow,
       downloadUrl: `/api/report?id=${encodeURIComponent(reportRow.id)}`,
-      emailConfigured: isReportEmailConfigured(),
+      emailConfigured: reportEmailConfigured,
       message: reportRow.status === "sent"
         ? `Your detailed report was emailed to ${reportRow.recipientEmail}.`
         : reportRow.status === "failed"
           ? "Your report is ready to download, but email delivery needs attention."
-          : "Your report is ready to download. Email delivery is waiting for site setup.",
+          : "Your report is ready to download.",
     } : null,
+    reportEmailConfigured,
     analysisMode: isGeminiConfigured() ? "ai-assisted" : "on-device",
     aiConfigured: isGeminiConfigured(),
   });
