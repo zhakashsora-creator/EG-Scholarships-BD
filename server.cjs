@@ -1,15 +1,56 @@
 const { createServer } = require("node:http");
 const next = require("next");
+const mysql = require("mysql2/promise");
 
 const hostname = process.env.HOSTNAME || "0.0.0.0";
 const port = Number(process.env.PORT || 3000);
 const app = next({ dev: false, hostname, port });
 const handle = app.getRequestHandler();
 
+async function respondToStagingHealth(request, response) {
+  const requestUrl = new URL(request.url || "/", `http://${request.headers.host || "localhost"}`);
+  const isStagingHost = (request.headers.host || "").startsWith("scholarships-stage.egconsultancy.com.bd");
+  if (!isStagingHost || requestUrl.pathname !== "/__staging-health") return false;
+
+  const authConfigured = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY);
+  const databaseConfigured = Boolean(process.env.DB_NAME && process.env.DB_USER && process.env.DB_PASSWORD);
+  let databaseConnected = false;
+  let counts = null;
+  let connection;
+
+  if (databaseConfigured) {
+    try {
+      connection = await mysql.createConnection({
+        host: process.env.DB_HOST || "localhost",
+        port: Number(process.env.DB_PORT || 3306),
+        database: process.env.DB_NAME,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+      });
+      const [[students]] = await connection.query("SELECT COUNT(*) AS count FROM students");
+      const [[applications]] = await connection.query("SELECT COUNT(*) AS count FROM applications");
+      databaseConnected = true;
+      counts = { students: Number(students.count), applications: Number(applications.count) };
+    } catch {
+      databaseConnected = false;
+    } finally {
+      await connection?.end();
+    }
+  }
+
+  const ok = authConfigured && databaseConnected;
+  response.writeHead(ok ? 200 : 503, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
+  response.end(JSON.stringify({ ok, authConfigured, databaseConfigured, databaseConnected, counts }));
+  return true;
+}
+
 app
   .prepare()
   .then(() => {
-    createServer((request, response) => handle(request, response)).listen(port, hostname, () => {
+    createServer(async (request, response) => {
+      if (await respondToStagingHealth(request, response)) return;
+      return handle(request, response);
+    }).listen(port, hostname, () => {
       console.log(`EG Scholarships is listening on ${hostname}:${port}`);
     });
   })
