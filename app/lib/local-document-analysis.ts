@@ -145,8 +145,8 @@ export async function analyzeDocumentsOnDevice(documents: DocumentForAnalysis[],
   const evidenceNotes: string[] = [];
   const analyzedIds: string[] = [];
   const warnings: string[] = [];
-  let workerPromise: Promise<OcrWorker> | null = null;
-  const getWorker = () => workerPromise ??= getOcrWorker(onProgress);
+  const workerRef: { current: Promise<OcrWorker> | null } = { current: null };
+  const getWorker = () => workerRef.current ??= getOcrWorker(onProgress);
 
   try {
     for (let index = 0; index < selected.length; index += 1) {
@@ -165,10 +165,9 @@ export async function analyzeDocumentsOnDevice(documents: DocumentForAnalysis[],
       }
     }
   } finally {
-    if (workerPromise) await (await workerPromise).terminate();
+    if (workerRef.current) await (await workerRef.current).terminate();
   }
 
   onProgress("Creating your evidence-led shortlist");
   return { profile, evidenceNotes, analyzedIds, warnings };
 }
-

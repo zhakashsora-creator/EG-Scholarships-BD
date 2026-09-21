@@ -1,10 +1,4 @@
-import { env } from "cloudflare:workers";
-
-type GeminiRuntime = {
-  GEMINI_API_KEYS?: string;
-  GEMINI_API_KEY?: string;
-  GEMINI_MODEL?: string;
-};
+import { runtimeValue } from "./runtime-env";
 
 export type GeminiCandidate = {
   content?: { parts?: Array<{ text?: string }> };
@@ -18,10 +12,6 @@ export type GeminiCandidate = {
 
 export type GeminiResponse = { candidates?: GeminiCandidate[] };
 
-function localValue(key: keyof GeminiRuntime) {
-  return typeof process !== "undefined" ? process.env[key] : undefined;
-}
-
 function parsePool(value?: string) {
   if (!value?.trim()) return [];
   try {
@@ -34,13 +24,12 @@ function parsePool(value?: string) {
 }
 
 function runtimeConfig() {
-  const runtime = env as unknown as GeminiRuntime;
-  const pooled = parsePool(runtime.GEMINI_API_KEYS ?? localValue("GEMINI_API_KEYS"));
-  const legacy = runtime.GEMINI_API_KEY ?? localValue("GEMINI_API_KEY");
+  const pooled = parsePool(runtimeValue("GEMINI_API_KEYS"));
+  const legacy = runtimeValue("GEMINI_API_KEY");
   const keys = Array.from(new Set([...pooled, ...(legacy?.trim() ? [legacy.trim()] : [])]));
   return {
     keys,
-    model: runtime.GEMINI_MODEL ?? localValue("GEMINI_MODEL") ?? "gemini-3.5-flash",
+    model: runtimeValue("GEMINI_MODEL") ?? "gemini-3.5-flash",
   };
 }
 

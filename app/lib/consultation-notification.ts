@@ -1,5 +1,5 @@
-import { env } from "cloudflare:workers";
 import type { StudentProfile } from "./matching";
+import { runtimeValue } from "./runtime-env";
 
 type ConsultationRuntime = {
   GMAIL_REPORT_WEBHOOK_URL?: string;
@@ -23,13 +23,8 @@ export type ConsultationNotification = {
   message: string;
 };
 
-function localValue(key: keyof ConsultationRuntime) {
-  return typeof process !== "undefined" ? process.env[key] : undefined;
-}
-
 function runtime() {
-  const worker = env as unknown as ConsultationRuntime;
-  const value = (key: keyof ConsultationRuntime) => worker[key] ?? localValue(key);
+  const value = (key: keyof ConsultationRuntime) => runtimeValue(key);
   return {
     gmailUrl: value("GMAIL_REPORT_WEBHOOK_URL")?.trim(),
     gmailSecret: value("GMAIL_REPORT_WEBHOOK_SECRET")?.trim(),

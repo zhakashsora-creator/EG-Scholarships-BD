@@ -22,7 +22,7 @@ export async function getStudentUser(): Promise<StudentUser | null> {
 
   // Retain Sites authentication as an administrator recovery path.
   const chatGPTUser = await getChatGPTUser();
-  if (chatGPTUser) return chatGPTUser;
+  if (chatGPTUser) return { ...chatGPTUser, fullName: chatGPTUser.fullName ?? chatGPTUser.displayName };
 
   const requestHeaders = await headers();
   const host = requestHeaders.get("host") ?? "";

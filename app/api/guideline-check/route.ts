@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
 import { database, ensureSchema } from "../../lib/storage";
 import { scholarships, type StudentProfile } from "../../lib/matching";
-import { extractGeminiJson, geminiGenerateContent, geminiText, isGeminiConfigured } from "../../lib/gemini-client";
+import { extractGeminiJson, geminiGenerateContent, geminiText, isGeminiConfigured, type GeminiCandidate } from "../../lib/gemini-client";
 import { baselineGuideline, type OfficialRequirement } from "../../lib/official-guidelines";
 import { safePublicHttpsUrl } from "../../lib/safe-url";
 
@@ -92,9 +92,9 @@ BASELINE THAT MUST NOT BE SILENTLY DROPPED: ${JSON.stringify(baseline.requiremen
       tools: [{ url_context: {} }],
       generationConfig: { temperature: 0.05, maxOutputTokens: 4500, responseMimeType: "application/json" },
     }, 25_000);
-    const candidate = payload.candidates?.[0] as typeof payload.candidates extends Array<infer T> ? T & {
+    const candidate = payload.candidates?.[0] as (GeminiCandidate & {
       url_context_metadata?: { url_metadata?: Array<{ retrieved_url?: string; url_retrieval_status?: string }> };
-    } : undefined;
+    }) | undefined;
     const camelMetadata = candidate?.urlContextMetadata?.urlMetadata ?? [];
     const snakeMetadata = candidate?.url_context_metadata?.url_metadata ?? [];
     const retrieved = [...camelMetadata.map((item) => ({ url: item.retrievedUrl, status: item.urlRetrievalStatus })), ...snakeMetadata.map((item) => ({ url: item.retrieved_url, status: item.url_retrieval_status }))]

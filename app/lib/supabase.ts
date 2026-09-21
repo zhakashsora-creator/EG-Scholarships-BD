@@ -1,11 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
-import { env } from "cloudflare:workers";
 import { cookies } from "next/headers";
+import { runtimeValue } from "./runtime-env";
 
 export function getSupabaseConfig() {
-  const runtime = env as unknown as { SUPABASE_URL?: string; SUPABASE_ANON_KEY?: string };
-  const url = runtime.SUPABASE_URL ?? process.env.SUPABASE_URL;
-  const anonKey = runtime.SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY;
+  const url = runtimeValue("SUPABASE_URL");
+  const anonKey = runtimeValue("SUPABASE_ANON_KEY");
   return url && anonKey ? { url, anonKey } : null;
 }
 

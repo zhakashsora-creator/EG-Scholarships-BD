@@ -1,6 +1,6 @@
-import { env } from "cloudflare:workers";
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from "pdf-lib";
 import type { ScholarshipMatch, StudentProfile } from "./matching";
+import { runtimeValue } from "./runtime-env";
 
 export type ReportSnapshot = {
   id: string;
@@ -21,13 +21,8 @@ type ReportRuntime = {
   CONSULTANT_REPLY_TO?: string;
 };
 
-function localValue(key: keyof ReportRuntime) {
-  return typeof process !== "undefined" ? process.env[key] : undefined;
-}
-
 function reportRuntime() {
-  const runtime = env as unknown as ReportRuntime;
-  const value = (key: keyof ReportRuntime) => runtime[key] ?? localValue(key);
+  const value = (key: keyof ReportRuntime) => runtimeValue(key);
   return {
     gmailWebhookUrl: value("GMAIL_REPORT_WEBHOOK_URL")?.trim(),
     gmailWebhookSecret: value("GMAIL_REPORT_WEBHOOK_SECRET")?.trim(),
