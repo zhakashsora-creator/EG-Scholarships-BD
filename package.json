@@ -9,7 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "build:sites": "vinext build",
-    "start": "node server.js",
+    "start": "node server.cjs",
     "test": "next build && node --test tests/rendered-html.test.mjs && tsx --test tests/scoring.test.ts",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
