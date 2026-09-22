@@ -1,4 +1,12 @@
 const { createServer } = require("node:http");
+const { join } = require("node:path");
+const { existsSync } = require("node:fs");
+
+const localEnvironmentFile = join(__dirname, ".env.production.local");
+if (existsSync(localEnvironmentFile)) {
+  process.loadEnvFile(localEnvironmentFile);
+}
+
 const next = require("next");
 const mysql = require("mysql2/promise");
 
