@@ -18,7 +18,7 @@ test("EG Scholarships public landing source is complete", async () => {
 
 test("catalogue contains normalized, source-backed opportunities", async () => {
   const rows = JSON.parse(await readFile(new URL("../app/data/scholarships.json", import.meta.url), "utf8"));
-  assert.equal(rows.length, 469);
+  assert.equal(rows.length, 475);
   assert.ok(rows.every((row) => row.name && row.country && /^https?:\/\//.test(row.officialSource)));
   assert.equal(new Set(rows.map((row) => row.id)).size, rows.length);
   assert.ok(rows.some((row) => /Erasmus Mundus/i.test(row.name)));
@@ -113,15 +113,16 @@ test("study profile, optional documents, top-ten reports and resilient official 
   assert.match(dashboard, /Open Student Records/);
   assert.match(dashboard, /APPLICATION & PRE-DEPARTURE TRACKER/);
   assert.match(dashboard, /best-finds-rail/);
-  assert.match(dashboard, /Find my top 10/);
+  assert.match(dashboard, /Find all matches/);
   assert.match(dashboard, /Email the report to/);
   assert.match(dashboard, /Download PDF/);
   assert.doesNotMatch(dashboard, /Generate my Top Five/);
   assert.match(matching, /typeof limit === "number"/);
   assert.match(matching, /prioritizeDestinationDiversity/);
   assert.match(analyze, /enhanceMatchesWithGemini/);
-  assert.match(analyze, /slice\(0, 10\)/);
-  assert.match(analyze, /prioritizeDestinationDiversity/);
+  assert.doesNotMatch(analyze, /results[^;]*slice\(0, 10\)/);
+  assert.match(analyze, /buildAvailableMatches/);
+  assert.match(analyze, /buildPriorityMatches/);
   assert.match(analyze, /emailScholarshipReport/);
   assert.match(workspaceRoute, /prioritizeDestinationDiversity/);
   assert.match(workspaceRoute, /scholarship_reports/);
@@ -172,7 +173,7 @@ test("portal fix brief is represented in scoring, controls, copy and routes", as
   ]);
   assert.match(matching, /subjectFit/);
   assert.match(matching, /englishHeadroom/);
-  assert.match(matching, /No \$\{country\} records matched your level and subject/);
+  assert.match(matching, /No currently available \$\{country\} records matched your level and subject/);
   assert.match(matching, /calibrateBestFindBands/);
   assert.match(analysis, /countryMatches/);
   assert.match(dashboard, /AI-assisted ranking, verified against our catalogue/);

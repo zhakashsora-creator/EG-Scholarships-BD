@@ -60,6 +60,7 @@ export type ScholarshipMatch = {
 };
 
 export type CountryCoverageNotice = { country: string; message: string; alternatives: string[] };
+export type FundingCategory = "Fully funded" | "Full tuition" | "Partial funding" | "Tuition discount" | "Other";
 
 /** Preserve score order while spreading equal-scoring opportunities across destinations. */
 export function prioritizeDestinationDiversity(matches: ScholarshipMatch[]) {
@@ -192,6 +193,23 @@ function deadlineState(scholarship: Scholarship, now: Date) {
   return { date, closed: /closed|expired|past deadline/.test(status) || Boolean(date && date.getTime() < now.getTime()) };
 }
 
+export function fundingCategory(scholarship: Scholarship): FundingCategory {
+  const funding = normalize(`${scholarship.coverage} ${scholarship.fundingSummary}`);
+  const coverage = normalize(scholarship.coverage);
+  if (/fully funded/.test(funding) || (coverage === "full" && /stipend|living|allowance|travel/.test(funding))) return "Fully funded";
+  if (/100 tuition|full tuition/.test(funding)) return "Full tuition";
+  if (/partial|stipend|waiver|toward tuition|up to/.test(funding)) return "Partial funding";
+  if (/discount|reduction/.test(funding)) return "Tuition discount";
+  return "Other";
+}
+
+export function isCurrentlyAvailable(match: ScholarshipMatch, now = new Date()) {
+  return !deadlineState(match.scholarship, now).closed
+    && match.subScores.studyLevel > 0
+    && match.subScores.eligibility > 0
+    && match.subScores.subjectFit > 0;
+}
+
 export function verificationAgeDays(scholarship: Scholarship, now = new Date()) {
   const raw = String(scholarship.verifiedAt ?? "");
   const checked = new Date(raw.includes(" ") ? `${raw.replace(" ", "T")}Z` : `${raw}T00:00:00Z`);
@@ -280,8 +298,52 @@ export function rankScholarships(profile: StudentProfile, limit?: number, now = 
   const preferred = (profile.preferredCountries ?? []).map((country) => country.trim()).filter(Boolean);
   const destinationRows = preferred.length ? scholarshipData.filter((scholarship) => preferred.some((country) => countryMatches(`${scholarship.country} ${scholarship.destination}`, country))) : scholarshipData;
   const candidates = destinationRows.length ? destinationRows : scholarshipData;
-  const ranked = candidates.map((scholarship) => scoreOne(profile, scholarship, now)).sort((a, b) => b.score - a.score || a.scholarship.name.localeCompare(b.scholarship.name));
+  const scored = candidates.map((scholarship) => scoreOne(profile, scholarship, now));
+  const bySource = new Map<string, ScholarshipMatch>();
+  for (const match of scored) {
+    const key = normalize(match.scholarship.officialSource).replace(/\/$/, "") || match.scholarship.id;
+    const current = bySource.get(key);
+    if (!current || match.score > current.score || (match.score === current.score && String(match.scholarship.verifiedAt).localeCompare(String(current.scholarship.verifiedAt)) > 0)) {
+      bySource.set(key, match);
+    }
+  }
+  const ranked = [...bySource.values()].sort((a, b) => b.score - a.score || a.scholarship.name.localeCompare(b.scholarship.name));
   return typeof limit === "number" ? ranked.slice(0, Math.max(0, limit)) : ranked;
+}
+
+/** Every relevant, currently available catalogue result for the selected destinations. */
+export function buildAvailableMatches(profile: StudentProfile, now = new Date()) {
+  return calibrateBestFindBands(
+    prioritizeDestinationDiversity(rankScholarships(profile, undefined, now).filter((match) => isCurrentlyAvailable(match, now))),
+  );
+}
+
+/**
+ * A separate aspirational shortlist. Selected destinations are preferred, then
+ * eligible global fully-funded options fill any remaining places. This does not
+ * remove or reorder the complete destination result set.
+ */
+export function buildPriorityMatches(profile: StudentProfile, destinationMatches?: ScholarshipMatch[], limit = 10, now = new Date()) {
+  const chosen = destinationMatches ?? buildAvailableMatches(profile, now);
+  const globalProfile: StudentProfile = { ...profile, preferredCountries: [] };
+  const global = prioritizeDestinationDiversity(rankScholarships(globalProfile, undefined, now));
+  const eligible = [...chosen, ...global].filter((match) => {
+    const availability = deadlineState(match.scholarship, now);
+    const status = normalize(`${match.scholarship.status} ${match.scholarship.priority}`);
+    const futureCycleTarget = availability.closed && /annual|monitor|recurring|next|cycle/.test(status) && !/permanent|no more/.test(status);
+    return (!availability.closed || futureCycleTarget)
+    && fundingCategory(match.scholarship) === "Fully funded"
+    && match.subScores.studyLevel > 0
+    && match.subScores.eligibility > 0
+    && match.subScores.subjectFit > 0;
+  });
+  const seen = new Set<string>();
+  const priority = eligible.filter((match) => {
+    if (seen.has(match.scholarship.id)) return false;
+    seen.add(match.scholarship.id);
+    return true;
+  }).slice(0, Math.max(0, limit));
+  return calibrateBestFindBands(priority);
 }
 
 /** Create useful decision bands without inventing precision or promoting hard eligibility gaps. */
@@ -299,14 +361,15 @@ export function calibrateBestFindBands(matches: ScholarshipMatch[]) {
 export function buildCountryCoverageNotices(profile: StudentProfile, selected: ScholarshipMatch[]): CountryCoverageNotice[] {
   return (profile.preferredCountries ?? []).flatMap((country) => {
     const countrySelections = selected.filter((match) => countryMatches(`${match.scholarship.country} ${match.scholarship.destination}`, country));
+    if (countrySelections.some((match) => match.subScores.subjectFit === 20)) return [];
     const specific = scholarshipData.filter((row) => countryMatches(`${row.country} ${row.destination}`, country))
       .filter((row) => studyLevelCompatibility(profile.studyLevel, row.studyLevel) === "aligned" && subjectCompatibility(profile.field, `${row.subjectRestrictions} ${row.category}`) === "direct");
-    if (specific.length) return [];
-    const broadAlternativeShown = countrySelections.length > 0;
-    return [{ country, message: `No ${country} records matched your level and subject.`, alternatives: [
-      broadAlternativeShown
-        ? `A broader ${country} award appears below as a Reach alternative; verify a ${profile.field || "target-subject"} programme on the university site.`
-        : `Review broader ${country} awards and verify a ${profile.field || "target-subject"} programme on the university site.`,
+    return [{ country, message: `No currently available ${country} records matched your level and subject.`, alternatives: [
+      specific.length
+        ? `${specific.length} subject-specific catalogue record${specific.length === 1 ? " is" : "s are"} closed, historical or not available for this profile; monitor the next verified cycle.`
+        : countrySelections.length
+          ? `Broader ${country} awards appear below, but verify a ${profile.field || "target-subject"} programme on the university site.`
+          : `Review broader ${country} awards and verify a ${profile.field || "target-subject"} programme on the university site.`,
       "Keep this destination selected and add a closely related subject such as apparel, fashion or materials.",
     ] }];
   });

@@ -37,7 +37,7 @@ export default async function Home() {
           <div className="trust-row">
             <span><b>{scholarships.length}</b> curated records</span>
             <span><b>{countries}</b> destinations</span>
-            <span><b>Top 10</b> consultant-ready options</span>
+            <span><b>All matches</b> plus fully funded priorities</span>
           </div>
         </div>
 

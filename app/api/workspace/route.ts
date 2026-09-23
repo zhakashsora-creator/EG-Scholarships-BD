@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
-import { buildCountryCoverageNotices, calibrateBestFindBands, prioritizeDestinationDiversity, profileCompleteness, rankScholarships, scholarships, type StudentProfile } from "../../lib/matching";
+import { buildCountryCoverageNotices, buildPriorityMatches, calibrateBestFindBands, prioritizeDestinationDiversity, profileCompleteness, rankScholarships, scholarships, type StudentProfile } from "../../lib/matching";
 import { isGeminiConfigured } from "../../lib/gemini-matching";
 import { isReportEmailConfigured } from "../../lib/scholarship-report";
 import { database, ensureSchema } from "../../lib/storage";
@@ -41,7 +41,8 @@ export async function GET() {
     let gaps = computed.gaps;
     try { gaps = JSON.parse(row.gapsJson); } catch { /* retain computed gaps */ }
     return [{ ...computed, scholarship, score: row.score, rationale: row.rationale, gaps }];
-  })).slice(0, 10));
+  })));
+  const priorityMatches = buildPriorityMatches(profile, matches, 10);
   const reportEmailConfigured = isReportEmailConfigured();
   return NextResponse.json({
     account: account ? {
@@ -58,6 +59,7 @@ export async function GET() {
     profile,
     completeness: student?.completeness ?? 0,
     matches,
+    priorityMatches,
     countryNotices: buildCountryCoverageNotices(profile, matches),
     applications: (applicationRows.results ?? []).map((application) => {
       let workflow = {};

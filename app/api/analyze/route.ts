@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
-import { buildCountryCoverageNotices, calibrateBestFindBands, prioritizeDestinationDiversity, profileCompleteness, rankScholarships, type StudentProfile } from "../../lib/matching";
+import { buildAvailableMatches, buildCountryCoverageNotices, buildPriorityMatches, profileCompleteness, type StudentProfile } from "../../lib/matching";
 import { enhanceMatchesWithGemini } from "../../lib/gemini-matching";
 import { database, ensureSchema } from "../../lib/storage";
 import { buildScholarshipReportPdf, consultationUrl, emailScholarshipReport, isReportEmailConfigured, type ReportSnapshot } from "../../lib/scholarship-report";
@@ -55,15 +55,16 @@ export async function POST(request: Request) {
     ? `On-device document reading reviewed ${analyzedIds.length} file${analyzedIds.length === 1 ? "" : "s"}${evidenceCount ? ` and detected ${evidenceCount} supported profile fact${evidenceCount === 1 ? "" : "s"}` : ""}. Raw document text was not sent to an AI service.${warningCount ? ` ${warningCount} file${warningCount === 1 ? "" : "s"} need manual review.` : ""}`
     : "Matches use the verified catalogue and the profile fields you entered.";
 
-  const ruleResults = rankScholarships(profile);
+  const ruleResults = buildAvailableMatches(profile);
   const enhanced = await enhanceMatchesWithGemini(profile, ruleResults);
-  const results = calibrateBestFindBands(prioritizeDestinationDiversity(enhanced.matches).slice(0, 10));
+  const results = enhanced.matches;
+  const priorityMatches = buildPriorityMatches(profile, results, 10);
   const countryNotices = buildCountryCoverageNotices(profile, results);
   const completeness = profileCompleteness(profile);
   const aiNotice = enhanced.used
     ? ` AI-assisted explanations were verified against the catalogue; deterministic eligibility, subscores and score bands remained authoritative.${enhanced.summary ? ` ${enhanced.summary}` : ""}`
     : " Results use catalogue-verified eligibility scoring; optional AI-assisted explanations are currently unavailable.";
-  const notice = `${documentNotice}${aiNotice} Your 10 highest-ranked options are shown with Strong, Possible and Reach bands; lower-confidence choices are marked for review.`;
+  const notice = `${documentNotice}${aiNotice} All currently available destination matches are shown, plus a separate fully funded build-up shortlist; lower-confidence choices are marked for review.`;
   await database()
     .prepare(`INSERT INTO students (email, full_name, profile_json, completeness, updated_at)
       VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
@@ -97,7 +98,7 @@ export async function POST(request: Request) {
     createdAt,
     student: { fullName: account?.fullName ?? user.fullName, email: user.email },
     profile,
-    matches: results,
+    matches: priorityMatches,
     followUpConsent: body.followUpConsent === true,
   };
   let reportStatus: "ready" | "sent" | "failed" = "ready";
@@ -125,7 +126,7 @@ export async function POST(request: Request) {
     .bind(reportId, user.email, user.email, reportStatus, JSON.stringify(snapshot), providerId || null,
       deliveryError || null, body.followUpConsent === true ? 1 : 0, createdAt, reportSentAt).run();
   await database().prepare(`INSERT INTO progress_events (id, owner_email, stage, note) VALUES (?, ?, 'Scholarship report prepared', ?)`)
-    .bind(crypto.randomUUID(), user.email, reportStatus === "sent" ? "Top 10 report emailed to the student" : "Top 10 report ready to download").run();
+    .bind(crypto.randomUUID(), user.email, reportStatus === "sent" ? "Fully funded priority report emailed to the student" : "Fully funded priority report ready to download").run();
 
   const report = {
     id: reportId,
@@ -142,5 +143,5 @@ export async function POST(request: Request) {
         : "Your report is ready to download.",
   };
 
-  return NextResponse.json({ mode: enhanced.used ? "ai-assisted" : analyzedIds.length ? "on-device" : "rules", notice, profile, completeness, results, countryNotices, analyzedIds, aiEnhanced: enhanced.used, report });
+  return NextResponse.json({ mode: enhanced.used ? "ai-assisted" : analyzedIds.length ? "on-device" : "rules", notice, profile, completeness, results, priorityMatches, countryNotices, analyzedIds, aiEnhanced: enhanced.used, report });
 }

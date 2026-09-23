@@ -4,7 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import ThemeToggle from "../../../components/ThemeToggle";
 import { getStudentUser } from "../../../lib/auth";
 import { buildCostPlan, buildFitChecks, buildNextSteps } from "../../../lib/scholarship-analysis";
-import { calibrateBestFindBands, prioritizeDestinationDiversity, rankScholarships, scholarships, type ScholarshipMatch, type StudentProfile } from "../../../lib/matching";
+import { buildAvailableMatches, scholarships, type ScholarshipMatch, type StudentProfile } from "../../../lib/matching";
 import { database, ensureSchema } from "../../../lib/storage";
 
 export const dynamic = "force-dynamic";
@@ -30,7 +30,7 @@ export default async function ScholarshipAnalysisPage({ params }: { params: Prom
   let gaps: string[] = [];
   try { profile = student?.profileJson ? JSON.parse(student.profileJson) : {}; } catch { profile = {}; }
   try { gaps = JSON.parse(row.gapsJson); } catch { gaps = []; }
-  const computed = calibrateBestFindBands(prioritizeDestinationDiversity(rankScholarships(profile)).slice(0, 10)).find((match) => match.scholarship.id === scholarship.id);
+  const computed = buildAvailableMatches(profile).find((match) => match.scholarship.id === scholarship.id);
   const label: ScholarshipMatch["label"] = computed?.label ?? "Reach";
   const fitChecks = buildFitChecks(profile, scholarship);
   const costPlan = buildCostPlan(scholarship);
