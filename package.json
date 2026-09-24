@@ -15,6 +15,7 @@
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
     "db:import": "node scripts/import-sites-dump.mjs",
+    "db:import-delta": "node scripts/import-sites-delta.mjs",
     "db:verify": "node scripts/verify-migration.mjs"
   },
   "dependencies": {
