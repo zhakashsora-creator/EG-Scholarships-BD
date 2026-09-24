@@ -15,18 +15,20 @@ Updated 24 September 2026. Production DNS still points to the Sites deployment.
 - The exact document URL returned HTTP 401 without authentication, confirming the download gate is private.
 - The temporary document file and its database record were removed after the test; the student vault returned to zero stored documents.
 
-## Current Sites snapshot comparison
+## Legacy student-data scope
 
-The live Sites database contains four students, four student accounts, four applications, twenty stored legacy match rows, four reports, zero documents, six consultant requests and twenty-seven progress events.
+The student and application records already present on staging are retained as test fixtures. They do not need to be deleted, enriched or reconciled further.
 
-The 21 September migration export contains the same counts except for five consultant requests and twenty-six progress events. The missing append-only rows were captured in a private, ignored delta file on 24 September.
+No additional Sites student accounts, profiles, applications, documents, reports, consultant requests or activity history will be migrated. The private, ignored delta captured on 24 September remains unused.
 
-Do not replay the full export over staging. Stored matches are derived data and the staging profile now has a newer uncapped result set. Use `npm run db:import-delta -- <dump>` for later reconciliation: append-only records insert by primary key, profiles/accounts/applications update only when the source `updated_at` is newer, and legacy matches plus pending upload sessions are intentionally skipped.
+The migration target is the application itself: its polished interface, workflows, matching behaviour and scholarship catalogue. Do not replay the full Sites export over staging.
 
 ## Remaining cutover gates
 
-1. Begin a short production write freeze and take a final Sites database/R2 export.
-2. Generate and review the final delta, then import it into MariaDB/private storage.
-3. Reconcile all table and object counts and check for orphaned ownership rows.
-4. Change the production `scholarships` DNS record to the Namecheap application.
-5. Retain the Sites deployment and rollback DNS target for at least 72 hours while monitoring health and sign-in flows.
+1. Create the production scholarship catalogue schema in MariaDB and import the validated catalogue with stable IDs, official sources, funding type, countries, eligibility and deadlines.
+2. Connect matching, fully funded priorities and catalogue filters to the MariaDB scholarship catalogue; retain safe fallback and deduplication behaviour during rollout.
+3. Add Google OAuth for student sign-in and account linking, with staging and production redirect URIs and the existing sign-in method retained as a fallback.
+4. Complete spotless release QA: responsive layout, accessibility, authentication, profile editing, uncapped matching, filters, tracked-application persistence, private documents, report download and failure-safe email messaging.
+5. Back up MariaDB and private storage, deploy the release candidate and run final staging smoke tests without spending further effort on legacy student-data migration.
+6. Change the production `scholarships` DNS record to the Namecheap application.
+7. Retain the Sites deployment and rollback DNS target for at least 72 hours while monitoring health and sign-in flows.
