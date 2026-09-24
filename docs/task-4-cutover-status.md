@@ -11,6 +11,9 @@ Updated 24 September 2026. Production DNS still points to the Sites deployment.
 - All four tracked applications survive a re-match, including Clarendon at Shortlist with an out-of-top-ten label.
 - Report email is not offered while delivery is unavailable; the PDF remains downloadable.
 - Unauthenticated document-list and document-download requests return HTTP 401.
+- A non-sensitive PNG was uploaded to the private staging document vault and opened successfully by its authenticated owner.
+- The exact document URL returned HTTP 401 without authentication, confirming the download gate is private.
+- The temporary document file and its database record were removed after the test; the student vault returned to zero stored documents.
 
 ## Current Sites snapshot comparison
 
@@ -22,11 +25,8 @@ Do not replay the full export over staging. Stored matches are derived data and 
 
 ## Remaining cutover gates
 
-1. Sign in to the existing staging test account and upload a non-sensitive test image.
-2. Confirm the authenticated owner can download it and an unauthenticated request cannot.
-3. Remove the test record and file after the check.
-4. Begin a short production write freeze and take a final Sites database/R2 export.
-5. Generate and review the final delta, then import it into MariaDB/private storage.
-6. Reconcile all table and object counts and check for orphaned ownership rows.
-7. Change the production `scholarships` DNS record to the Namecheap application.
-8. Retain the Sites deployment and rollback DNS target for at least 72 hours while monitoring health and sign-in flows.
+1. Begin a short production write freeze and take a final Sites database/R2 export.
+2. Generate and review the final delta, then import it into MariaDB/private storage.
+3. Reconcile all table and object counts and check for orphaned ownership rows.
+4. Change the production `scholarships` DNS record to the Namecheap application.
+5. Retain the Sites deployment and rollback DNS target for at least 72 hours while monitoring health and sign-in flows.
