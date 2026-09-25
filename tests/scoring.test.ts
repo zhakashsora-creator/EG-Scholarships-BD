@@ -57,3 +57,10 @@ test("known high-English awards are not strong at IELTS 6.0 and UK aliases align
   assert.equal(checks.find((check) => check.label === "Destination")?.status, "Aligned");
   assert.equal(checks.find((check) => check.label === "Study level")?.status, "Check required");
 });
+
+test("matching accepts the database-provided catalogue instead of relying on the bundle", () => {
+  const customCatalogue = scholarships.slice(0, 2);
+  const ranked = rankScholarships(textileProfile, undefined, new Date("2026-09-23T10:00:00Z"), customCatalogue);
+  assert.equal(ranked.length, customCatalogue.length);
+  assert.deepEqual(new Set(ranked.map((match) => match.scholarship.id)), new Set(customCatalogue.map((item) => item.id)));
+});

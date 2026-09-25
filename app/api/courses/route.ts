@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
 import { database, ensureSchema } from "../../lib/storage";
-import { scholarships, type StudentProfile } from "../../lib/matching";
+import { type StudentProfile } from "../../lib/matching";
+import { getScholarshipById } from "../../lib/scholarship-catalogue";
 import { extractGeminiJson, geminiGenerateContent, geminiText, isGeminiConfigured } from "../../lib/gemini-client";
 import { isPlausibleOfficialEducationUrl, safePublicHttpsUrl } from "../../lib/safe-url";
 import { officialCourseFallback } from "../../lib/course-discovery";
@@ -17,7 +18,7 @@ export async function POST(request: Request) {
   const user = await getStudentUser();
   if (!user) return NextResponse.json({ error: "Sign in required" }, { status: 401 });
   const body = await request.json().catch(() => ({})) as { scholarshipId?: string };
-  const scholarship = scholarships.find((item) => item.id === body.scholarshipId);
+  const scholarship = body.scholarshipId ? await getScholarshipById(body.scholarshipId) : null;
   if (!scholarship) return NextResponse.json({ error: "Opportunity not found" }, { status: 404 });
 
   await ensureSchema();

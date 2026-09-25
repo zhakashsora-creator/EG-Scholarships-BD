@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
 import { buildAvailableMatches, buildCountryCoverageNotices, buildPriorityMatches, profileCompleteness, type StudentProfile } from "../../lib/matching";
+import { getScholarshipCatalogue } from "../../lib/scholarship-catalogue";
 import { enhanceMatchesWithGemini } from "../../lib/gemini-matching";
 import { database, ensureSchema } from "../../lib/storage";
 import { buildScholarshipReportPdf, consultationUrl, emailScholarshipReport, isReportEmailConfigured, type ReportSnapshot } from "../../lib/scholarship-report";
@@ -39,6 +40,7 @@ export async function POST(request: Request) {
   const extraction = body.localExtraction;
   const profile = mergeDocumentFacts(submitted, extraction?.profile);
   await ensureSchema();
+  const catalogue = await getScholarshipCatalogue();
 
   const analyzedIds = Array.from(new Set((extraction?.analyzedIds ?? []).filter((id): id is string => typeof id === "string"))).slice(0, 4);
   if (analyzedIds.length) {
@@ -55,11 +57,11 @@ export async function POST(request: Request) {
     ? `On-device document reading reviewed ${analyzedIds.length} file${analyzedIds.length === 1 ? "" : "s"}${evidenceCount ? ` and detected ${evidenceCount} supported profile fact${evidenceCount === 1 ? "" : "s"}` : ""}. Raw document text was not sent to an AI service.${warningCount ? ` ${warningCount} file${warningCount === 1 ? "" : "s"} need manual review.` : ""}`
     : "Matches use the verified catalogue and the profile fields you entered.";
 
-  const ruleResults = buildAvailableMatches(profile);
+  const ruleResults = buildAvailableMatches(profile, new Date(), catalogue);
   const enhanced = await enhanceMatchesWithGemini(profile, ruleResults);
   const results = enhanced.matches;
-  const priorityMatches = buildPriorityMatches(profile, results, 10);
-  const countryNotices = buildCountryCoverageNotices(profile, results);
+  const priorityMatches = buildPriorityMatches(profile, results, 10, new Date(), catalogue);
+  const countryNotices = buildCountryCoverageNotices(profile, results, catalogue);
   const completeness = profileCompleteness(profile);
   const aiNotice = enhanced.used
     ? ` AI-assisted explanations were verified against the catalogue; deterministic eligibility, subscores and score bands remained authoritative.${enhanced.summary ? ` ${enhanced.summary}` : ""}`

@@ -5,7 +5,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState, useSyncExternalStore }
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "../components/ThemeToggle";
-import { catalogueCountries, catalogueIntakes, fundingCategory, profileCompleteness, scholarships, verificationAgeDays, type CountryCoverageNotice, type Scholarship, type ScholarshipMatch, type StudentProfile } from "../lib/matching";
+import { fundingCategory, profileCompleteness, verificationAgeDays, type CountryCoverageNotice, type Scholarship, type ScholarshipMatch, type StudentProfile } from "../lib/matching";
 import { buildCostPlan, buildFitChecks } from "../lib/scholarship-analysis";
 
 type Tab = "overview" | "account" | "documents" | "profile" | "matches" | "applications" | "consultant";
@@ -72,6 +72,12 @@ type AccountProfile = {
   photoVersion: number;
   onboardingComplete: boolean;
 };
+type CatalogueSummary = {
+  count: number;
+  countries: string[];
+  intakes: string[];
+  highConfidenceCount: number;
+};
 
 const emptyProfile: StudentProfile = {
   studyLevel: "", preferredCountries: [], field: "", gpa: "",
@@ -81,6 +87,7 @@ const emptyProfile: StudentProfile = {
   englishTest: "", englishScore: "", budget: "", budgetCurrency: "BDT", fundingNeed: "", studyMode: "", intake: "",
   workExperience: "", researchExperience: "", extracurriculars: "", careerGoals: "", notes: "",
 };
+const emptyCatalogueSummary: CatalogueSummary = { count: 0, countries: [], intakes: [], highConfidenceCount: 0 };
 const categories = [
   ["academic", "Academic", "Transcripts, certificates and mark sheets", "01"],
   ["language", "Language", "IELTS, TOEFL, PTE or Duolingo", "02"],
@@ -120,6 +127,8 @@ export default function DashboardClient({ user, signOutPath, initialTab = "overv
   const [emailReport, setEmailReport] = useState(true);
   const [followUpConsent, setFollowUpConsent] = useState(false);
   const [countryNotices, setCountryNotices] = useState<CountryCoverageNotice[]>([]);
+  const [catalogueSummary, setCatalogueSummary] = useState<CatalogueSummary>(emptyCatalogueSummary);
+  const [applicationScholarships, setApplicationScholarships] = useState<Scholarship[]>([]);
   const localReadingSupported = useSyncExternalStore(
     () => () => undefined,
     () => "showOpenFilePicker" in window,
@@ -150,6 +159,8 @@ export default function DashboardClient({ user, signOutPath, initialTab = "overv
         setAiConfigured(Boolean(workspace.aiConfigured));
         setReport(workspace.report ?? null);
         setReportEmailConfigured(Boolean(workspace.reportEmailConfigured ?? workspace.report?.emailConfigured));
+        setCatalogueSummary(workspace.catalogueSummary ?? emptyCatalogueSummary);
+        setApplicationScholarships(workspace.applicationScholarships ?? []);
         setDocuments(documentData.documents ?? []);
       })
       .catch((error) => setNotice(error instanceof Error ? error.message : "Workspace could not be loaded"))
@@ -331,12 +342,12 @@ export default function DashboardClient({ user, signOutPath, initialTab = "overv
       <header className="dashboard-topbar"><button className="menu-button" onClick={() => setSidebarOpen(true)} aria-label="Open menu">☰</button><div><small>EG SCHOLARSHIPS BD</small><strong>{navItems.find(([id]) => id === tab)?.[2]}</strong></div><div className="top-actions"><div className="secure-pill"><span /> Secure workspace</div><ThemeToggle compact /><button className="user-chip" onClick={() => navigateTo("account")} aria-label="Edit my account">{account.hasPhoto ? <img src={`/api/account/photo?v=${account.photoVersion}`} alt="" /> : <span>{initials(account.fullName)}</span>}<div><b>{account.fullName}</b><small>{user.email}</small></div></button><a href={signOutPath}>Sign out</a></div></header>
       <div className="dashboard-body">
         <div className="page-heading"><div><span className="eyebrow">{tab === "overview" ? "YOUR ACTION CENTRE" : "STUDENT WORKSPACE"}</span><h1>{tab === "overview" ? `Welcome back, ${account.fullName.split(" ")[0]}.` : navItems.find(([id]) => id === tab)?.[2]}</h1><p>{pageDescriptions[tab]}</p></div>{tab === "overview" && <button className="button primary compact" onClick={() => navigateTo(completeness < 80 ? "profile" : "matches")}>{completeness < 80 ? "Complete my profile" : "Browse Best Finds"}<span>→</span></button>}</div>
-        {tab === "overview" && <Overview documents={documents} matches={matches} completeness={completeness} categoryCount={categoryCount} applications={applications} progress={progress} onNavigate={navigateTo} />}
+        {tab === "overview" && <Overview documents={documents} matches={matches} completeness={completeness} categoryCount={categoryCount} applications={applications} progress={progress} catalogueSummary={catalogueSummary} onNavigate={navigateTo} />}
         {tab === "account" && <AccountEditor account={account} email={user.email} busy={busy} notice={notice} onSave={saveAccount} />}
         {tab === "documents" && <Documents documents={documents} busy={busy} deletingId={deletingId} notice={notice} onUpload={uploadDocument} onDelete={removeDocument} />}
-        {tab === "profile" && <Profile profile={profile} setProfile={setProfile} consent={consent} setConsent={setConsent} emailReport={emailReport} setEmailReport={setEmailReport} reportEmailConfigured={reportEmailConfigured} followUpConsent={followUpConsent} setFollowUpConsent={setFollowUpConsent} email={user.email} documents={documents.length} busy={busy} analysisProgress={analysisProgress} aiConfigured={aiConfigured} localReadingSupported={localReadingSupported} onSave={saveProfile} onRun={runMatch} />}
+        {tab === "profile" && <Profile profile={profile} setProfile={setProfile} consent={consent} setConsent={setConsent} emailReport={emailReport} setEmailReport={setEmailReport} reportEmailConfigured={reportEmailConfigured} followUpConsent={followUpConsent} setFollowUpConsent={setFollowUpConsent} email={user.email} documents={documents.length} busy={busy} analysisProgress={analysisProgress} aiConfigured={aiConfigured} localReadingSupported={localReadingSupported} catalogueSummary={catalogueSummary} onSave={saveProfile} onRun={runMatch} />}
         {tab === "matches" && <Matches matches={matches} priorityMatches={priorityMatches} countryNotices={countryNotices} profile={profile} report={report} busy={busy} onRetryReport={retryReportEmail} onProfile={() => navigateTo("profile")} onConsultant={() => navigateTo("consultant")} onTrack={(id) => { updateApplication(id, "shortlisted"); navigateTo("applications"); }} />}
-        {tab === "applications" && <Applications matches={priorityMatches} applications={applications} recordCount={documents.length} onUpdate={updateApplication} />}
+        {tab === "applications" && <Applications matches={priorityMatches} applications={applications} catalogue={applicationScholarships} recordCount={documents.length} onUpdate={updateApplication} />}
         {tab === "consultant" && <Consultant sent={consultantSent} busy={busy} email={user.email} onRequest={requestConsultant} />}
       </div>
     </section>
@@ -406,7 +417,7 @@ function AccountForm({ account, email, busy, notice, onSave, submitLabel }: { ac
   </form>;
 }
 
-function Overview({ documents, matches, completeness, categoryCount, applications, progress, onNavigate }: { documents: DocumentItem[]; matches: ScholarshipMatch[]; completeness: number; categoryCount: number; applications: ApplicationItem[]; progress: ProgressItem[]; onNavigate: (tab: Tab) => void }) {
+function Overview({ documents, matches, completeness, categoryCount, applications, progress, catalogueSummary, onNavigate }: { documents: DocumentItem[]; matches: ScholarshipMatch[]; completeness: number; categoryCount: number; applications: ApplicationItem[]; progress: ProgressItem[]; catalogueSummary: CatalogueSummary; onNavigate: (tab: Tab) => void }) {
   const nextTab: Tab = completeness < 80 ? "profile" : matches.length ? "matches" : "profile";
   const nextTitle = completeness < 80 ? "Complete your study profile" : matches.length ? "Browse your Best Finds" : "Generate your first Best Finds";
   const roadmapDone = [completeness >= 80, matches.length > 0, applications.length > 0].filter(Boolean).length;
@@ -416,7 +427,7 @@ function Overview({ documents, matches, completeness, categoryCount, application
     <section className="workspace-hub"><div><span className="section-kicker">YOUR ONE-STOP STUDENT WORKSPACE</span><h2>From first search to arrival, keep the whole journey together.</h2><p>Best Finds helps you choose. The records hub keeps every supporting file, email and payment receipt ready. The application tracker remembers what happened and what comes next.</p></div><div className="hub-links"><button onClick={() => onNavigate("profile")}><b>01</b><span><strong>Study profile</strong><small>Academic history & goals</small></span></button><button onClick={() => onNavigate("documents")}><b>02</b><span><strong>Records hub</strong><small>Files, emails & receipts</small></span></button><button onClick={() => onNavigate("matches")}><b>03</b><span><strong>Best Finds</strong><small>Tailored opportunities</small></span></button><button onClick={() => onNavigate("applications")}><b>04</b><span><strong>Application tracker</strong><small>Admission through arrival</small></span></button></div></section>
     <div className="dashboard-two-col"><section className="panel journey-panel"><div className="panel-head"><div><span className="section-kicker">YOUR ROADMAP</span><h2>Progress without guesswork.</h2></div><span>{roadmapDone} / 3 complete</span></div>{[[completeness >= 80, "Study profile", completeness >= 80 ? "Core results and preferences saved" : "Add SSC/O-level, HSC/A-level and study plans", "profile"], [matches.length > 0, "Best Finds generated", matches.length ? `${matches.length} tailored opportunities ready` : "Run profile matching", "matches"], [applications.length > 0, "Application plan", applications.length ? `${applications.length} option${applications.length === 1 ? "" : "s"} tracked` : "Move a Best Find into tracking", "applications"]].map(([done, title, text, destination], index) => <button className={`roadmap-step ${done ? "done" : ""}`} key={String(title)} onClick={() => onNavigate(destination as Tab)}><b>{done ? "✓" : index + 1}</b><span><strong>{title as string}</strong><small>{text as string}</small></span><i>→</i></button>)}<button className="roadmap-step optional-step" onClick={() => onNavigate("documents")}><b>+</b><span><strong>Student records <em>Optional for matching</em></strong><small>{documents.length ? `${documents.length} files safely kept together` : "Recommended for documents, emails and receipts later"}</small></span><i>→</i></button></section>
       <section className="panel activity-panel"><div className="panel-head"><div><span className="section-kicker">RECENT ACTIVITY</span><h2>Your workspace history</h2></div></div>{progress.length ? progress.map((item) => <article key={`${item.stage}-${item.createdAt}`}><span /><div><strong>{item.stage}</strong><small>{item.note}</small></div></article>) : <div className="empty-state compact-empty"><b>◎</b><strong>Your activity will appear here</strong><p>Uploads, matches and consultant updates create a clear audit trail.</p></div>}</section></div>
-    <section className="panel catalogue-strip"><div><span className="section-kicker">CURATED DATABASE</span><h2>{scholarships.length} source-backed opportunities</h2><p>Built from the supplied regional research workbooks. Deadlines and eligibility must still be rechecked on official pages before applying.</p></div><div className="catalogue-stats"><span><b>{new Set(scholarships.map((item) => item.country)).size}</b> destinations</span><span><b>{scholarships.filter((item) => /high/i.test(item.confidence)).length}</b> high-confidence</span><span><b>∞</b> no five-result limit</span></div></section>
+    <section className="panel catalogue-strip"><div><span className="section-kicker">CURATED DATABASE</span><h2>{catalogueSummary.count} source-backed opportunities</h2><p>Built from the supplied regional research workbooks. Deadlines and eligibility must still be rechecked on official pages before applying.</p></div><div className="catalogue-stats"><span><b>{catalogueSummary.countries.length}</b> destinations</span><span><b>{catalogueSummary.highConfidenceCount}</b> high-confidence</span><span><b>∞</b> no five-result limit</span></div></section>
   </>;
 }
 
@@ -431,16 +442,16 @@ function Documents({ documents, busy, deletingId, notice, onUpload, onDelete }: 
       <section className="panel"><div className="panel-head"><div><span className="section-kicker">YOUR FILES</span><h2>{documents.length} document{documents.length === 1 ? "" : "s"} stored</h2></div></div><div className="document-list">{documents.length ? documents.map((doc) => <article key={doc.id}><span>{doc.filename.split(".").pop()?.slice(0, 4).toUpperCase() || "FILE"}</span><div><strong>{doc.filename}</strong><small>{friendlyCategory(doc.category)} · {fileSize(doc.sizeBytes)}</small></div><i>{doc.status === "analyzed" ? "On-device reviewed" : "Ready"}</i><div className="document-actions"><a href={`/api/documents/download?id=${encodeURIComponent(doc.id)}`} target="_blank" rel="noreferrer">Open</a><button type="button" onClick={() => onDelete(doc.id, doc.filename)} disabled={deletingId === doc.id}>{deletingId === doc.id ? "Removing..." : "Remove"}</button></div></article>) : <div className="empty-state"><b>↑</b><strong>No documents uploaded—and that’s fine</strong><p>You can generate Best Finds from your study profile alone.</p></div>}</div></section></div></>;
 }
 
-function CountryField({ value, onChange }: { value: string[]; onChange: (countries: string[]) => void }) {
+function CountryField({ value, countries, onChange }: { value: string[]; countries: string[]; onChange: (countries: string[]) => void }) {
   return <label className="wide country-field" htmlFor="preferred-countries">Preferred countries
     <select id="preferred-countries" name="preferredCountries" multiple size={6} value={value} onChange={(event) => onChange(Array.from(event.currentTarget.selectedOptions, (option) => option.value))}>
-      {catalogueCountries.map((country) => <option key={country} value={country}>{country}</option>)}
+      {countries.map((country) => <option key={country} value={country}>{country}</option>)}
     </select>
     <small>Choose one or more destinations from the current scholarship catalogue. Hold Ctrl or Command to select several.</small>
   </label>;
 }
 
-function Profile({ profile, setProfile, consent, setConsent, emailReport, setEmailReport, reportEmailConfigured, followUpConsent, setFollowUpConsent, email, documents, busy, analysisProgress, aiConfigured, localReadingSupported, onSave, onRun }: { profile: StudentProfile; setProfile: (profile: StudentProfile) => void; consent: boolean; setConsent: (value: boolean) => void; emailReport: boolean; setEmailReport: (value: boolean) => void; reportEmailConfigured: boolean; followUpConsent: boolean; setFollowUpConsent: (value: boolean) => void; email: string; documents: number; busy: boolean; analysisProgress: string; aiConfigured: boolean; localReadingSupported: boolean; onSave: () => void; onRun: () => void }) {
+function Profile({ profile, setProfile, consent, setConsent, emailReport, setEmailReport, reportEmailConfigured, followUpConsent, setFollowUpConsent, email, documents, busy, analysisProgress, aiConfigured, localReadingSupported, catalogueSummary, onSave, onRun }: { profile: StudentProfile; setProfile: (profile: StudentProfile) => void; consent: boolean; setConsent: (value: boolean) => void; emailReport: boolean; setEmailReport: (value: boolean) => void; reportEmailConfigured: boolean; followUpConsent: boolean; setFollowUpConsent: (value: boolean) => void; email: string; documents: number; busy: boolean; analysisProgress: string; aiConfigured: boolean; localReadingSupported: boolean; catalogueSummary: CatalogueSummary; onSave: () => void; onRun: () => void }) {
   const update = (key: keyof StudentProfile, value: string | string[]) => setProfile({ ...profile, [key]: value });
   const bachelorAnswer = (answer: "yes" | "no") => setProfile({
     ...profile,
@@ -470,10 +481,10 @@ function Profile({ profile, setProfile, consent, setConsent, emailReport, setEma
 
     <fieldset className="profile-section"><legend>Study plans & funding</legend><div className="profile-grid">
       <label htmlFor="study-level">Target study level<select id="study-level" name="studyLevel" value={profile.studyLevel ?? ""} onChange={(e) => update("studyLevel", e.target.value)}><option value="">Select your target</option><option>Bachelor</option><option>Master</option><option>Doctoral</option></select></label>
-      <label htmlFor="target-intake">Target intake<select id="target-intake" name="intake" value={profile.intake ?? ""} onChange={(e) => update("intake", e.target.value)}><option value="">Choose a catalogue intake</option>{profile.intake && !catalogueIntakes.includes(profile.intake) && <option>{profile.intake}</option>}{catalogueIntakes.map((intake) => <option key={intake} value={intake}>{intake}</option>)}</select></label>
+      <label htmlFor="target-intake">Target intake<select id="target-intake" name="intake" value={profile.intake ?? ""} onChange={(e) => update("intake", e.target.value)}><option value="">Choose a catalogue intake</option>{profile.intake && !catalogueSummary.intakes.includes(profile.intake) && <option>{profile.intake}</option>}{catalogueSummary.intakes.map((intake) => <option key={intake} value={intake}>{intake}</option>)}</select></label>
       <label htmlFor="subject-field">Subject / field<input id="subject-field" name="field" value={profile.field ?? ""} onChange={(e) => update("field", e.target.value)} placeholder="e.g. Textile" /></label>
       <label htmlFor="study-mode">Study mode<select id="study-mode" name="studyMode" value={profile.studyMode ?? ""} onChange={(e) => update("studyMode", e.target.value)}><option value="">Any suitable mode</option><option>On campus</option><option>Research</option><option>Coursework</option><option>Online / hybrid</option></select></label>
-      <CountryField value={profile.preferredCountries ?? []} onChange={(countries) => update("preferredCountries", countries)} />
+      <CountryField value={profile.preferredCountries ?? []} countries={catalogueSummary.countries} onChange={(countries) => update("preferredCountries", countries)} />
       <label className="wide" htmlFor="annual-budget">Available annual budget<div className="budget-input"><select id="budget-currency" name="budgetCurrency" aria-label="Budget currency" value={profile.budgetCurrency ?? "BDT"} onChange={(e) => update("budgetCurrency", e.target.value)}><option>BDT</option><option>GBP</option><option>NZD</option><option>EUR</option><option>USD</option></select><input id="annual-budget" name="budget" type="number" min="0" step="1000" inputMode="decimal" value={profile.budget ?? ""} onChange={(e) => update("budget", e.target.value)} placeholder="e.g. 1500000" /></div></label>
       <label htmlFor="funding-needed">Funding needed<select id="funding-needed" name="fundingNeed" value={profile.fundingNeed ?? ""} onChange={(e) => update("fundingNeed", e.target.value)}><option value="">Choose funding preference</option><option>Fully funded only</option><option>Full tuition scholarship</option><option>Partial scholarship / discount</option><option>Any meaningful funding</option><option>Self-funded if affordable</option></select></label>
     </div></fieldset>
@@ -565,10 +576,10 @@ function CourseDialog({ match, onClose }: { match: ScholarshipMatch; onClose: ()
   </section></div>;
 }
 
-function Applications({ matches, applications, recordCount, onUpdate }: { matches: ScholarshipMatch[]; applications: ApplicationItem[]; recordCount: number; onUpdate: (id: string, stage: string, workflow?: ApplicationWorkflow) => void }) {
+function Applications({ matches, applications, catalogue, recordCount, onUpdate }: { matches: ScholarshipMatch[]; applications: ApplicationItem[]; catalogue: Scholarship[]; recordCount: number; onUpdate: (id: string, stage: string, workflow?: ApplicationWorkflow) => void }) {
   const tracked = applications.flatMap((application) => {
     const match = matches.find((item) => item.scholarship.id === application.scholarshipId);
-    const scholarship = match?.scholarship ?? scholarships.find((item) => item.id === application.scholarshipId);
+    const scholarship = match?.scholarship ?? catalogue.find((item) => item.id === application.scholarshipId);
     return scholarship ? [{ application, scholarship, inCurrentResults: Boolean(match) }] : [];
   });
   if (!tracked.length) return <section className="panel large-empty"><span>◎</span><h2>No applications tracked yet.</h2><p>Open Best Finds and choose “Track” to start a live application workflow.</p></section>;

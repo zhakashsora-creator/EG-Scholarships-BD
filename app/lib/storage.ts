@@ -226,6 +226,10 @@ const sqliteSchema = [
   `CREATE INDEX IF NOT EXISTS applications_owner_idx ON applications(owner_email)`,
   `CREATE UNIQUE INDEX IF NOT EXISTS applications_owner_scholarship_idx ON applications(owner_email, scholarship_id)`,
   `CREATE TABLE IF NOT EXISTS scholarship_reports (id TEXT PRIMARY KEY, owner_email TEXT NOT NULL, recipient_email TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'ready', snapshot_json TEXT NOT NULL, provider_id TEXT, error_message TEXT, follow_up_consent INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, sent_at TEXT)`,
+  `CREATE TABLE IF NOT EXISTS scholarship_catalogue (id TEXT PRIMARY KEY, name TEXT NOT NULL, provider TEXT NOT NULL, country TEXT NOT NULL, funding_category TEXT NOT NULL, official_source TEXT NOT NULL, deadline TEXT, status TEXT, verified_at TEXT, confidence TEXT, source_dataset TEXT, data_json TEXT NOT NULL, active INTEGER NOT NULL DEFAULT 1, source_order INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)`,
+  `CREATE INDEX IF NOT EXISTS scholarship_catalogue_country_idx ON scholarship_catalogue(country)`,
+  `CREATE INDEX IF NOT EXISTS scholarship_catalogue_funding_idx ON scholarship_catalogue(funding_category)`,
+  `CREATE INDEX IF NOT EXISTS scholarship_catalogue_active_idx ON scholarship_catalogue(active, source_order)`,
 ];
 
 const mysqlSchema = [
@@ -239,6 +243,7 @@ const mysqlSchema = [
   `CREATE TABLE IF NOT EXISTS consultant_requests (id CHAR(36) PRIMARY KEY, owner_email VARCHAR(320) NOT NULL, message TEXT NOT NULL, status VARCHAR(40) NOT NULL DEFAULT 'requested', created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3), INDEX consultant_requests_owner_idx (owner_email)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`,
   `CREATE TABLE IF NOT EXISTS applications (id CHAR(36) PRIMARY KEY, owner_email VARCHAR(320) NOT NULL, scholarship_id VARCHAR(120) NOT NULL, stage VARCHAR(40) NOT NULL DEFAULT 'shortlisted', next_action VARCHAR(300) NOT NULL DEFAULT 'Review eligibility', workflow_json LONGTEXT NOT NULL, updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3), UNIQUE KEY applications_owner_scholarship_idx (owner_email, scholarship_id), INDEX applications_owner_idx (owner_email)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`,
   `CREATE TABLE IF NOT EXISTS scholarship_reports (id CHAR(36) PRIMARY KEY, owner_email VARCHAR(320) NOT NULL, recipient_email VARCHAR(320) NOT NULL, status VARCHAR(40) NOT NULL DEFAULT 'ready', snapshot_json LONGTEXT NOT NULL, provider_id VARCHAR(255), error_message TEXT, follow_up_consent TINYINT(1) NOT NULL DEFAULT 0, created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3), sent_at DATETIME(3), INDEX scholarship_reports_owner_idx (owner_email)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`,
+  `CREATE TABLE IF NOT EXISTS scholarship_catalogue (id VARCHAR(120) PRIMARY KEY, name VARCHAR(500) NOT NULL, provider VARCHAR(500) NOT NULL, country VARCHAR(160) NOT NULL, funding_category VARCHAR(80) NOT NULL, official_source VARCHAR(1500) NOT NULL, deadline VARCHAR(120), status VARCHAR(255), verified_at VARCHAR(80), confidence VARCHAR(80), source_dataset VARCHAR(255), data_json LONGTEXT NOT NULL, active TINYINT(1) NOT NULL DEFAULT 1, source_order INT NOT NULL DEFAULT 0, created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3), updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3), INDEX scholarship_catalogue_country_idx (country), INDEX scholarship_catalogue_funding_idx (funding_category), INDEX scholarship_catalogue_active_idx (active, source_order)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`,
 ];
 
 export async function ensureSchema() {

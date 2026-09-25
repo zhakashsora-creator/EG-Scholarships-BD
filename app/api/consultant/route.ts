@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
 import { emailConsultationRequest } from "../../lib/consultation-notification";
-import { scholarships, type StudentProfile } from "../../lib/matching";
+import { type StudentProfile } from "../../lib/matching";
+import { getScholarshipCatalogue } from "../../lib/scholarship-catalogue";
 import { database, ensureSchema } from "../../lib/storage";
 
 export async function POST(request: Request) {
@@ -10,6 +11,7 @@ export async function POST(request: Request) {
   const body = (await request.json()) as { message?: string };
   const message = (body.message ?? "Please review my Best Finds scholarship shortlist.").trim().slice(0, 1200);
   await ensureSchema();
+  const catalogue = await getScholarshipCatalogue();
   const id = crypto.randomUUID();
   const [account, student, matchRows] = await Promise.all([
     database().prepare(`SELECT full_name AS fullName, mobile, address, current_institution AS currentInstitution
@@ -32,7 +34,7 @@ export async function POST(request: Request) {
     ]);
   let profile: StudentProfile = {};
   try { profile = student?.profileJson ? JSON.parse(student.profileJson) : {}; } catch { profile = {}; }
-  const byId = new Map(scholarships.map((scholarship) => [scholarship.id, scholarship]));
+  const byId = new Map(catalogue.map((scholarship) => [scholarship.id, scholarship]));
   const topMatches = (matchRows.results ?? []).flatMap((row) => {
     const scholarship = byId.get(row.scholarshipId);
     return scholarship ? [{ name: scholarship.name, country: scholarship.country, score: row.score }] : [];

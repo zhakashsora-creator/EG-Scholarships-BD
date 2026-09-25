@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import { getStudentUser } from "./lib/auth";
-import { scholarships } from "./lib/matching";
+import { getScholarshipCatalogue } from "./lib/scholarship-catalogue";
 import ThemeToggle from "./components/ThemeToggle";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const user = await getStudentUser();
+  const scholarships = await getScholarshipCatalogue();
   const countries = new Set(scholarships.map((item) => item.country).filter(Boolean)).size;
   const target = user ? "/dashboard" : "/login?next=/dashboard";
 
@@ -29,7 +30,7 @@ export default async function Home() {
         <div className="hero-copy">
           <span className="eyebrow"><span className="status-dot" /> Verified opportunities · Profile-led guidance</span>
           <h1>Your scholarship search, finally built around <em>your profile.</em></h1>
-          <p>Build one detailed study profile. EG Scholarships compares it with our curated funding database, shows your 10 best options, and emails a practical report you can bring to a consultation. Documents stay completely optional.</p>
+          <p>Build one detailed study profile. EG Scholarships compares it with our curated funding database, shows every relevant available result plus ten fully funded build-up priorities, and prepares a practical report you can bring to a consultation. Documents stay completely optional.</p>
           <div className="hero-actions">
             <a className="button primary" href={target}>{user ? "Continue to your dashboard" : "Create or access my account"}<span>→</span></a>
             <a className="button ghost" href="#how">See the process</a>
@@ -64,7 +65,7 @@ export default async function Home() {
         <div className="process-grid">
           {[
             ["01", "Build your profile", "Add study level, subject, destinations, intake, budget and English-test position."],
-            ["02", "See your best 10", "Review ranked options with match reasoning, gaps, official sources, deadlines and cost planning."],
+            ["02", "See every relevant result", "Filter the full ranked catalogue and compare ten fully funded build-up priorities with reasoning, gaps and official sources."],
             ["03", "Receive your report", "Get a branded PDF with your profile summary, match realities and a focused action plan."],
             ["04", "Plan with a consultant", "Bring the report to a free at-office consultation and turn the strongest options into an application plan."],
           ].map(([number, title, text]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}

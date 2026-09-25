@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
 import { database, ensureSchema } from "../../lib/storage";
-import { scholarships, type StudentProfile } from "../../lib/matching";
+import { type StudentProfile } from "../../lib/matching";
+import { getScholarshipById } from "../../lib/scholarship-catalogue";
 import { extractGeminiJson, geminiGenerateContent, geminiText, isGeminiConfigured, type GeminiCandidate } from "../../lib/gemini-client";
 import { baselineGuideline, type OfficialRequirement } from "../../lib/official-guidelines";
 import { safePublicHttpsUrl } from "../../lib/safe-url";
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
 
   const body = await request.json().catch(() => ({})) as { scholarshipId?: string; phase?: string; guidelineUrl?: string };
   const phase = body.phase === "visa" ? "visa" : body.phase === "application" ? "application" : "";
-  const scholarship = scholarships.find((item) => item.id === body.scholarshipId);
+  const scholarship = body.scholarshipId ? await getScholarshipById(body.scholarshipId) : null;
   if (!phase || !scholarship) return NextResponse.json({ error: "Choose a tracked opportunity and phase" }, { status: 400 });
 
   await ensureSchema();

@@ -294,10 +294,10 @@ function scoreOne(profile: StudentProfile, scholarship: Scholarship, now: Date):
   };
 }
 
-export function rankScholarships(profile: StudentProfile, limit?: number, now = new Date()): ScholarshipMatch[] {
+export function rankScholarships(profile: StudentProfile, limit?: number, now = new Date(), catalogue: Scholarship[] = scholarships): ScholarshipMatch[] {
   const preferred = (profile.preferredCountries ?? []).map((country) => country.trim()).filter(Boolean);
-  const destinationRows = preferred.length ? scholarshipData.filter((scholarship) => preferred.some((country) => countryMatches(`${scholarship.country} ${scholarship.destination}`, country))) : scholarshipData;
-  const candidates = destinationRows.length ? destinationRows : scholarshipData;
+  const destinationRows = preferred.length ? catalogue.filter((scholarship) => preferred.some((country) => countryMatches(`${scholarship.country} ${scholarship.destination}`, country))) : catalogue;
+  const candidates = destinationRows.length ? destinationRows : catalogue;
   const scored = candidates.map((scholarship) => scoreOne(profile, scholarship, now));
   const bySource = new Map<string, ScholarshipMatch>();
   for (const match of scored) {
@@ -312,9 +312,9 @@ export function rankScholarships(profile: StudentProfile, limit?: number, now = 
 }
 
 /** Every relevant, currently available catalogue result for the selected destinations. */
-export function buildAvailableMatches(profile: StudentProfile, now = new Date()) {
+export function buildAvailableMatches(profile: StudentProfile, now = new Date(), catalogue: Scholarship[] = scholarships) {
   return calibrateBestFindBands(
-    prioritizeDestinationDiversity(rankScholarships(profile, undefined, now).filter((match) => isCurrentlyAvailable(match, now))),
+    prioritizeDestinationDiversity(rankScholarships(profile, undefined, now, catalogue).filter((match) => isCurrentlyAvailable(match, now))),
   );
 }
 
@@ -323,10 +323,10 @@ export function buildAvailableMatches(profile: StudentProfile, now = new Date())
  * eligible global fully-funded options fill any remaining places. This does not
  * remove or reorder the complete destination result set.
  */
-export function buildPriorityMatches(profile: StudentProfile, destinationMatches?: ScholarshipMatch[], limit = 10, now = new Date()) {
-  const chosen = destinationMatches ?? buildAvailableMatches(profile, now);
+export function buildPriorityMatches(profile: StudentProfile, destinationMatches?: ScholarshipMatch[], limit = 10, now = new Date(), catalogue: Scholarship[] = scholarships) {
+  const chosen = destinationMatches ?? buildAvailableMatches(profile, now, catalogue);
   const globalProfile: StudentProfile = { ...profile, preferredCountries: [] };
-  const global = prioritizeDestinationDiversity(rankScholarships(globalProfile, undefined, now));
+  const global = prioritizeDestinationDiversity(rankScholarships(globalProfile, undefined, now, catalogue));
   const eligible = [...chosen, ...global].filter((match) => {
     const availability = deadlineState(match.scholarship, now);
     const status = normalize(`${match.scholarship.status} ${match.scholarship.priority}`);
@@ -358,11 +358,11 @@ export function calibrateBestFindBands(matches: ScholarshipMatch[]) {
   });
 }
 
-export function buildCountryCoverageNotices(profile: StudentProfile, selected: ScholarshipMatch[]): CountryCoverageNotice[] {
+export function buildCountryCoverageNotices(profile: StudentProfile, selected: ScholarshipMatch[], catalogue: Scholarship[] = scholarships): CountryCoverageNotice[] {
   return (profile.preferredCountries ?? []).flatMap((country) => {
     const countrySelections = selected.filter((match) => countryMatches(`${match.scholarship.country} ${match.scholarship.destination}`, country));
     if (countrySelections.some((match) => match.subScores.subjectFit === 20)) return [];
-    const specific = scholarshipData.filter((row) => countryMatches(`${row.country} ${row.destination}`, country))
+    const specific = catalogue.filter((row) => countryMatches(`${row.country} ${row.destination}`, country))
       .filter((row) => studyLevelCompatibility(profile.studyLevel, row.studyLevel) === "aligned" && subjectCompatibility(profile.field, `${row.subjectRestrictions} ${row.category}`) === "direct");
     return [{ country, message: `No currently available ${country} records matched your level and subject.`, alternatives: [
       specific.length
@@ -375,6 +375,6 @@ export function buildCountryCoverageNotices(profile: StudentProfile, selected: S
   });
 }
 
-export const catalogueCountries: string[] = Array.from(new Set(scholarshipData.map((item) => item.country).filter((country) => country && !/^multiple/i.test(country)))).sort();
-export const catalogueIntakes: string[] = Array.from(new Set(scholarshipData.map((item) => item.intake).filter(Boolean))).sort();
-export const scholarships = scholarshipData;
+export const scholarships = scholarshipData as Scholarship[];
+export const catalogueCountries: string[] = Array.from(new Set(scholarships.map((item) => item.country).filter((country) => country && !/^multiple/i.test(country)))).sort();
+export const catalogueIntakes: string[] = Array.from(new Set(scholarships.map((item) => item.intake).filter(Boolean))).sort();

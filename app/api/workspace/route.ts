@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getStudentUser } from "../../lib/auth";
-import { buildCountryCoverageNotices, buildPriorityMatches, calibrateBestFindBands, prioritizeDestinationDiversity, profileCompleteness, rankScholarships, scholarships, type StudentProfile } from "../../lib/matching";
+import { buildCountryCoverageNotices, buildPriorityMatches, calibrateBestFindBands, prioritizeDestinationDiversity, profileCompleteness, rankScholarships, type StudentProfile } from "../../lib/matching";
+import { getScholarshipCatalogue, scholarshipCatalogueSummary } from "../../lib/scholarship-catalogue";
 import { isGeminiConfigured } from "../../lib/gemini-matching";
 import { isReportEmailConfigured } from "../../lib/scholarship-report";
 import { database, ensureSchema } from "../../lib/storage";
@@ -11,6 +12,7 @@ export async function GET() {
   const user = await getStudentUser();
   if (!user) return NextResponse.json({ error: "Sign in required" }, { status: 401 });
   await ensureSchema();
+  const catalogue = await getScholarshipCatalogue();
   const [student, account, matchRows, applicationRows, progressRows, reportRow] = await Promise.all([
     database().prepare(`SELECT profile_json AS profileJson, completeness FROM students WHERE email = ?`).bind(user.email).first<{ profileJson: string; completeness: number }>(),
     database().prepare(`SELECT full_name AS fullName, address, mobile, date_of_birth AS dateOfBirth,
@@ -31,8 +33,8 @@ export async function GET() {
   ]);
   let profile: StudentProfile = {};
   try { profile = student?.profileJson ? JSON.parse(student.profileJson) : {}; } catch { profile = {}; }
-  const byId = new Map(scholarships.map((item) => [item.id, item]));
-  const liveScoring = new Map(rankScholarships(profile).map((match) => [match.scholarship.id, match]));
+  const byId = new Map(catalogue.map((item) => [item.id, item]));
+  const liveScoring = new Map(rankScholarships(profile, undefined, new Date(), catalogue).map((match) => [match.scholarship.id, match]));
   const matches = calibrateBestFindBands(prioritizeDestinationDiversity((matchRows.results ?? []).flatMap((row) => {
     const scholarship = byId.get(row.scholarshipId);
     if (!scholarship) return [];
@@ -42,7 +44,7 @@ export async function GET() {
     try { gaps = JSON.parse(row.gapsJson); } catch { /* retain computed gaps */ }
     return [{ ...computed, scholarship, score: row.score, rationale: row.rationale, gaps }];
   })));
-  const priorityMatches = buildPriorityMatches(profile, matches, 10);
+  const priorityMatches = buildPriorityMatches(profile, matches, 10, new Date(), catalogue);
   const reportEmailConfigured = isReportEmailConfigured();
   return NextResponse.json({
     account: account ? {
@@ -60,7 +62,10 @@ export async function GET() {
     completeness: student?.completeness ?? 0,
     matches,
     priorityMatches,
-    countryNotices: buildCountryCoverageNotices(profile, matches),
+    countryNotices: buildCountryCoverageNotices(profile, matches, catalogue),
+    catalogueSummary: scholarshipCatalogueSummary(catalogue),
+    applicationScholarships: Array.from(new Set((applicationRows.results ?? []).map((item) => item.scholarshipId)))
+      .flatMap((id) => byId.get(id) ?? []),
     applications: (applicationRows.results ?? []).map((application) => {
       let workflow = {};
       try { workflow = application.workflowJson ? JSON.parse(application.workflowJson) : {}; } catch { workflow = {}; }

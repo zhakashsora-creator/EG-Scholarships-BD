@@ -16,6 +16,7 @@
     "db:generate": "drizzle-kit generate",
     "db:import": "node scripts/import-sites-dump.mjs",
     "db:import-delta": "node scripts/import-sites-delta.mjs",
+    "db:import-catalogue": "node scripts/import-scholarship-catalogue.mjs",
     "db:verify": "node scripts/verify-migration.mjs"
   },
   "dependencies": {

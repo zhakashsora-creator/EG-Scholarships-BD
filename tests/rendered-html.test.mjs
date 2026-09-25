@@ -179,8 +179,8 @@ test("portal fix brief is represented in scoring, controls, copy and routes", as
   assert.match(dashboard, /AI-assisted ranking, verified against our catalogue/);
   assert.match(dashboard, /Catalogue checked/);
   assert.match(dashboard, /budgetCurrency/);
-  assert.match(dashboard, /catalogueCountries/);
-  assert.match(dashboard, /catalogueIntakes/);
+  assert.match(dashboard, /catalogueSummary\.countries/);
+  assert.match(dashboard, /catalogueSummary\.intakes/);
   assert.match(dashboard, /showOpenFilePicker/);
   assert.match(dashboard, /href=\{`\/dashboard\?tab=\$\{id\}`\}/);
   assert.match(css, /min-height:44px/);
@@ -195,7 +195,7 @@ test("tracked applications survive rematching and report email actions reflect c
     readFile(new URL("../app/api/workspace/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/report/route.ts", import.meta.url), "utf8"),
   ]);
-  assert.match(dashboard, /scholarships\.find\(\(item\) => item\.id === application\.scholarshipId\)/);
+  assert.match(dashboard, /catalogue\.find\(\(item\) => item\.id === application\.scholarshipId\)/);
   assert.match(dashboard, /No longer in your current top ten/);
   assert.doesNotMatch(dashboard, /filter\(\(item\) => item\.match\)/);
   assert.doesNotMatch(analyzeRoute, /DELETE FROM applications/);
@@ -204,4 +204,26 @@ test("tracked applications survive rematching and report email actions reflect c
   assert.doesNotMatch(`${analyzeRoute}${workspaceRoute}${reportRoute}`, /Email delivery is waiting for site setup/);
   assert.doesNotMatch(dashboard, /\{notice\} Scores guide prioritization/);
   assert.doesNotMatch(dashboard, /function Matches\(\{[^}]*notice/);
+});
+
+test("scholarship catalogue is database-backed with a bundled operational fallback", async () => {
+  const [catalogue, storage, schema, workspaceRoute, analyzeRoute, dashboard, packageFile] = await Promise.all([
+    readFile(new URL("../app/lib/scholarship-catalogue.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/storage.ts", import.meta.url), "utf8"),
+    readFile(new URL("../scripts/mysql-schema.sql", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/workspace/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/analyze/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/dashboard/DashboardClient.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../package.json", import.meta.url), "utf8"),
+  ]);
+  assert.match(storage, /CREATE TABLE IF NOT EXISTS scholarship_catalogue/);
+  assert.match(schema, /CREATE TABLE IF NOT EXISTS scholarship_catalogue/);
+  assert.match(catalogue, /SELECT data_json AS dataJson\s+FROM scholarship_catalogue WHERE active = 1/);
+  assert.match(catalogue, /bundledCatalogue/);
+  assert.match(workspaceRoute, /getScholarshipCatalogue/);
+  assert.match(analyzeRoute, /getScholarshipCatalogue/);
+  assert.match(dashboard, /workspace\.catalogueSummary/);
+  assert.match(dashboard, /workspace\.applicationScholarships/);
+  assert.doesNotMatch(dashboard, /import \{[^\n]*\bscholarships\b[^\n]*\} from "\.\.\/lib\/matching"/);
+  assert.match(packageFile, /db:import-catalogue/);
 });
