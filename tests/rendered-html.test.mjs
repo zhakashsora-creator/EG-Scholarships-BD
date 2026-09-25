@@ -217,7 +217,9 @@ test("scholarship catalogue is database-backed with a bundled operational fallba
     readFile(new URL("../package.json", import.meta.url), "utf8"),
   ]);
   assert.match(storage, /CREATE TABLE IF NOT EXISTS scholarship_catalogue/);
+  assert.match(storage, /source_dataset TEXT/);
   assert.match(schema, /CREATE TABLE IF NOT EXISTS scholarship_catalogue/);
+  assert.match(schema, /source_dataset TEXT/);
   assert.match(catalogue, /SELECT data_json AS dataJson\s+FROM scholarship_catalogue WHERE active = 1/);
   assert.match(catalogue, /bundledCatalogue/);
   assert.match(workspaceRoute, /getScholarshipCatalogue/);
