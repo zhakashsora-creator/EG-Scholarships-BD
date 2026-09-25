@@ -5,8 +5,8 @@ const { existsSync, readFileSync, writeFileSync } = require("node:fs");
 const { join } = require("node:path");
 const { execFileSync } = require("node:child_process");
 
-const archiveName = "next-build-a9e7a20.zip";
-const expectedDeployment = "a9e7a20 MariaDB scholarship catalogue";
+const archiveName = "next-build-2a66d2d.zip";
+const expectedDeployment = "2a66d2d MariaDB catalogue provenance fix";
 const archivePath = join(__dirname, archiveName);
 const deploymentMarker = join(__dirname, ".next", "DEPLOY_COMMIT");
 
