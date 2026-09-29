@@ -28,11 +28,14 @@ test("catalogue contains normalized, source-backed opportunities", async () => {
 });
 
 test("student access supports Google OAuth with email-and-password fallback, registration and recovery", async () => {
-  const [authClient, loginPage, landingPage, resetClient] = await Promise.all([
+  const [authClient, loginPage, landingPage, resetClient, callbackRoute, signoutRoute, requestOrigin] = await Promise.all([
     readFile(new URL("../app/login/AuthClient.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/login/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/reset-password/ResetPasswordClient.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/auth/callback/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/auth/signout/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/request-origin.ts", import.meta.url), "utf8"),
   ]);
   assert.match(authClient, /signInWithPassword/);
   assert.match(authClient, /signInWithOAuth/);
@@ -46,6 +49,10 @@ test("student access supports Google OAuth with email-and-password fallback, reg
   assert.match(resetClient, /updateUser\(\{ password \}\)/);
   assert.match(loginPage, /Google or secure email and password access/);
   assert.match(loginPage, /Continue with Google when available/);
+  assert.match(callbackRoute, /publicRequestOrigin/);
+  assert.match(signoutRoute, /publicRequestOrigin/);
+  assert.match(requestOrigin, /APP_PUBLIC_URL/);
+  assert.match(requestOrigin, /x-forwarded-host/);
 });
 
 test("first-login account setup requires only core contact fields and remains editable", async () => {
