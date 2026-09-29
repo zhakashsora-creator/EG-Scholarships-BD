@@ -5,7 +5,8 @@ import { runtimeValue } from "./runtime-env";
 export function getSupabaseConfig() {
   const url = runtimeValue("SUPABASE_URL");
   const anonKey = runtimeValue("SUPABASE_ANON_KEY");
-  return url && anonKey ? { url, anonKey } : null;
+  const googleAuthEnabled = runtimeValue("GOOGLE_OAUTH_ENABLED")?.toLowerCase() === "true";
+  return url && anonKey ? { url, anonKey, googleAuthEnabled } : null;
 }
 
 export async function createSupabaseServerClient() {

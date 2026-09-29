@@ -1,6 +1,6 @@
 # Task 4: Namecheap cutover status
 
-Updated 25 September 2026. Production DNS still points to the Sites deployment.
+Updated 29 September 2026. Production DNS still points to the Sites deployment.
 
 ## Completed staging gates
 
@@ -16,6 +16,7 @@ Updated 25 September 2026. Production DNS still points to the Sites deployment.
 - The temporary document file and its database record were removed after the test; the student vault returned to zero stored documents.
 - The validated 475-record scholarship catalogue now has a MariaDB schema, a non-destructive upsert importer and an automatic first-run seed with a bundled outage fallback.
 - Matching, fully funded priorities, country-gap notices, catalogue statistics, country/intake controls, course lookup and scholarship detail pages now read from the database-backed catalogue.
+- Namecheap staging is running release `2a66d2d`, with the catalogue provenance column widened to `TEXT`; the authenticated portal still reports four retained applications after the deployment.
 
 ## Legacy student-data scope
 
@@ -27,7 +28,7 @@ The migration target is the application itself: its polished interface, workflow
 
 ## Remaining cutover gates
 
-1. Add Google OAuth for student sign-in and account linking, with staging and production redirect URIs and the existing sign-in method retained as a fallback.
+1. Configure the prepared Google OAuth flow in Google Cloud and Supabase, then enable it on staging. The existing email/password method remains the fallback.
 2. Complete spotless release QA: responsive layout, accessibility, authentication, profile editing, uncapped matching, filters, tracked-application persistence, private documents, report download and failure-safe email messaging.
 3. Back up MariaDB and private storage, deploy the release candidate and run final staging smoke tests without spending further effort on legacy student-data migration.
 4. Change the production `scholarships` DNS record to the Namecheap application.

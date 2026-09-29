@@ -27,7 +27,7 @@ test("catalogue contains normalized, source-backed opportunities", async () => {
   }
 });
 
-test("student access supports email-and-password sign in, registration and recovery", async () => {
+test("student access supports Google OAuth with email-and-password fallback, registration and recovery", async () => {
   const [authClient, loginPage, landingPage, resetClient] = await Promise.all([
     readFile(new URL("../app/login/AuthClient.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/login/page.tsx", import.meta.url), "utf8"),
@@ -35,12 +35,17 @@ test("student access supports email-and-password sign in, registration and recov
     readFile(new URL("../app/reset-password/ResetPasswordClient.tsx", import.meta.url), "utf8"),
   ]);
   assert.match(authClient, /signInWithPassword/);
+  assert.match(authClient, /signInWithOAuth/);
+  assert.match(authClient, /provider: "google"/);
+  assert.match(authClient, /Continue with Google/);
+  assert.match(authClient, /googleAuthEnabled/);
   assert.match(authClient, /auth\.signUp/);
   assert.match(authClient, /resetPasswordForEmail/);
   assert.match(authClient, /Sign In/);
   assert.match(authClient, /Sign Up/);
   assert.match(resetClient, /updateUser\(\{ password \}\)/);
-  assert.doesNotMatch(`${authClient}${loginPage}${landingPage}`, /signInWithOAuth|Continue with Google|Google \/ email sign in/);
+  assert.match(loginPage, /Google or secure email and password access/);
+  assert.match(loginPage, /Continue with Google when available/);
 });
 
 test("first-login account setup requires only core contact fields and remains editable", async () => {
