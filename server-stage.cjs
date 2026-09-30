@@ -5,8 +5,8 @@ const { existsSync, readFileSync, writeFileSync } = require("node:fs");
 const { join } = require("node:path");
 const { execFileSync } = require("node:child_process");
 
-const archiveName = "next-build-efb3760-v2.zip";
-const expectedDeployment = "efb3760 Proxy-aware OAuth redirect fix";
+const archiveName = "next-build-274d368.zip";
+const expectedDeployment = "274d368 Mobile profile responsive fix";
 const archivePath = join(__dirname, archiveName);
 const deploymentMarker = join(__dirname, ".next", "DEPLOY_COMMIT");
 
