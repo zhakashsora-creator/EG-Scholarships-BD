@@ -22,6 +22,8 @@ Updated 30 September 2026. Production DNS still points to the Sites deployment.
 - End-to-end Google sign-in was verified with the existing test profile. It opened 17 matches and four retained applications; Clarendon remained at Shortlist with the out-of-top-ten label. Sign-out returned to the staging homepage rather than the internal bind address.
 - The authenticated overview reports 475 source-backed catalogue opportunities, 49 destinations and 457 high-confidence records.
 - The staging repository manifest was restored after a one-off archive extraction mistake. All 19 misplaced build artifacts were moved, without deletion, to the recoverable sibling folder `/home/egcoccrw/repositories/eg-scholarships-quarantine-20260930`.
+- The release suite was rerun after cleanup: the production build, nine portal checks and four matching/scoring checks all passed.
+- A fresh MariaDB backup and a scoped private-vault archive were downloaded locally and validated by decompression/listing. The vault archive contains only the current empty staging directories; no student documents are stored there.
 
 ## Legacy student-data scope
 
@@ -34,6 +36,6 @@ The migration target is the application itself: its polished interface, workflow
 ## Remaining cutover gates
 
 1. Complete the remaining spotless release QA: responsive layout, accessibility, profile editing, uncapped matching, filters, report download and failure-safe email messaging.
-2. Back up MariaDB and private storage, deploy the release candidate and run final staging smoke tests without spending further effort on legacy student-data migration.
+2. Deploy the release candidate and run final staging smoke tests without spending further effort on legacy student-data migration. The pre-cutover MariaDB and private-storage backups are complete.
 3. Change the production `scholarships` DNS record to the Namecheap application only after explicit cutover approval.
 4. Retain the Sites deployment and rollback DNS target for at least 72 hours while monitoring health and sign-in flows.

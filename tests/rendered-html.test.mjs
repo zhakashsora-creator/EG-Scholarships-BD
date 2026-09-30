@@ -196,6 +196,8 @@ test("portal fix brief is represented in scoring, controls, copy and routes", as
   assert.match(dashboard, /showOpenFilePicker/);
   assert.match(dashboard, /href=\{`\/dashboard\?tab=\$\{id\}`\}/);
   assert.match(css, /min-height:44px/);
+  assert.match(css, /\.profile-grid\{grid-template-columns:minmax\(0,1fr\)\}/);
+  assert.match(css, /\.profile-grid input,\.profile-grid select,\.profile-grid textarea\{width:100%;max-width:100%;min-width:0\}/);
   assert.doesNotMatch(`${dashboard}${analyzeRoute}${workspaceRoute}${report}`, /Home Consultation|BDT 1,000/);
   assert.doesNotMatch(dashboard, />[^<{]*Gemini[^<{]*</);
 });
