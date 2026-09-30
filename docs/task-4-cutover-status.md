@@ -1,11 +1,11 @@
 # Task 4: Namecheap cutover status
 
-Updated 29 September 2026. Production DNS still points to the Sites deployment.
+Updated 30 September 2026. Production DNS still points to the Sites deployment.
 
 ## Completed staging gates
 
 - Namecheap Node.js staging runtime is live with SSL.
-- MariaDB is connected and reports four students and four tracked applications.
+- MariaDB is connected and currently reports five student profiles and four tracked applications.
 - The advanced textile-profile search returns 17 complete results plus a separate ten-option fully funded build-up list.
 - Country and funding filters work, score values are differentiated, and the Finland catalogue gap is explicit.
 - All four tracked applications survive a re-match, including Clarendon at Shortlist with an out-of-top-ten label.
@@ -21,6 +21,7 @@ Updated 29 September 2026. Production DNS still points to the Sites deployment.
 - Namecheap staging is running release `efb3760` with `APP_PUBLIC_URL=https://scholarships-stage.egconsultancy.com.bd`; proxy-aware OAuth callbacks and sign-out now preserve the public staging origin.
 - End-to-end Google sign-in was verified with the existing test profile. It opened 17 matches and four retained applications; Clarendon remained at Shortlist with the out-of-top-ten label. Sign-out returned to the staging homepage rather than the internal bind address.
 - The authenticated overview reports 475 source-backed catalogue opportunities, 49 destinations and 457 high-confidence records.
+- The staging repository manifest was restored after a one-off archive extraction mistake. All 19 misplaced build artifacts were moved, without deletion, to the recoverable sibling folder `/home/egcoccrw/repositories/eg-scholarships-quarantine-20260930`.
 
 ## Legacy student-data scope
 
