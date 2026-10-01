@@ -1,6 +1,6 @@
 # Task 4: Namecheap cutover status
 
-Updated 1 October 2026. Production DNS still points to the Sites deployment.
+Updated 1 October 2026. Production DNS now points to the Namecheap deployment. HTTPS is live; final browser sign-in verification remains pending only on the local browser's old DNS cache.
 
 ## Completed staging gates
 
@@ -28,6 +28,11 @@ Updated 1 October 2026. Production DNS still points to the Sites deployment.
 - The stale staging worker was identified and recycled without touching production DNS or student data. The live server now reports deployment `274d368` and serves stylesheet `e01dcd14f9d1ff53.css`.
 - Responsive QA passed live at 390×844: the profile form is one column, every sampled control stays inside the viewport, and horizontal overflow is absent. Desktop QA also reports no horizontal overflow.
 - The final health check returned HTTP 200 with authentication and MariaDB connected; all five staging profiles and four tracked applications remain present.
+- The production `scholarships.egconsultancy.com.bd` record was changed from the rollback CNAME `custom-domains.chatgpt.site` to Namecheap address `198.54.116.228`. Both authoritative Namecheap nameservers and the Cloudflare, Google and Quad9 public resolvers return the new address.
+- The production hostname is attached to the existing Node.js application with `APP_PUBLIC_URL=https://scholarships.egconsultancy.com.bd`; the consultant link uses the production origin and the application was restarted on Git commit `42fdc2b`.
+- Direct production-host checks return the expected release marker `274d368`, HTTP 200, configured authentication, a connected MariaDB database, five profiles and four tracked applications.
+- Namecheap installed a domain-validated production certificate (expiry 17 April 2027). HTTPS returns HTTP 200 with valid hostname verification, and plain HTTP returns a permanent redirect to the same HTTPS URL.
+- The production login page advertises unlimited Best Finds and renders the Google sign-in control. The local Chrome session still resolves the previous Sites CNAME from its pre-cutover 14,400-second cache, so the final interactive Google callback check must follow a normal browser restart or cache expiry rather than bypassing browser DNS or certificate safety.
 
 ## Legacy student-data scope
 
@@ -37,7 +42,9 @@ No additional Sites student accounts, profiles, applications, documents, reports
 
 The migration target is the application itself: its polished interface, workflows, matching behaviour and scholarship catalogue. Do not replay the full Sites export over staging.
 
-## Remaining cutover gates
+## Rollback and remaining cutover gates
 
-1. Change the production `scholarships` DNS record to the Namecheap application only after explicit cutover approval.
+The Sites deployment is retained. During the 72-hour monitoring period, rollback is the single DNS change `scholarships.egconsultancy.com.bd CNAME custom-domains.chatgpt.site` (previous TTL: 14,400 seconds).
+
+1. Restart Chrome (or wait for its old DNS cache to expire), then re-run Google sign-in on the production hostname and confirm the existing test profile opens normally.
 2. Retain the Sites deployment and rollback DNS target for at least 72 hours while monitoring health and sign-in flows.
