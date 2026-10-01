@@ -25,10 +25,15 @@ function readBuildFile(name) {
   }
 }
 
+function isScholarshipPortalHost(hostHeader) {
+  const hostname = (hostHeader || "").split(":", 1)[0].toLowerCase();
+  return hostname === "scholarships.egconsultancy.com.bd"
+    || hostname === "scholarships-stage.egconsultancy.com.bd";
+}
+
 function respondToStagingBuild(request, response) {
   const requestUrl = new URL(request.url || "/", `http://${request.headers.host || "localhost"}`);
-  const isStagingHost = (request.headers.host || "").startsWith("scholarships-stage.egconsultancy.com.bd");
-  if (!isStagingHost || requestUrl.pathname !== "/__staging-build") return false;
+  if (!isScholarshipPortalHost(request.headers.host) || requestUrl.pathname !== "/__staging-build") return false;
 
   response.writeHead(200, {
     "content-type": "application/json; charset=utf-8",
@@ -43,8 +48,7 @@ function respondToStagingBuild(request, response) {
 
 async function respondToStagingHealth(request, response) {
   const requestUrl = new URL(request.url || "/", `http://${request.headers.host || "localhost"}`);
-  const isStagingHost = (request.headers.host || "").startsWith("scholarships-stage.egconsultancy.com.bd");
-  if (!isStagingHost || requestUrl.pathname !== "/__staging-health") return false;
+  if (!isScholarshipPortalHost(request.headers.host) || requestUrl.pathname !== "/__staging-health") return false;
 
   const authConfigured = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY);
   const databaseConfigured = Boolean(process.env.DB_NAME && process.env.DB_USER && process.env.DB_PASSWORD);
