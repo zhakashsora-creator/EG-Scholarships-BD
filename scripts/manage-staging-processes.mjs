@@ -33,7 +33,7 @@ for (const entry of await readdir("/proc")) {
 
     const belongsToPortal =
       (cwd === expectedRoot || command.includes(expectedRoot)) &&
-      /(lsnode\.js|server-stage\.cjs|server\.cjs|server\.js)/.test(command);
+      /(^lsnode:|lsnode\.js|server-stage\.cjs|server\.cjs|server\.js)/.test(command);
 
     if (belongsToPortal) candidates.push({ pid, command, cwd });
   } catch {
