@@ -1,6 +1,6 @@
 # Task 4: Namecheap cutover status
 
-Updated 1 October 2026. Production DNS now points to the Namecheap deployment. HTTPS is live; final browser sign-in verification remains pending only on the local browser's old DNS cache.
+Updated 1 October 2026. Production DNS now points to the Namecheap deployment. HTTPS, Google sign-in and the authenticated production workflow are verified live.
 
 ## Completed staging gates
 
@@ -32,7 +32,12 @@ Updated 1 October 2026. Production DNS now points to the Namecheap deployment. H
 - The production hostname is attached to the existing Node.js application with `APP_PUBLIC_URL=https://scholarships.egconsultancy.com.bd`; the consultant link uses the production origin and the application was restarted on Git commit `42fdc2b`.
 - Direct production-host checks return the expected release marker `274d368`, HTTP 200, configured authentication, a connected MariaDB database, five profiles and four tracked applications.
 - Namecheap installed a domain-validated production certificate (expiry 17 April 2027). HTTPS returns HTTP 200 with valid hostname verification, and plain HTTP returns a permanent redirect to the same HTTPS URL.
-- The production login page advertises unlimited Best Finds and renders the Google sign-in control. The local Chrome session still resolves the previous Sites CNAME from its pre-cutover 14,400-second cache, so the final interactive Google callback check must follow a normal browser restart or cache expiry rather than bypassing browser DNS or certificate safety.
+- The production login page advertises unlimited Best Finds and renders the Google sign-in control. After the local DNS cache cleared, Google sign-in completed successfully on the production hostname and opened the existing test profile.
+- The production profile retains the required BSc Clothing & Textile, 3.56/4.00 CGPA, IELTS 6.0, Master in Textile and Finland/New Zealand/United Kingdom preferences.
+- Production Best Finds shows all 17 relevant results without a ten-result cap, plus a separate ten-option fully funded build-up list. Scores span 56-74 across the complete selected-destination set, and report delivery is limited to a secure PDF download while email is unavailable.
+- The production country filter was exercised live: selecting Finland reduced the complete result set from 17 to seven Finland records. Funding, match-band, verification and sort controls are also present.
+- The production Finland coverage notice explicitly states that no currently available Finland record matches both the level and Textile subject, while broader Finland awards remain visible for programme-level verification.
+- The production Applications tracker retains all four records. Clarendon Scholarships remains at Shortlist and is labelled "No longer in your current top ten" rather than being deleted.
 
 ## Legacy student-data scope
 
@@ -46,5 +51,4 @@ The migration target is the application itself: its polished interface, workflow
 
 The Sites deployment is retained. During the 72-hour monitoring period, rollback is the single DNS change `scholarships.egconsultancy.com.bd CNAME custom-domains.chatgpt.site` (previous TTL: 14,400 seconds).
 
-1. Restart Chrome (or wait for its old DNS cache to expire), then re-run Google sign-in on the production hostname and confirm the existing test profile opens normally.
-2. Retain the Sites deployment and rollback DNS target for at least 72 hours while monitoring health and sign-in flows.
+1. Retain the Sites deployment and rollback DNS target for at least 72 hours while monitoring health and sign-in flows.
