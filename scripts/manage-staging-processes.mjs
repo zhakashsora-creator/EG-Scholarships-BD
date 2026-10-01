@@ -9,6 +9,7 @@ if (process.platform !== "linux" || resolve(process.cwd()) !== expectedRoot) {
 }
 
 const ownUid = process.getuid?.();
+const observed = [];
 const candidates = [];
 
 for (const entry of await readdir("/proc")) {
@@ -25,8 +26,13 @@ for (const entry of await readdir("/proc")) {
       .replaceAll("\0", " ")
       .trim();
     const cwd = await readlink(`/proc/${pid}/cwd`).catch(() => "");
+    const looksLikeNode = /(node|lsnode\.js|server-stage\.cjs|server\.cjs|server\.js)/i.test(command);
+    if (looksLikeNode || cwd === expectedRoot || command.includes(expectedRoot)) {
+      observed.push({ pid, command, cwd });
+    }
+
     const belongsToPortal =
-      cwd === expectedRoot &&
+      (cwd === expectedRoot || command.includes(expectedRoot)) &&
       /(lsnode\.js|server-stage\.cjs|server\.cjs|server\.js)/.test(command);
 
     if (belongsToPortal) candidates.push({ pid, command, cwd });
@@ -35,7 +41,9 @@ for (const entry of await readdir("/proc")) {
   }
 }
 
-console.log(JSON.stringify({ mode: shouldTerminate ? "terminate" : "inspect", candidates }, null, 2));
+console.log(
+  JSON.stringify({ mode: shouldTerminate ? "terminate" : "inspect", observed, candidates }, null, 2),
+);
 
 if (shouldTerminate) {
   for (const candidate of candidates) process.kill(candidate.pid, "SIGTERM");
