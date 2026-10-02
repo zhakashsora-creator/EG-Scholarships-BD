@@ -11,13 +11,15 @@
     "build:hosting": "next build --webpack",
     "build:sites": "vinext build",
     "start": "node server.cjs",
-    "test": "next build && node --test tests/rendered-html.test.mjs && tsx --test tests/scoring.test.ts",
+    "test": "next build && node --test tests/rendered-html.test.mjs tests/catalogue-maintenance.test.mjs && tsx --test tests/scoring.test.ts",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
     "db:import": "node scripts/import-sites-dump.mjs",
     "db:import-delta": "node scripts/import-sites-delta.mjs",
     "db:import-catalogue": "node scripts/import-scholarship-catalogue.mjs",
-    "db:verify": "node scripts/verify-migration.mjs"
+    "db:verify": "node scripts/verify-migration.mjs",
+    "catalogue:audit": "node scripts/catalogue-maintenance.mjs --limit=12",
+    "catalogue:check-links": "node scripts/catalogue-maintenance.mjs --check-links --limit=12"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.3",
