@@ -19,20 +19,25 @@ export default async function ScholarshipAnalysisPage({ params }: { params: Prom
   if (!scholarship) notFound();
 
   await ensureSchema();
-  const [student, row] = await Promise.all([
+  const [student, row, trackedApplication] = await Promise.all([
     database().prepare(`SELECT profile_json AS profileJson FROM students WHERE email = ?`)
       .bind(user.email).first<{ profileJson: string }>(),
     database().prepare(`SELECT rank, score, rationale, gaps_json AS gapsJson FROM matches WHERE owner_email = ? AND scholarship_id = ?`)
       .bind(user.email, scholarship.id).first<{ rank: number; score: number; rationale: string; gapsJson: string }>(),
+    database().prepare(`SELECT scholarship_id AS scholarshipId FROM applications WHERE owner_email = ? AND scholarship_id = ?`)
+      .bind(user.email, scholarship.id).first<{ scholarshipId: string }>(),
   ]);
-  if (!row) notFound();
+  if (!row && !trackedApplication) notFound();
 
   let profile: StudentProfile = {};
   let gaps: string[] = [];
   try { profile = student?.profileJson ? JSON.parse(student.profileJson) : {}; } catch { profile = {}; }
-  try { gaps = JSON.parse(row.gapsJson); } catch { gaps = []; }
+  try { gaps = row?.gapsJson ? JSON.parse(row.gapsJson) : []; } catch { gaps = []; }
   const computed = buildAvailableMatches(profile, new Date(), await getScholarshipCatalogue()).find((match) => match.scholarship.id === scholarship.id);
-  const label: ScholarshipMatch["label"] = computed?.label ?? "Reach";
+  if (!gaps.length && computed?.gaps.length) gaps = computed.gaps;
+  const label: ScholarshipMatch["label"] | "Tracked" = computed?.label ?? "Tracked";
+  const score = row?.score ?? computed?.score ?? null;
+  const rationale = row?.rationale ?? "You saved this scholarship to Applications. It is no longer in your current Best Finds, but its official-source record and your application workflow remain available here.";
   const fitChecks = buildFitChecks(profile, scholarship);
   const costPlan = buildCostPlan(scholarship);
   const nextSteps = buildNextSteps(scholarship);
@@ -46,12 +51,12 @@ export default async function ScholarshipAnalysisPage({ params }: { params: Prom
 
       <section className="analysis-hero">
         <div>
-          <span className="eyebrow">BEST FINDS · #{row.rank} FOR YOUR PROFILE</span>
+          <span className="eyebrow">{row ? `BEST FINDS · #${row.rank} FOR YOUR PROFILE` : "TRACKED APPLICATION · SAVED WORK PRESERVED"}</span>
           <h1>{scholarship.name}</h1>
           <p>{scholarship.provider} · {scholarship.country}</p>
           <div className="analysis-tags"><span>{scholarship.studyLevel}</span><span>{scholarship.coverage || "Funding varies"}</span><span>{scholarship.status}</span></div>
         </div>
-        <div className="analysis-score"><strong>{row.score}</strong><small>/100</small><span>{label}</span></div>
+        <div className="analysis-score"><strong>{score ?? "Saved"}</strong>{score !== null && <small>/100</small>}<span>{label}</span></div>
       </section>
 
       <div className="analysis-alert"><b>Profile-aware guidance</b><p>This page is generated from your saved profile, the ranked-match evidence and the stored official-source record. Recheck all live requirements, fees and deadlines before applying; this analysis is not an admission, scholarship or visa guarantee.</p></div>
@@ -60,7 +65,7 @@ export default async function ScholarshipAnalysisPage({ params }: { params: Prom
         <article className="analysis-card analysis-summary">
           <span className="section-kicker">WHY THIS WAS SELECTED</span>
           <h2>The evidence behind your ranking</h2>
-          <p>{row.rationale}</p>
+          <p>{rationale}</p>
           <dl>
             <div><dt>Funding recorded</dt><dd>{scholarship.fundingSummary || scholarship.coverage || "Verify on the official source"}</dd></div>
             <div><dt>Deadline / cycle</dt><dd>{scholarship.deadline || "Annual or programme-specific"} · {scholarship.deadlineTimezone || scholarship.status}</dd></div>
@@ -78,9 +83,9 @@ export default async function ScholarshipAnalysisPage({ params }: { params: Prom
         </aside>
       </section>
 
-      {computed && <section className="analysis-card">
+      {computed && score !== null && <section className="analysis-card">
         <span className="section-kicker">WEIGHTED MATCH SCORE</span>
-        <h2>Where the {row.score}/100 score comes from</h2>
+        <h2>Where the {score}/100 score comes from</h2>
         <div className="subscore-grid">{Object.entries(computed.subScores).map(([key, value]) => <div key={key}><span>{key.replace(/([A-Z])/g, " $1")}</span><strong>{value}</strong></div>)}</div>
       </section>}
 

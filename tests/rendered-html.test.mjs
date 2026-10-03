@@ -203,8 +203,9 @@ test("portal fix brief is represented in scoring, controls, copy and routes", as
 });
 
 test("tracked applications survive rematching and report email actions reflect configuration", async () => {
-  const [dashboard, analyzeRoute, workspaceRoute, reportRoute] = await Promise.all([
+  const [dashboard, analysisPage, analyzeRoute, workspaceRoute, reportRoute] = await Promise.all([
     readFile(new URL("../app/dashboard/DashboardClient.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/dashboard/scholarship/[id]/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/api/analyze/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/workspace/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/report/route.ts", import.meta.url), "utf8"),
@@ -213,6 +214,9 @@ test("tracked applications survive rematching and report email actions reflect c
   assert.match(dashboard, /No longer in your current top ten/);
   assert.doesNotMatch(dashboard, /filter\(\(item\) => item\.match\)/);
   assert.doesNotMatch(analyzeRoute, /DELETE FROM applications/);
+  assert.match(analysisPage, /FROM applications WHERE owner_email = \? AND scholarship_id = \?/);
+  assert.match(analysisPage, /if \(!row && !trackedApplication\) notFound\(\)/);
+  assert.match(analysisPage, /TRACKED APPLICATION · SAVED WORK PRESERVED/);
   assert.match(workspaceRoute, /reportEmailConfigured/);
   assert.match(dashboard, /report\.status === "failed" && report\.emailConfigured/);
   assert.doesNotMatch(`${analyzeRoute}${workspaceRoute}${reportRoute}`, /Email delivery is waiting for site setup/);
