@@ -33,3 +33,7 @@ Every proposed change must preserve the official URL and evidence date. Deadline
 ## Initial bounded review
 
 The first 12-record queue was reviewed against official sources on 2 October 2026. Confirmed corrections include the University of Auckland award's Masters-only scope, 25% tuition value and 4 November 2026 supplementary-form deadline; the University of Wisconsin–Superior 15 November spring deadline; UQ's A$39,220 2026 stipend; exact January 2027 University of Dundee cycles; and current Otago undergraduate funding. Expired UNSW HDR and UNM spring rounds are no longer represented as open. All 475 records still pass structural validation, and both benchmark profiles pass after the changes.
+
+## Production deployment
+
+Deployed to Namecheap production on 3 October 2026 from commit `f0dbaa3`. The cPanel catalogue import completed with return code 0 and reported 475 imported records with 475 active database records. Live verification confirmed 475 source-backed opportunities, the refreshed Auckland and UQ entries, 17 complete Textile-profile matches, the explicit Finland coverage notice, and four retained tracked applications. Clarendon remained at Shortlist with the "No longer in your current top ten" label, confirming that the catalogue upsert did not remove student-owned application data.
