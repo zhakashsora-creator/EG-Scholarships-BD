@@ -37,3 +37,9 @@ The first 12-record queue was reviewed against official sources on 2 October 202
 ## Production deployment
 
 Deployed to Namecheap production on 3 October 2026 from commit `f0dbaa3`. The cPanel catalogue import completed with return code 0 and reported 475 imported records with 475 active database records. Live verification confirmed 475 source-backed opportunities, the refreshed Auckland and UQ entries, 17 complete Textile-profile matches, the explicit Finland coverage notice, and four retained tracked applications. Clarendon remained at Shortlist with the "No longer in your current top ten" label, confirming that the catalogue upsert did not remove student-owned application data.
+
+## Second bounded review
+
+The next 12-record queue was reviewed against official sources on 3 October 2026. The review corrected several misleading open or recurring states: McCall MacBain, the 2026 Government of Ireland call, both 2026/27 Swedish Institute calls and the 2026 Massey doctoral round are now explicitly closed. Bangladesh is explicitly recorded as eligible for Pioneering Women in STEM.
+
+Current future rounds were also brought forward without guessing unpublished dates: Sydney RTP now points to the 18 December 2026 Research Period 3/4 deadline and 2027 stipend; Monash now shows its 28 February 2027 international round and 2027 rate; KTH now shows its published 15 January 2027 deadline; UNM Amigo now shows the 15 February 2027 fall priority deadline and published academic thresholds; and the annual Türkiye Scholarships route now points to the 2027 round. Melbourne remains open for automatic consideration with the relevant course deadline, while Uppsala is marked upcoming with its exact scholarship deadline left blank until the university publishes it.
