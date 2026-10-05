@@ -1,6 +1,6 @@
 # Sites-to-owned-domain roadmap status
 
-Updated 6 October 2026 after the production Linux-build repair. The original twelve-task plan remains the governing sequence; this file maps it to the work now present in the Namecheap repository.
+Updated 6 October 2026 after the normalized catalogue production deployment. The original twelve-task plan remains the governing sequence; this file maps it to the work now present in the Namecheap repository.
 
 | Original task | Status | Evidence / remaining gate |
 |---|---|---|
@@ -9,7 +9,7 @@ Updated 6 October 2026 after the production Linux-build repair. The original twe
 | 3. Hosting ownership and feasibility | Complete | Namecheap Node.js, MariaDB, private storage, DNS, SSL and rollback were audited. |
 | 4. Staging migration | Complete | Runtime, authentication, data, private files and release checks passed in staging. |
 | 5. Live cutover | Complete | Production runs on Namecheap with HTTPS and Google sign-in; Sites remains the rollback target. |
-| 6. Structured catalogue | In progress | Normalized award, programme and cycle tables plus a controlled importer are implemented locally. Production import and verification remain. |
+| 6. Structured catalogue | Complete | The controlled production import created 475 active awards, 475 primary programmes and 475 current cycles while retaining all 475 legacy rollback rows. Build `60235db` is live and all 4 tracked applications remain. |
 | 7. European coverage | In progress | Architecture benchmark records and two bounded official-source review batches are present. Textile/programme coverage still needs reviewed expansion. |
 | 8. Eligibility and ranking | Substantially complete | Evidence-based subscores, hard gaps, differentiated scores and fully funded priorities are live; continue calibration as catalogue depth improves. |
 | 9. Unrestricted results and filters | Substantially complete | All relevant results, funding/country/band/freshness filters and sorting are live. Shareable filter URLs and large-result pagination remain. |
@@ -19,9 +19,8 @@ Updated 6 October 2026 after the production Linux-build repair. The original twe
 
 ## Current execution order
 
-1. Finish Task 6 locally, validate the normalized catalogue and deploy it without removing the legacy rollback table.
-2. Complete Task 9's shareable filters and pagination on staging.
-3. Extend Task 10 tests to cover normalized import/read parity and filtered URLs.
-4. Run Task 7 in reviewed country/subject batches and finish the Task 11 maintenance pilot.
+1. Complete Task 9's shareable filters and pagination on staging.
+2. Extend Task 10 tests to cover filtered URLs and production acceptance checks.
+3. Run Task 7 in reviewed country/subject batches and finish the Task 11 maintenance pilot.
+4. Retain the Task 6 legacy rollback table through at least one maintenance cycle, then test rollback before considering its removal.
 5. Begin Task 12 only after the portal work is stable and only if the WordPress audit justifies a rebuild.
-
