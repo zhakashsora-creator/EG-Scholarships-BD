@@ -109,3 +109,56 @@ export const applications = sqliteTable("applications", {
   workflowJson: text("workflow_json").notNull().default("{}"),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
+
+export const catalogueAwards = sqliteTable("catalogue_awards", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  provider: text("provider").notNull(),
+  country: text("country").notNull(),
+  destination: text("destination"),
+  category: text("category"),
+  fundingCategory: text("funding_category").notNull(),
+  fundingSummary: text("funding_summary"),
+  coverage: text("coverage"),
+  bangladeshEligibility: text("bangladesh_eligibility"),
+  officialSource: text("official_source").notNull(),
+  sourceDataset: text("source_dataset"),
+  active: integer("active", { mode: "boolean" }).notNull().default(true),
+  sourceOrder: integer("source_order").notNull().default(0),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const catalogueProgrammes = sqliteTable("catalogue_programmes", {
+  id: text("id").primaryKey(),
+  scholarshipId: text("scholarship_id").notNull(),
+  name: text("name").notNull(),
+  studyLevel: text("study_level"),
+  subjectRestrictions: text("subject_restrictions"),
+  academicCriteria: text("academic_criteria"),
+  englishRequirement: text("english_requirement"),
+  separateAdmission: text("separate_admission"),
+  documents: text("documents"),
+  officialSource: text("official_source").notNull(),
+  isPrimary: integer("is_primary", { mode: "boolean" }).notNull().default(false),
+  active: integer("active", { mode: "boolean" }).notNull().default(true),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const catalogueCycles = sqliteTable("catalogue_cycles", {
+  id: text("id").primaryKey(),
+  scholarshipId: text("scholarship_id").notNull(),
+  intake: text("intake"),
+  deadline: text("deadline"),
+  deadlineTimezone: text("deadline_timezone"),
+  status: text("status"),
+  applicationRoute: text("application_route"),
+  verifiedAt: text("verified_at"),
+  confidence: text("confidence"),
+  priority: text("priority"),
+  isCurrent: integer("is_current", { mode: "boolean" }).notNull().default(false),
+  active: integer("active", { mode: "boolean" }).notNull().default(true),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});

@@ -7,9 +7,37 @@ const CACHE_MS = 60_000;
 let cache: { expiresAt: number; rows: Scholarship[]; source: "database" | "bundled" } | null = null;
 
 type CatalogueRow = { dataJson: string };
+type StructuredCatalogueRow = {
+  id: string;
+  name: string;
+  provider: string;
+  country: string;
+  destination: string | null;
+  category: string | null;
+  fundingSummary: string | null;
+  coverage: string | null;
+  bangladeshEligibility: string | null;
+  officialSource: string;
+  sourceDataset: string | null;
+  studyLevel: string | null;
+  subjectRestrictions: string | null;
+  academicCriteria: string | null;
+  englishRequirement: string | null;
+  separateAdmission: string | null;
+  documents: string | null;
+  intake: string | null;
+  deadline: string | null;
+  deadlineTimezone: string | null;
+  status: string | null;
+  applicationRoute: string | null;
+  verifiedAt: string | null;
+  confidence: string | null;
+  priority: string | null;
+};
 
 function fundingCategory(row: Scholarship) {
   const value = `${row.coverage ?? ""} ${row.fundingSummary ?? ""}`.toLowerCase();
+  if (/self-funded|self funded/.test(value)) return "Self-funded";
   if (/fully funded/.test(value) || (/\bfull\b/.test(String(row.coverage).toLowerCase()) && /stipend|living|allowance|travel/.test(value))) return "Fully funded";
   if (/100%? tuition|full tuition/.test(value)) return "Full tuition";
   if (/discount|reduction/.test(value)) return "Tuition discount";
@@ -36,8 +64,55 @@ async function readDatabaseCatalogue() {
   });
 }
 
-async function seedBundledCatalogue() {
-  const statements = bundledCatalogue.map((item, index) => database().prepare(`INSERT INTO scholarship_catalogue
+async function readStructuredCatalogue() {
+  const result = await database().prepare(`SELECT
+      award.id AS id, award.name AS name, award.provider AS provider, award.country AS country,
+      award.destination AS destination, award.category AS category, award.funding_summary AS fundingSummary,
+      award.coverage AS coverage, award.bangladesh_eligibility AS bangladeshEligibility,
+      award.official_source AS officialSource, award.source_dataset AS sourceDataset,
+      programme.study_level AS studyLevel, programme.subject_restrictions AS subjectRestrictions,
+      programme.academic_criteria AS academicCriteria, programme.english_requirement AS englishRequirement,
+      programme.separate_admission AS separateAdmission, programme.documents AS documents,
+      cycle.intake AS intake, cycle.deadline AS deadline, cycle.deadline_timezone AS deadlineTimezone,
+      cycle.status AS status, cycle.application_route AS applicationRoute, cycle.verified_at AS verifiedAt,
+      cycle.confidence AS confidence, cycle.priority AS priority
+    FROM catalogue_awards award
+    LEFT JOIN catalogue_programmes programme ON programme.scholarship_id = award.id
+      AND programme.active = 1 AND programme.is_primary = 1
+    LEFT JOIN catalogue_cycles cycle ON cycle.scholarship_id = award.id
+      AND cycle.active = 1 AND cycle.is_current = 1
+    WHERE award.active = 1 ORDER BY award.source_order, award.id`).all<StructuredCatalogueRow>();
+  return (result.results ?? []).map((row) => ({
+    id: row.id,
+    name: row.name,
+    provider: row.provider,
+    country: row.country,
+    destination: row.destination ?? row.country,
+    category: row.category ?? "",
+    studyLevel: row.studyLevel ?? "",
+    intake: row.intake ?? "",
+    fundingSummary: row.fundingSummary ?? "",
+    coverage: row.coverage ?? "",
+    bangladeshEligibility: row.bangladeshEligibility ?? "",
+    academicCriteria: row.academicCriteria ?? "",
+    englishRequirement: row.englishRequirement ?? "",
+    subjectRestrictions: row.subjectRestrictions ?? "",
+    deadline: row.deadline ?? "",
+    deadlineTimezone: row.deadlineTimezone ?? "",
+    status: row.status ?? "",
+    applicationRoute: row.applicationRoute ?? "",
+    separateAdmission: row.separateAdmission ?? "",
+    documents: row.documents ?? "",
+    officialSource: row.officialSource,
+    verifiedAt: row.verifiedAt ?? "",
+    confidence: row.confidence ?? "",
+    priority: row.priority ?? "",
+    sourceDataset: row.sourceDataset ?? "",
+  })) as Scholarship[];
+}
+
+async function seedLegacyCatalogue(records: Scholarship[]) {
+  const statements = records.map((item, index) => database().prepare(`INSERT INTO scholarship_catalogue
     (id, name, provider, country, funding_category, official_source, deadline, status, verified_at,
       confidence, source_dataset, data_json, active, source_order, updated_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, CURRENT_TIMESTAMP)
@@ -58,11 +133,13 @@ export async function getScholarshipCatalogue(options: { fresh?: boolean } = {})
   if (!options.fresh && cache && cache.expiresAt > Date.now()) return cache.rows;
   try {
     await ensureSchema();
-    let rows = await readDatabaseCatalogue();
-    if (!rows.length) {
-      await seedBundledCatalogue();
-      rows = await readDatabaseCatalogue();
+    let legacyRows = await readDatabaseCatalogue();
+    if (!legacyRows.length) {
+      await seedLegacyCatalogue(bundledCatalogue);
+      legacyRows = await readDatabaseCatalogue();
     }
+    const structuredRows = await readStructuredCatalogue();
+    const rows = structuredRows.length === legacyRows.length ? structuredRows : legacyRows;
     if (rows.length) {
       cache = { expiresAt: Date.now() + CACHE_MS, rows, source: "database" };
       return rows;

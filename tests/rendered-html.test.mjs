@@ -224,11 +224,12 @@ test("tracked applications survive rematching and report email actions reflect c
   assert.doesNotMatch(dashboard, /function Matches\(\{[^}]*notice/);
 });
 
-test("scholarship catalogue is database-backed with a bundled operational fallback", async () => {
-  const [catalogue, storage, schema, workspaceRoute, analyzeRoute, dashboard, packageFile] = await Promise.all([
+test("scholarship catalogue reads normalized entities with legacy and bundled rollback paths", async () => {
+  const [catalogue, storage, schema, importer, workspaceRoute, analyzeRoute, dashboard, packageFile] = await Promise.all([
     readFile(new URL("../app/lib/scholarship-catalogue.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/lib/storage.ts", import.meta.url), "utf8"),
     readFile(new URL("../scripts/mysql-schema.sql", import.meta.url), "utf8"),
+    readFile(new URL("../scripts/import-scholarship-catalogue.mjs", import.meta.url), "utf8"),
     readFile(new URL("../app/api/workspace/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/analyze/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/dashboard/DashboardClient.tsx", import.meta.url), "utf8"),
@@ -238,7 +239,16 @@ test("scholarship catalogue is database-backed with a bundled operational fallba
   assert.match(storage, /source_dataset TEXT/);
   assert.match(schema, /CREATE TABLE IF NOT EXISTS scholarship_catalogue/);
   assert.match(schema, /source_dataset TEXT/);
+  for (const table of ["catalogue_awards", "catalogue_programmes", "catalogue_cycles"]) {
+    assert.match(storage, new RegExp(`CREATE TABLE IF NOT EXISTS ${table}`));
+    assert.match(schema, new RegExp(`CREATE TABLE IF NOT EXISTS ${table}`));
+    assert.match(importer, new RegExp(`INSERT INTO ${table}`));
+  }
   assert.match(catalogue, /SELECT data_json AS dataJson\s+FROM scholarship_catalogue WHERE active = 1/);
+  assert.match(catalogue, /FROM catalogue_awards award/);
+  assert.match(catalogue, /LEFT JOIN catalogue_programmes programme/);
+  assert.match(catalogue, /LEFT JOIN catalogue_cycles cycle/);
+  assert.match(catalogue, /structuredRows\.length === legacyRows\.length \? structuredRows : legacyRows/);
   assert.match(catalogue, /bundledCatalogue/);
   assert.match(workspaceRoute, /getScholarshipCatalogue/);
   assert.match(analyzeRoute, /getScholarshipCatalogue/);
