@@ -1,0 +1,56 @@
+name: Linux hosting build
+
+on:
+  push:
+    branches:
+      - task4-namecheap-stage
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Next.js for Linux hosting
+        run: pnpm run build:hosting
+
+      - name: Add deployment marker
+        shell: bash
+        run: printf '%s Linux hosting build\n' "$GITHUB_SHA" > .next/DEPLOY_COMMIT
+
+      - name: Stage deployment artifact
+        shell: bash
+        run: |
+          mkdir -p deployment
+          cp -a .next deployment/.next
+          rm -rf deployment/.next/cache deployment/.next/standalone
+
+      - name: Upload Linux build
+        uses: actions/upload-artifact@v4
+        with:
+          name: namecheap-linux-build
+          path: deployment
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
