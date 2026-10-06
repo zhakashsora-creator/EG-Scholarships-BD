@@ -42,6 +42,9 @@ export function normalizeCatalogueRecord(record, sourceOrder = 0) {
       bangladeshEligibility: clean(record.bangladeshEligibility),
       officialSource: clean(record.officialSource),
       sourceDataset: clean(record.sourceDataset),
+      overallSummary: typeof record.overallSummary === "object" && record.overallSummary !== null
+        ? JSON.stringify(record.overallSummary)
+        : clean(record.overallSummary),
       sourceOrder,
     },
     programme: {

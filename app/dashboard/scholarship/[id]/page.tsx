@@ -61,6 +61,31 @@ export default async function ScholarshipAnalysisPage({ params }: { params: Prom
 
       <div className="analysis-alert"><b>Profile-aware guidance</b><p>This page is generated from your saved profile, the ranked-match evidence and the stored official-source record. Recheck all live requirements, fees and deadlines before applying; this analysis is not an admission, scholarship or visa guarantee.</p></div>
 
+      {scholarship.overallSummary && (
+        <section className="analysis-card overall-summary-card">
+          <span className="section-kicker">OVERALL SCHOLARSHIP SUMMARY</span>
+          <h2>Executive overview at a glance</h2>
+          {typeof scholarship.overallSummary === "object" ? (
+            <div className="overall-summary-grid">
+              <div className="summary-block cost-block">
+                <span className="summary-pill">🏷️ Tuition & Direct Costs</span>
+                <p>{scholarship.overallSummary.cost || scholarship.fundingSummary || "Check official award notice"}</p>
+              </div>
+              <div className="summary-block benefits-block">
+                <span className="summary-pill">💰 Stipend & Allowances</span>
+                <p>{scholarship.overallSummary.benefits || scholarship.coverage || "Check official award notice"}</p>
+              </div>
+              <div className="summary-block logistics-block">
+                <span className="summary-pill">📌 Key Logistics & Criteria</span>
+                <p>{scholarship.overallSummary.other || scholarship.academicCriteria || "Check official award notice"}</p>
+              </div>
+            </div>
+          ) : (
+            <p className="summary-text">{scholarship.overallSummary}</p>
+          )}
+        </section>
+      )}
+
       <section className="analysis-grid">
         <article className="analysis-card analysis-summary">
           <span className="section-kicker">WHY THIS WAS SELECTED</span>

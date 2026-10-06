@@ -1,6 +1,14 @@
 import scholarshipData from "../data/scholarships.json";
 
-export type Scholarship = (typeof scholarshipData)[number];
+export type OverallSummary = {
+  cost?: string;
+  benefits?: string;
+  other?: string;
+} | string;
+
+export type Scholarship = (typeof scholarshipData)[number] & {
+  overallSummary?: OverallSummary;
+};
 
 export type StudentProfile = {
   studyLevel?: string;

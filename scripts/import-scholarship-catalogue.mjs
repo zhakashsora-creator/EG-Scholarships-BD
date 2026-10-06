@@ -39,12 +39,12 @@ try {
     ON DUPLICATE KEY UPDATE name=VALUES(name), provider=VALUES(provider), country=VALUES(country), funding_category=VALUES(funding_category), official_source=VALUES(official_source), deadline=VALUES(deadline), status=VALUES(status), verified_at=VALUES(verified_at), confidence=VALUES(confidence), source_dataset=VALUES(source_dataset), data_json=VALUES(data_json), active=1, source_order=VALUES(source_order), updated_at=CURRENT_TIMESTAMP(3)`;
   const awardSql = `INSERT INTO catalogue_awards
     (id, name, provider, country, destination, category, funding_category, funding_summary, coverage,
-      bangladesh_eligibility, official_source, source_dataset, active, source_order, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, CURRENT_TIMESTAMP(3), CURRENT_TIMESTAMP(3))
+      bangladesh_eligibility, official_source, source_dataset, overall_summary, active, source_order, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, CURRENT_TIMESTAMP(3), CURRENT_TIMESTAMP(3))
     ON DUPLICATE KEY UPDATE name=VALUES(name), provider=VALUES(provider), country=VALUES(country),
       destination=VALUES(destination), category=VALUES(category), funding_category=VALUES(funding_category),
       funding_summary=VALUES(funding_summary), coverage=VALUES(coverage), bangladesh_eligibility=VALUES(bangladesh_eligibility),
-      official_source=VALUES(official_source), source_dataset=VALUES(source_dataset), active=1,
+      official_source=VALUES(official_source), source_dataset=VALUES(source_dataset), overall_summary=VALUES(overall_summary), active=1,
       source_order=VALUES(source_order), updated_at=CURRENT_TIMESTAMP(3)`;
   const programmeSql = `INSERT INTO catalogue_programmes
     (id, scholarship_id, name, study_level, subject_restrictions, academic_criteria, english_requirement,
@@ -83,7 +83,7 @@ try {
     await connection.execute(awardSql, [
       award.id, award.name, award.provider, award.country, award.destination, award.category,
       award.fundingCategory, award.fundingSummary, award.coverage, award.bangladeshEligibility,
-      award.officialSource, award.sourceDataset || null, award.sourceOrder,
+      award.officialSource, award.sourceDataset || null, award.overallSummary || null, award.sourceOrder,
     ]);
     await connection.execute(programmeSql, [
       programme.id, programme.scholarshipId, programme.name, programme.studyLevel,

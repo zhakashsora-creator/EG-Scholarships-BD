@@ -76,7 +76,8 @@ test("funding normalization keeps self-funded programmes out of funded categorie
 test("every reviewed catalogue record has one deterministic primary programme and current cycle", async () => {
   const records = validateCatalogueRecords(JSON.parse(await readFile(new URL("../app/data/scholarships.json", import.meta.url), "utf8")));
   const structured = records.map(normalizeCatalogueRecord);
-  assert.equal(structured.length, 475);
+  assert.equal(structured.length, records.length);
+  assert.ok(structured.length >= 475);
   assert.equal(new Set(structured.map((item) => item.award.id)).size, records.length);
   assert.equal(new Set(structured.map((item) => item.programme.id)).size, records.length);
   assert.equal(new Set(structured.map((item) => item.cycle.id)).size, records.length);

@@ -19,6 +19,7 @@ type StructuredCatalogueRow = {
   bangladeshEligibility: string | null;
   officialSource: string;
   sourceDataset: string | null;
+  overallSummary: string | null;
   studyLevel: string | null;
   subjectRestrictions: string | null;
   academicCriteria: string | null;
@@ -70,6 +71,7 @@ async function readStructuredCatalogue() {
       award.destination AS destination, award.category AS category, award.funding_summary AS fundingSummary,
       award.coverage AS coverage, award.bangladesh_eligibility AS bangladeshEligibility,
       award.official_source AS officialSource, award.source_dataset AS sourceDataset,
+      award.overall_summary AS overallSummary,
       programme.study_level AS studyLevel, programme.subject_restrictions AS subjectRestrictions,
       programme.academic_criteria AS academicCriteria, programme.english_requirement AS englishRequirement,
       programme.separate_admission AS separateAdmission, programme.documents AS documents,
@@ -82,33 +84,44 @@ async function readStructuredCatalogue() {
     LEFT JOIN catalogue_cycles cycle ON cycle.scholarship_id = award.id
       AND cycle.active = 1 AND cycle.is_current = 1
     WHERE award.active = 1 ORDER BY award.source_order, award.id`).all<StructuredCatalogueRow>();
-  return (result.results ?? []).map((row) => ({
-    id: row.id,
-    name: row.name,
-    provider: row.provider,
-    country: row.country,
-    destination: row.destination ?? row.country,
-    category: row.category ?? "",
-    studyLevel: row.studyLevel ?? "",
-    intake: row.intake ?? "",
-    fundingSummary: row.fundingSummary ?? "",
-    coverage: row.coverage ?? "",
-    bangladeshEligibility: row.bangladeshEligibility ?? "",
-    academicCriteria: row.academicCriteria ?? "",
-    englishRequirement: row.englishRequirement ?? "",
-    subjectRestrictions: row.subjectRestrictions ?? "",
-    deadline: row.deadline ?? "",
-    deadlineTimezone: row.deadlineTimezone ?? "",
-    status: row.status ?? "",
-    applicationRoute: row.applicationRoute ?? "",
-    separateAdmission: row.separateAdmission ?? "",
-    documents: row.documents ?? "",
-    officialSource: row.officialSource,
-    verifiedAt: row.verifiedAt ?? "",
-    confidence: row.confidence ?? "",
-    priority: row.priority ?? "",
-    sourceDataset: row.sourceDataset ?? "",
-  })) as Scholarship[];
+  return (result.results ?? []).map((row) => {
+    let overallSummary: unknown = row.overallSummary ?? "";
+    try {
+      if (typeof row.overallSummary === "string" && row.overallSummary.startsWith("{")) {
+        overallSummary = JSON.parse(row.overallSummary);
+      }
+    } catch {
+      overallSummary = row.overallSummary ?? "";
+    }
+    return {
+      id: row.id,
+      name: row.name,
+      provider: row.provider,
+      country: row.country,
+      destination: row.destination ?? row.country,
+      category: row.category ?? "",
+      studyLevel: row.studyLevel ?? "",
+      intake: row.intake ?? "",
+      fundingSummary: row.fundingSummary ?? "",
+      coverage: row.coverage ?? "",
+      bangladeshEligibility: row.bangladeshEligibility ?? "",
+      academicCriteria: row.academicCriteria ?? "",
+      englishRequirement: row.englishRequirement ?? "",
+      subjectRestrictions: row.subjectRestrictions ?? "",
+      deadline: row.deadline ?? "",
+      deadlineTimezone: row.deadlineTimezone ?? "",
+      status: row.status ?? "",
+      applicationRoute: row.applicationRoute ?? "",
+      separateAdmission: row.separateAdmission ?? "",
+      documents: row.documents ?? "",
+      officialSource: row.officialSource,
+      verifiedAt: row.verifiedAt ?? "",
+      confidence: row.confidence ?? "",
+      priority: row.priority ?? "",
+      sourceDataset: row.sourceDataset ?? "",
+      overallSummary,
+    };
+  }) as Scholarship[];
 }
 
 async function seedLegacyCatalogue(records: Scholarship[]) {
