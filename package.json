@@ -11,7 +11,7 @@
     "build:hosting": "next build --webpack",
     "build:sites": "vinext build",
     "start": "node server.cjs",
-    "test": "next build && node --test tests/rendered-html.test.mjs tests/catalogue-maintenance.test.mjs && tsx --test tests/scoring.test.ts",
+    "test": "next build && node --test tests/rendered-html.test.mjs tests/catalogue-maintenance.test.mjs && tsx --test tests/scoring.test.ts tests/match-filters.test.ts",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
     "db:import": "node scripts/import-sites-dump.mjs",

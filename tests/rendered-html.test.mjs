@@ -257,3 +257,20 @@ test("scholarship catalogue reads normalized entities with legacy and bundled ro
   assert.doesNotMatch(dashboard, /import \{[^\n]*\bscholarships\b[^\n]*\} from "\.\.\/lib\/matching"/);
   assert.match(packageFile, /db:import-catalogue/);
 });
+
+test("Best Finds filters are shareable and complete results paginate without changing matches", async () => {
+  const [dashboard, page, filters, css] = await Promise.all([
+    readFile(new URL("../app/dashboard/DashboardClient.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/dashboard/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/lib/match-filters.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+  assert.match(page, /parseMatchFilters\(params\)/);
+  assert.match(dashboard, /window\.history\.replaceState/);
+  assert.match(dashboard, /visibleMatches\.map/);
+  assert.match(dashboard, /Page \{currentPage\} of \{pageCount\}/);
+  assert.match(filters, /new URLSearchParams\(\{ tab: "matches" \}\)/);
+  assert.match(filters, /params\.set\("page", String\(filters\.page\)\)/);
+  assert.match(css, /\.result-pagination/);
+  assert.doesNotMatch(dashboard, /matches\.slice\(0,\s*10\)/);
+});
