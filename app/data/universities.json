@@ -1,0 +1,1106 @@
+[
+  {
+    "rank": 1,
+    "name": "Massachusetts Institute of Technology (MIT)",
+    "iso": "USA",
+    "country": "United States",
+    "city": "Cambridge, MA",
+    "c": [
+      298,
+      92
+    ],
+    "strengths": "Computer Science, Engineering, AI, Physics",
+    "psw": "3 Years STEM OPT",
+    "scholarships": [
+      "Fulbright",
+      "Knight-Hennessy",
+      "MIT Fellowships"
+    ]
+  },
+  {
+    "rank": 2,
+    "name": "University of Cambridge",
+    "iso": "GBR",
+    "country": "United Kingdom",
+    "city": "Cambridge",
+    "c": [
+      493,
+      56
+    ],
+    "strengths": "Natural Sciences, Mathematics, Engineering, Law",
+    "psw": "2 Years Graduate Route",
+    "scholarships": [
+      "Gates Cambridge",
+      "Chevening",
+      "Commonwealth"
+    ]
+  },
+  {
+    "rank": 3,
+    "name": "University of Oxford",
+    "iso": "GBR",
+    "country": "United Kingdom",
+    "city": "Oxford",
+    "c": [
+      491,
+      57
+    ],
+    "strengths": "Philosophy, Medicine, Humanities, PPE",
+    "psw": "2 Years Graduate Route",
+    "scholarships": [
+      "Rhodes",
+      "Clarendon Fund",
+      "Chevening",
+      "Commonwealth"
+    ]
+  },
+  {
+    "rank": 4,
+    "name": "Harvard University",
+    "iso": "USA",
+    "country": "United States",
+    "city": "Cambridge, MA",
+    "c": [
+      299,
+      93
+    ],
+    "strengths": "Business, Law, Medicine, Government, Economics",
+    "psw": "1-3 Years OPT",
+    "scholarships": [
+      "Fulbright",
+      "Harvard University Fellowships"
+    ]
+  },
+  {
+    "rank": 5,
+    "name": "Stanford University",
+    "iso": "USA",
+    "country": "United States",
+    "city": "Stanford, CA",
+    "c": [
+      180,
+      105
+    ],
+    "strengths": "Computer Science, Entrepreneurship, AI, Bioengineering",
+    "psw": "3 Years STEM OPT",
+    "scholarships": [
+      "Knight-Hennessy Scholars",
+      "Fulbright"
+    ]
+  },
+  {
+    "rank": 6,
+    "name": "Imperial College London",
+    "iso": "GBR",
+    "country": "United Kingdom",
+    "city": "London",
+    "c": [
+      494,
+      58
+    ],
+    "strengths": "STEM, Medicine, Data Science, Chemical Engineering",
+    "psw": "2 Years Graduate Route",
+    "scholarships": [
+      "President's PhD Scholarships",
+      "Chevening",
+      "Commonwealth"
+    ]
+  },
+  {
+    "rank": 7,
+    "name": "ETH Zurich (Swiss Federal Institute of Tech)",
+    "iso": "CHE",
+    "country": "Switzerland",
+    "city": "Zurich",
+    "c": [
+      518,
+      77
+    ],
+    "strengths": "Robotics, Architecture, Civil Engineering, Mathematics",
+    "psw": "6 Months Job Search Visa",
+    "scholarships": [
+      "Swiss Government Excellence",
+      "ETH Excellence Scholarship"
+    ]
+  },
+  {
+    "rank": 8,
+    "name": "National University of Singapore (NUS)",
+    "iso": "SGP",
+    "country": "Singapore",
+    "city": "Singapore",
+    "c": [
+      792,
+      221
+    ],
+    "strengths": "Computer Science, Business Analytics, Materials Science",
+    "psw": "1-3 Years Employment Pass",
+    "scholarships": [
+      "SINGA Award",
+      "NUS Research Scholarship"
+    ]
+  },
+  {
+    "rank": 9,
+    "name": "University College London (UCL)",
+    "iso": "GBR",
+    "country": "United Kingdom",
+    "city": "London",
+    "c": [
+      493,
+      59
+    ],
+    "strengths": "Architecture, Education, Neuroscience, Economics",
+    "psw": "2 Years Graduate Route",
+    "scholarships": [
+      "UCL Global Masters Scholarship",
+      "Chevening"
+    ]
+  },
+  {
+    "rank": 10,
+    "name": "California Institute of Technology (Caltech)",
+    "iso": "USA",
+    "country": "United States",
+    "city": "Pasadena, CA",
+    "c": [
+      183,
+      108
+    ],
+    "strengths": "Astrophysics, Quantum Computing, Chemistry",
+    "psw": "3 Years STEM OPT",
+    "scholarships": [
+      "Fulbright",
+      "Caltech Graduate Fellowship"
+    ]
+  },
+  {
+    "rank": 11,
+    "name": "University of Pennsylvania (UPenn)",
+    "iso": "USA",
+    "country": "United States",
+    "city": "Philadelphia, PA",
+    "c": [
+      291,
+      101
+    ],
+    "strengths": "Wharton Business, Medicine, Nursing, Law",
+    "psw": "1-3 Years OPT",
+    "scholarships": [
+      "Fulbright",
+      "Penn Fellowships"
+    ]
+  },
+  {
+    "rank": 12,
+    "name": "University of California, Berkeley (UC Berkeley)",
+    "iso": "USA",
+    "country": "United States",
+    "city": "Berkeley, CA",
+    "c": [
+      179,
+      104
+    ],
+    "strengths": "Computer Science, Economics, Chemistry, Public Policy",
+    "psw": "3 Years STEM OPT",
+    "scholarships": [
+      "Fulbright",
+      "Bancroft Awards"
+    ]
+  },
+  {
+    "rank": 13,
+    "name": "The University of Melbourne",
+    "iso": "AUS",
+    "country": "Australia",
+    "city": "Melbourne",
+    "c": [
+      884,
+      375
+    ],
+    "strengths": "Biomedical, Law, Arts, Business",
+    "psw": "2-4 Years Post-Study Work",
+    "scholarships": [
+      "Australia Awards",
+      "Melbourne Research Scholarships"
+    ]
+  },
+  {
+    "rank": 14,
+    "name": "Peking University",
+    "iso": "CHN",
+    "country": "China",
+    "city": "Beijing",
+    "c": [
+      808,
+      101
+    ],
+    "strengths": "Economics, Physics, International Relations",
+    "psw": "Work Permit Path",
+    "scholarships": [
+      "CSC Chinese Government Scholarship",
+      "Yenching Academy"
+    ]
+  },
+  {
+    "rank": 15,
+    "name": "Nanyang Technological University (NTU)",
+    "iso": "SGP",
+    "country": "Singapore",
+    "city": "Singapore",
+    "c": [
+      793,
+      222
+    ],
+    "strengths": "Engineering, Nanotechnology, Business",
+    "psw": "1-3 Years EP",
+    "scholarships": [
+      "SINGA Award",
+      "Nanyang President's Fellowship"
+    ]
+  },
+  {
+    "rank": 16,
+    "name": "Cornell University",
+    "iso": "USA",
+    "country": "United States",
+    "city": "Ithaca, NY",
+    "c": [
+      288,
+      94
+    ],
+    "strengths": "Agriculture, Veterinary, Architecture, Engineering",
+    "psw": "3 Years STEM OPT",
+    "scholarships": [
+      "Fulbright",
+      "Cornell Fellowships"
+    ]
+  },
+  {
+    "rank": 17,
+    "name": "The University of Hong Kong (HKU)",
+    "iso": "CHN",
+    "country": "Hong Kong / China",
+    "city": "Hong Kong",
+    "c": [
+      814,
+      168
+    ],
+    "strengths": "Dentistry, Finance, Law, Civil Engineering",
+    "psw": "2 Years IANG Visa",
+    "scholarships": [
+      "Hong Kong PhD Fellowship (HKPFS)"
+    ]
+  },
+  {
+    "rank": 18,
+    "name": "The University of Sydney",
+    "iso": "AUS",
+    "country": "Australia",
+    "city": "Sydney",
+    "c": [
+      896,
+      368
+    ],
+    "strengths": "Veterinary Science, Sports Science, Oncology, Law",
+    "psw": "2-4 Years Post-Study Work",
+    "scholarships": [
+      "Sydney International Scholarship",
+      "Australia Awards"
+    ]
+  },
+  {
+    "rank": 19,
+    "name": "The University of New South Wales (UNSW)",
+    "iso": "AUS",
+    "country": "Australia",
+    "city": "Sydney",
+    "c": [
+      897,
+      369
+    ],
+    "strengths": "Renewable Energy, Mining Engineering, Business",
+    "psw": "2-4 Years Post-Study Work",
+    "scholarships": [
+      "UNSW International Scientia Coursework"
+    ]
+  },
+  {
+    "rank": 20,
+    "name": "Tsinghua University",
+    "iso": "CHN",
+    "country": "China",
+    "city": "Beijing",
+    "c": [
+      809,
+      102
+    ],
+    "strengths": "Civil Engineering, AI, Materials Science",
+    "psw": "Work Permit Path",
+    "scholarships": [
+      "Schwarzman Scholars",
+      "CSC Scholarship"
+    ]
+  },
+  {
+    "rank": 21,
+    "name": "University of Chicago",
+    "iso": "USA",
+    "country": "United States",
+    "city": "Chicago, IL",
+    "c": [
+      255,
+      96
+    ],
+    "strengths": "Economics, Public Policy, Physics, Sociology",
+    "psw": "1-3 Years OPT",
+    "scholarships": [
+      "Fulbright",
+      "UChicago Merit Awards"
+    ]
+  },
+  {
+    "rank": 22,
+    "name": "Princeton University",
+    "iso": "USA",
+    "country": "United States",
+    "city": "Princeton, NJ",
+    "c": [
+      293,
+      99
+    ],
+    "strengths": "Mathematics, Plasma Physics, Public Affairs",
+    "psw": "1-3 Years OPT",
+    "scholarships": [
+      "Princeton University Full Funding"
+    ]
+  },
+  {
+    "rank": 23,
+    "name": "Yale University",
+    "iso": "USA",
+    "country": "United States",
+    "city": "New Haven, CT",
+    "c": [
+      296,
+      96
+    ],
+    "strengths": "Law, Drama, Architecture, Global Affairs",
+    "psw": "1-3 Years OPT",
+    "scholarships": [
+      "Fulbright",
+      "Yale Fellowships"
+    ]
+  },
+  {
+    "rank": 24,
+    "name": "Université PSL (Paris Sciences & Lettres)",
+    "iso": "FRA",
+    "country": "France",
+    "city": "Paris",
+    "c": [
+      497,
+      72
+    ],
+    "strengths": "Theoretical Physics, Mathematics, Philosophy",
+    "psw": "1-2 Years APS Job Search",
+    "scholarships": [
+      "Eiffel Excellence",
+      "Campus France Grants"
+    ]
+  },
+  {
+    "rank": 25,
+    "name": "University of Toronto",
+    "iso": "CAN",
+    "country": "Canada",
+    "city": "Toronto, ON",
+    "c": [
+      278,
+      87
+    ],
+    "strengths": "Machine Learning / AI, Medicine, Business, Humanities",
+    "psw": "3 Years PGWP",
+    "scholarships": [
+      "Lester B. Pearson",
+      "Vanier Canada"
+    ]
+  },
+  {
+    "rank": 26,
+    "name": "EPFL (École Polytechnique Fédérale de Lausanne)",
+    "iso": "CHE",
+    "country": "Switzerland",
+    "city": "Lausanne",
+    "c": [
+      514,
+      79
+    ],
+    "strengths": "Computer Science, Bioengineering, Clean Energy",
+    "psw": "6 Months Job Search",
+    "scholarships": [
+      "Swiss Government Excellence",
+      "EPFL Excellence Fellowships"
+    ]
+  },
+  {
+    "rank": 27,
+    "name": "The University of Edinburgh",
+    "iso": "GBR",
+    "country": "United Kingdom",
+    "city": "Edinburgh",
+    "c": [
+      486,
+      47
+    ],
+    "strengths": "Informatics, Linguistics, Veterinary Medicine",
+    "psw": "2 Years Graduate Route",
+    "scholarships": [
+      "Edinburgh Global Research",
+      "Chevening"
+    ]
+  },
+  {
+    "rank": 28,
+    "name": "Technical University of Munich (TUM)",
+    "iso": "DEU",
+    "country": "Germany",
+    "city": "Munich",
+    "c": [
+      526,
+      74
+    ],
+    "strengths": "Mechanical Engineering, Informatics, Aerospace, Automotive",
+    "psw": "18 Months Job Search Visa",
+    "scholarships": [
+      "DAAD EPOS",
+      "Deutschlandstipendium"
+    ]
+  },
+  {
+    "rank": 29,
+    "name": "The University of Tokyo",
+    "iso": "JPN",
+    "country": "Japan",
+    "city": "Tokyo",
+    "c": [
+      855,
+      112
+    ],
+    "strengths": "Earth Sciences, Engineering, Public Health",
+    "psw": "1-2 Years Job Hunter Visa",
+    "scholarships": [
+      "MEXT Embassy Recommendation",
+      "University of Tokyo Fellowship"
+    ]
+  },
+  {
+    "rank": 30,
+    "name": "Columbia University",
+    "iso": "USA",
+    "country": "United States",
+    "city": "New York, NY",
+    "c": [
+      294,
+      98
+    ],
+    "strengths": "Journalism, International Affairs, Data Science",
+    "psw": "1-3 Years OPT",
+    "scholarships": [
+      "Fulbright",
+      "Columbia Merit Awards"
+    ]
+  },
+  {
+    "rank": 31,
+    "name": "The University of Manchester",
+    "iso": "GBR",
+    "country": "United Kingdom",
+    "city": "Manchester",
+    "c": [
+      488,
+      54
+    ],
+    "strengths": "Graphene & Materials, Business (Alliance), Chemical Eng",
+    "psw": "2 Years Graduate Route",
+    "scholarships": [
+      "Global Futures",
+      "Chevening",
+      "Commonwealth"
+    ]
+  },
+  {
+    "rank": 32,
+    "name": "Seoul National University (SNU)",
+    "iso": "KOR",
+    "country": "South Korea",
+    "city": "Seoul",
+    "c": [
+      826,
+      111
+    ],
+    "strengths": "Semiconductor Tech, Chemical Eng, Social Sciences",
+    "psw": "D-10 Job Seeker Visa",
+    "scholarships": [
+      "Global Korea Scholarship (GKS)",
+      "SNU President Fellowship"
+    ]
+  },
+  {
+    "rank": 33,
+    "name": "Monash University",
+    "iso": "AUS",
+    "country": "Australia",
+    "city": "Melbourne",
+    "c": [
+      885,
+      376
+    ],
+    "strengths": "Pharmacy & Pharmacology, Engineering, Education",
+    "psw": "2-4 Years Post-Study Work",
+    "scholarships": [
+      "Monash International Leadership",
+      "Australia Awards"
+    ]
+  },
+  {
+    "rank": 34,
+    "name": "King's College London (KCL)",
+    "iso": "GBR",
+    "country": "United Kingdom",
+    "city": "London",
+    "c": [
+      495,
+      59
+    ],
+    "strengths": "War Studies, Psychiatry, Dentistry, Law",
+    "psw": "2 Years Graduate Route",
+    "scholarships": [
+      "King's International PGR Awards",
+      "Chevening"
+    ]
+  },
+  {
+    "rank": 35,
+    "name": "McGill University",
+    "iso": "CAN",
+    "country": "Canada",
+    "city": "Montreal, QC",
+    "c": [
+      289,
+      83
+    ],
+    "strengths": "Neurology, Law, Music, Mining Engineering",
+    "psw": "3 Years PGWP",
+    "scholarships": [
+      "McCall MacBain Scholarships",
+      "Vanier Canada"
+    ]
+  },
+  {
+    "rank": 36,
+    "name": "The University of Queensland (UQ)",
+    "iso": "AUS",
+    "country": "Australia",
+    "city": "Brisbane",
+    "c": [
+      908,
+      335
+    ],
+    "strengths": "Environmental Science, Biotechnology, Sports",
+    "psw": "2-4 Years Post-Study Work",
+    "scholarships": [
+      "UQ International Excellence",
+      "Australia Awards"
+    ]
+  },
+  {
+    "rank": 37,
+    "name": "Kyoto University",
+    "iso": "JPN",
+    "country": "Japan",
+    "city": "Kyoto",
+    "c": [
+      850,
+      114
+    ],
+    "strengths": "Chemistry, Physics, Stem Cell Biology (iPS)",
+    "psw": "1-2 Years Job Hunter Visa",
+    "scholarships": [
+      "MEXT",
+      "ADB-JSP Scholarship"
+    ]
+  },
+  {
+    "rank": 38,
+    "name": "Institut Polytechnique de Paris",
+    "iso": "FRA",
+    "country": "France",
+    "city": "Palaiseau",
+    "c": [
+      496,
+      73
+    ],
+    "strengths": "Applied Mathematics, Nuclear Energy, Cyber Security",
+    "psw": "1-2 Years APS Visa",
+    "scholarships": [
+      "Eiffel Excellence",
+      "IP Paris Fellowships"
+    ]
+  },
+  {
+    "rank": 39,
+    "name": "Delft University of Technology (TU Delft)",
+    "iso": "NLD",
+    "country": "Netherlands",
+    "city": "Delft",
+    "c": [
+      500,
+      62
+    ],
+    "strengths": "Aerospace, Civil Engineering, Architecture, Water Tech",
+    "psw": "1 Year Orientation Year (Zoekjaar)",
+    "scholarships": [
+      "Justus & Louise van Effen",
+      "NL Scholarship"
+    ]
+  },
+  {
+    "rank": 40,
+    "name": "London School of Economics (LSE)",
+    "iso": "GBR",
+    "country": "United Kingdom",
+    "city": "London",
+    "c": [
+      494,
+      59
+    ],
+    "strengths": "Economics, Political Science, Finance, International Dev",
+    "psw": "2 Years Graduate Route",
+    "scholarships": [
+      "LSE Master's Awards",
+      "Chevening"
+    ]
+  },
+  {
+    "rank": 41,
+    "name": "Karolinska Institutet",
+    "iso": "SWE",
+    "country": "Sweden",
+    "city": "Stockholm",
+    "c": [
+      537,
+      43
+    ],
+    "strengths": "Medicine, Public Health, Immunology (Nobel Assembly)",
+    "psw": "1 Year Job Search Visa",
+    "scholarships": [
+      "SI Global Professionals (SISGP)",
+      "Karolinska Global Masters"
+    ]
+  },
+  {
+    "rank": 42,
+    "name": "Ludwig Maximilian University of Munich (LMU)",
+    "iso": "DEU",
+    "country": "Germany",
+    "city": "Munich",
+    "c": [
+      525,
+      74
+    ],
+    "strengths": "Physics, Humanities, Veterinary, Oncology",
+    "psw": "18 Months Job Search Visa",
+    "scholarships": [
+      "DAAD",
+      "Deutschlandstipendium"
+    ]
+  },
+  {
+    "rank": 43,
+    "name": "University of Bristol",
+    "iso": "GBR",
+    "country": "United Kingdom",
+    "city": "Bristol",
+    "c": [
+      489,
+      59
+    ],
+    "strengths": "Aerospace Engineering, Veterinary Science, Sociology",
+    "psw": "2 Years Graduate Route",
+    "scholarships": [
+      "Think Big Scholarships",
+      "Chevening"
+    ]
+  },
+  {
+    "rank": 44,
+    "name": "KAIST (Korea Adv Inst of Sci & Tech)",
+    "iso": "KOR",
+    "country": "South Korea",
+    "city": "Daejeon",
+    "c": [
+      826,
+      113
+    ],
+    "strengths": "AI, Electrical Engineering, Robotics, Semiconductor",
+    "psw": "D-10 Job Seeker Visa",
+    "scholarships": [
+      "KAIST Full Scholarship",
+      "GKS"
+    ]
+  },
+  {
+    "rank": 45,
+    "name": "University of Amsterdam (UvA)",
+    "iso": "NLD",
+    "country": "Netherlands",
+    "city": "Amsterdam",
+    "c": [
+      501,
+      61
+    ],
+    "strengths": "Communication Science, AI, Social Sciences",
+    "psw": "1 Year Orientation Year",
+    "scholarships": [
+      "Amsterdam Merit Scholarship",
+      "NL Scholarship"
+    ]
+  },
+  {
+    "rank": 46,
+    "name": "KU Leuven",
+    "iso": "BEL",
+    "country": "Belgium",
+    "city": "Leuven",
+    "c": [
+      502,
+      66
+    ],
+    "strengths": "Innovation, Microelectronics (IMEC), Theology, Law",
+    "psw": "1 Year Search Year Visa",
+    "scholarships": [
+      "Master Mind Scholarship",
+      "VLIR-UOS"
+    ]
+  },
+  {
+    "rank": 47,
+    "name": "Sorbonne University",
+    "iso": "FRA",
+    "country": "France",
+    "city": "Paris",
+    "c": [
+      498,
+      73
+    ],
+    "strengths": "Oceanography, Linguistics, Mathematics, Oncology",
+    "psw": "1-2 Years APS Visa",
+    "scholarships": [
+      "Eiffel Excellence",
+      "Sorbonne Fellowships"
+    ]
+  },
+  {
+    "rank": 48,
+    "name": "Heidelberg University",
+    "iso": "DEU",
+    "country": "Germany",
+    "city": "Heidelberg",
+    "c": [
+      519,
+      72
+    ],
+    "strengths": "Medicine, Life Sciences, Astronomy, Law",
+    "psw": "18 Months Job Search Visa",
+    "scholarships": [
+      "DAAD",
+      "Baden-Württemberg Foundation"
+    ]
+  },
+  {
+    "rank": 49,
+    "name": "Trinity College Dublin (TCD)",
+    "iso": "IRL",
+    "country": "Ireland",
+    "city": "Dublin",
+    "c": [
+      473,
+      56
+    ],
+    "strengths": "English Literature, Immunology, Computer Science",
+    "psw": "2 Years Third Level Graduate Scheme",
+    "scholarships": [
+      "Government of Ireland (GOI-IES)",
+      "Global Excellence"
+    ]
+  },
+  {
+    "rank": 50,
+    "name": "Politecnico di Milano",
+    "iso": "ITA",
+    "country": "Italy",
+    "city": "Milan",
+    "c": [
+      517,
+      82
+    ],
+    "strengths": "Design, Architecture, Industrial Engineering, AI",
+    "psw": "1 Year Post-Study Permesso",
+    "scholarships": [
+      "Invest Your Talent in Italy (IYT)",
+      "DSU Grant (0€ + Living)"
+    ]
+  },
+  {
+    "rank": 51,
+    "name": "University of Sydney",
+    "iso": "AUS",
+    "country": "Australia",
+    "city": "Sydney",
+    "c": [
+      896,
+      368
+    ],
+    "strengths": "Veterinary Science, Sports Science, Oncology, Law",
+    "psw": "2-4 Years Post-Study Work",
+    "scholarships": [
+      "Sydney International Scholarship",
+      "Australia Awards"
+    ]
+  },
+  {
+    "rank": 52,
+    "name": "University of British Columbia (UBC)",
+    "iso": "CAN",
+    "country": "Canada",
+    "city": "Vancouver, BC",
+    "c": [
+      188,
+      73
+    ],
+    "strengths": "Forestry, Marine Biology, Business (Sauder), Data Science",
+    "psw": "3 Years PGWP",
+    "scholarships": [
+      "International Leader of Tomorrow",
+      "Vanier"
+    ]
+  },
+  {
+    "rank": 53,
+    "name": "KTH Royal Institute of Technology",
+    "iso": "SWE",
+    "country": "Sweden",
+    "city": "Stockholm",
+    "c": [
+      538,
+      44
+    ],
+    "strengths": "Telecommunications, Sustainable Energy, Transport",
+    "psw": "1 Year Job Search Visa",
+    "scholarships": [
+      "SI Global Professionals",
+      "KTH Scholarship"
+    ]
+  },
+  {
+    "rank": 54,
+    "name": "University of Warwick",
+    "iso": "GBR",
+    "country": "United Kingdom",
+    "city": "Coventry",
+    "c": [
+      491,
+      56
+    ],
+    "strengths": "Warwick Business School (WBS), Economics, Manufacturing",
+    "psw": "2 Years Graduate Route",
+    "scholarships": [
+      "Warwick Chancellor's International",
+      "Chevening"
+    ]
+  },
+  {
+    "rank": 55,
+    "name": "Lund University",
+    "iso": "SWE",
+    "country": "Sweden",
+    "city": "Lund",
+    "c": [
+      530,
+      50
+    ],
+    "strengths": "Synchrotron Radiation (MAX IV), Innovation, Human Rights",
+    "psw": "1 Year Job Search Visa",
+    "scholarships": [
+      "SI Global Professionals",
+      "Lund Global Scholarship"
+    ]
+  },
+  {
+    "rank": 56,
+    "name": "University of Helsinki",
+    "iso": "FIN",
+    "country": "Finland",
+    "city": "Helsinki",
+    "c": [
+      555,
+      36
+    ],
+    "strengths": "Atmospheric Science, Education, Forestry, Computer Science",
+    "psw": "2 Years Job Search Visa",
+    "scholarships": [
+      "Finland Scholarship (100% + €5k)",
+      "UH Grant"
+    ]
+  },
+  {
+    "rank": 57,
+    "name": "Technical University of Denmark (DTU)",
+    "iso": "DNK",
+    "country": "Denmark",
+    "city": "Lyngby / Copenhagen",
+    "c": [
+      524,
+      52
+    ],
+    "strengths": "Wind Energy, Biotechnology, Environmental Engineering",
+    "psw": "3 Years Job Search Visa",
+    "scholarships": [
+      "Danish Government Scholarship (Tuition waiver)"
+    ]
+  },
+  {
+    "rank": 58,
+    "name": "University of Bologna",
+    "iso": "ITA",
+    "country": "Italy",
+    "city": "Bologna",
+    "c": [
+      524,
+      85
+    ],
+    "strengths": "Oldest University, Agriculture, Law, Automotive (MotorValley)",
+    "psw": "1 Year Post-Study Permesso",
+    "scholarships": [
+      "Unibo Action 1 & 2 (€11k)",
+      "ER.GO Regional Grant"
+    ]
+  },
+  {
+    "rank": 59,
+    "name": "University of Vienna",
+    "iso": "AUT",
+    "country": "Austria",
+    "city": "Vienna",
+    "c": [
+      536,
+      74
+    ],
+    "strengths": "Physics, Economics, Philosophy, Molecular Biology",
+    "psw": "1 Year Red-White-Red Job Search",
+    "scholarships": [
+      "Ernst Mach Grant",
+      "Austrian Development Cooperation"
+    ]
+  },
+  {
+    "rank": 60,
+    "name": "Sapienza University of Rome",
+    "iso": "ITA",
+    "country": "Italy",
+    "city": "Rome",
+    "c": [
+      526,
+      92
+    ],
+    "strengths": "Classics & Ancient History, Aerospace, Medicine",
+    "psw": "1 Year Job Search",
+    "scholarships": [
+      "LazioDisco Regional Scholarship (0€ + €7k)",
+      "IYT"
+    ]
+  },
+  {
+    "rank": 61,
+    "name": "Universitat de Barcelona (UB)",
+    "iso": "ESP",
+    "country": "Spain",
+    "city": "Barcelona",
+    "c": [
+      496,
+      92
+    ],
+    "strengths": "Biomedicine, Chemistry, Arts, Renewable Energy",
+    "psw": "1 Year Residence Authorization",
+    "scholarships": [
+      "Fundación Carolina",
+      "Erasmus Mundus"
+    ]
+  },
+  {
+    "rank": 62,
+    "name": "King Abdullah Univ of Science & Tech (KAUST)",
+    "iso": "SAU",
+    "country": "Saudi Arabia",
+    "city": "Thuwal",
+    "c": [
+      622,
+      161
+    ],
+    "strengths": "Solar Energy, Marine Genomics, Advanced Computing, AI",
+    "psw": "Research / Corporate Sponsorship",
+    "scholarships": [
+      "KAUST Fellowship (100% Tuition + $25k/yr + Housing)"
+    ]
+  },
+  {
+    "rank": 63,
+    "name": "Eötvös Loránd University (ELTE)",
+    "iso": "HUN",
+    "country": "Hungary",
+    "city": "Budapest",
+    "c": [
+      545,
+      77
+    ],
+    "strengths": "Informatics, Psychology, Law, Natural Sciences",
+    "psw": "9 Months Study-to-Work Visa",
+    "scholarships": [
+      "Stipendium Hungaricum (100% Free + Stipend)"
+    ]
+  },
+  {
+    "rank": 64,
+    "name": "University of Warsaw",
+    "iso": "POL",
+    "country": "Poland",
+    "city": "Warsaw",
+    "c": [
+      549,
+      62
+    ],
+    "strengths": "Mathematics, Computer Science, Archaeology, Journalism",
+    "psw": "9 Months Job Search Visa",
+    "scholarships": [
+      "Ignacy Łukasiewicz Scholarship (NAWA)",
+      "Poland My First Choice"
+    ]
+  },
+  {
+    "rank": 65,
+    "name": "Charles University",
+    "iso": "CZE",
+    "country": "Czech Republic",
+    "city": "Prague",
+    "c": [
+      530,
+      68
+    ],
+    "strengths": "General Medicine, Central European Studies, Physics",
+    "psw": "9 Months Job Search Visa",
+    "scholarships": [
+      "Czech Government Scholarships (Full Funding)"
+    ]
+  }
+]

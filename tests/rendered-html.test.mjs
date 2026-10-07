@@ -275,3 +275,42 @@ test("Best Finds filters are shareable and complete results paginate without cha
   assert.match(css, /\.result-pagination/);
   assert.doesNotMatch(dashboard, /matches\.slice\(0,\s*10\)/);
 });
+
+test("EG Global Study Compass interactive map app and data assets are available and integrated", async () => {
+  const [compassPage, mapRedirect, mapEngine, compassCss, worldData, geoIndex, briefs, univs] = await Promise.all([
+    readFile(new URL("../app/compass/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/map/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../components/compass/MapEngine.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/compass/compass.module.css", import.meta.url), "utf8"),
+    readFile(new URL("../public/world.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/data/geo-scholarship-index.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/data/country-briefs.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/data/universities.json", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(compassPage, /GlobalStudyCompassPage/);
+  assert.match(compassPage, /compass-hud/);
+  assert.match(compassPage, /Match My Profile/);
+  assert.match(compassPage, /Download My Map/);
+  assert.match(mapRedirect, /redirect\("\/compass"\)/);
+  assert.match(mapEngine, /DHAKA_COORD/);
+  assert.match(mapEngine, /drawDhakaOrigin/);
+  assert.match(mapEngine, /generateExportCard/);
+  assert.match(compassCss, /\.hudRibbon/);
+
+  const world = JSON.parse(worldData);
+  assert.ok(world.f.length >= 190);
+  assert.ok(world.f.some((c) => c.i === "BGD" && c.c));
+
+  const clusters = JSON.parse(geoIndex);
+  assert.ok(clusters.DEU && clusters.GBR && clusters.USA);
+  assert.ok(clusters.DEU.totalCount >= 10);
+
+  const countryBriefsData = JSON.parse(briefs);
+  assert.ok(countryBriefsData.DEU && countryBriefsData.DEU.tuition && countryBriefsData.DEU.blockedAccount);
+
+  const univList = JSON.parse(univs);
+  assert.ok(univList.length >= 50);
+  assert.ok(univList.some((u) => u.rank === 1 && u.name.includes("MIT")));
+});
+
