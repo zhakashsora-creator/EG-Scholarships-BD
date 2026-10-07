@@ -20,7 +20,7 @@ const archiveName = existsSync(join(__dirname, "next-build-9c3d4be.zip"))
   : existsSync(join(__dirname, "namecheap-linux-build.zip"))
   ? "namecheap-linux-build.zip"
   : "next-build-803a1bf.zip";
-const expectedDeployment = "9c3d4be Linux hosting build";
+const expectedDeployment = "9c3d4be7c9991266d269fc4613e1c85f1791a10a Linux hosting build";
 
 const archivePath = join(__dirname, archiveName);
 const deploymentMarker = join(__dirname, ".next", "DEPLOY_COMMIT");
