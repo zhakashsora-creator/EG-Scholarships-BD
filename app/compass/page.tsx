@@ -69,6 +69,10 @@ const POPULAR_DESTINATIONS = [
   { iso: "NLD", name: "নেদারল্যান্ডস", flag: "🇳🇱" },
   { iso: "TUR", name: "তুরস্ক", flag: "🇹🇷" },
   { iso: "CHN", name: "চীন", flag: "🇨🇳" },
+  { iso: "KAZ", name: "কাজাখস্তান", flag: "🇰🇿" },
+  { iso: "KGZ", name: "কিরগিজস্তান", flag: "🇰🇬" },
+  { iso: "AZE", name: "আজারবাইজান", flag: "🇦🇿" },
+  { iso: "RUS", name: "রাশিয়া", flag: "🇷🇺" },
 ];
 
 /**
@@ -341,7 +345,7 @@ export default function GlobalStudyCompassPage() {
       }
     }
 
-    const totalScholCount = selectedIso ? (geoIndex[selectedIso]?.totalCount || 0) : 517;
+    const totalScholCount = selectedIso ? (geoIndex[selectedIso]?.totalCount || 0) : 602;
     const totalUni = selectedIso ? universities.filter((u) => u.iso === selectedIso).length : universities.length;
 
     const dataUrl = rendererRef.current.generateExportCard({
@@ -784,7 +788,7 @@ export default function GlobalStudyCompassPage() {
                 <span className={styles.welcomeHeroBadge}>✨ Global Study Compass</span>
                 <h1 className={styles.welcomeHeroTitle}>গ্লোবাল স্টাডি কম্পাস</h1>
                 <p className={styles.welcomeHeroSub}>
-                  বাংলাদেশি শিক্ষার্থীদের জন্য ৫০+ দেশের স্কলারশিপ, টিউশন ফি, লিভিং কস্ট ও শীর্ষ বিশ্ববিদ্যালয়ের সমন্বিত ইন্টারেক্টিভ ম্যাপ।
+                  বাংলাদেশি শিক্ষার্থীদের জন্য ৭৮+ দেশের স্কলারশিপ, টিউশন ফি, লিভিং কস্ট ও শীর্ষ বিশ্ববিদ্যালয়ের সমন্বিত ইন্টারেক্টিভ ম্যাপ।
                 </p>
                 <div className={styles.welcomeHeroMotto}>
                   &ldquo;Study abroad with a plan, not confusion.&rdquo; — Excellence Global
@@ -794,11 +798,11 @@ export default function GlobalStudyCompassPage() {
               {/* Key Metrics Grid */}
               <div className={styles.welcomeStatsGrid}>
                 <div className={styles.welcomeStatCard}>
-                  <span className={styles.welcomeStatNum}>৫১৭+</span>
+                  <span className={styles.welcomeStatNum}>৬০২+</span>
                   <span className={styles.welcomeStatLabel}>ভেরিফায়েড স্কলারশিপ</span>
                 </div>
                 <div className={styles.welcomeStatCard}>
-                  <span className={styles.welcomeStatNum}>৫০+</span>
+                  <span className={styles.welcomeStatNum}>৭৮+</span>
                   <span className={styles.welcomeStatLabel}>গ্লোবাল গন্তব্য দেশ</span>
                 </div>
                 <div className={styles.welcomeStatCard}>
