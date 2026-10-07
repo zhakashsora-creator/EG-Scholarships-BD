@@ -25,20 +25,31 @@ const expectedDeployment = "9c3d4be7c9991266d269fc4613e1c85f1791a10a Linux hosti
 const archivePath = join(__dirname, archiveName);
 const deploymentMarker = join(__dirname, ".next", "DEPLOY_COMMIT");
 
+let promotionLog = [];
+
 try {
   const activeDeployment = existsSync(deploymentMarker)
     ? readFileSync(deploymentMarker, "utf8").trim()
     : "";
 
+  promotionLog.push(`active: "${activeDeployment}", expected: "${expectedDeployment}", archive: "${archiveName}", exists: ${existsSync(archivePath)}`);
+
   if (activeDeployment !== expectedDeployment && existsSync(archivePath)) {
-    execFileSync("/usr/bin/unzip", ["-t", archivePath], { stdio: "ignore" });
-    execFileSync("/usr/bin/unzip", ["-o", archivePath, "-d", __dirname], {
-      stdio: "inherit",
-    });
+    try {
+      execFileSync("/usr/bin/unzip", ["-o", archivePath, "-d", __dirname], { stdio: "ignore" });
+      promotionLog.push("unzipped with /usr/bin/unzip");
+    } catch (e1) {
+      try {
+        const { execSync } = require("node:child_process");
+        execSync(`unzip -o "${archivePath}" -d "${__dirname}"`, { stdio: "ignore" });
+        promotionLog.push("unzipped with PATH unzip");
+      } catch (e2) {
+        promotionLog.push(`unzip failed: ${e1.message} | ${e2.message}`);
+      }
+    }
   }
 } catch (error) {
-  // Keep the last working build online. The diagnostic endpoint will continue
-  // to report its old deployment marker, making a failed promotion visible.
+  promotionLog.push(`outer error: ${error.message}`);
   console.error("Staging build promotion failed; keeping the active build.", error);
 }
 
@@ -48,6 +59,7 @@ writeFileSync(
     entry: "server-stage.cjs",
     archive: archiveName,
     startedAt: new Date().toISOString(),
+    promotionLog,
   }),
 );
 

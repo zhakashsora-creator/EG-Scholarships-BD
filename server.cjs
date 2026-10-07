@@ -35,6 +35,11 @@ function respondToStagingBuild(request, response) {
   const requestUrl = new URL(request.url || "/", `http://${request.headers.host || "localhost"}`);
   if (!isScholarshipPortalHost(request.headers.host) || requestUrl.pathname !== "/__staging-build") return false;
 
+  let marker = null;
+  try {
+    marker = JSON.parse(readFileSync(join(applicationDirectory, "staging-startup-marker.json"), "utf8"));
+  } catch {}
+
   response.writeHead(200, {
     "content-type": "application/json; charset=utf-8",
     "cache-control": "no-store, no-cache, must-revalidate",
@@ -42,6 +47,7 @@ function respondToStagingBuild(request, response) {
   response.end(JSON.stringify({
     buildId: readBuildFile("BUILD_ID"),
     deployment: readBuildFile("DEPLOY_COMMIT"),
+    marker,
   }));
   return true;
 }
