@@ -1,214 +1,8 @@
-{
-  "DEU": {
-    "nameEn": "Germany",
-    "nameBn": "জার্মানি",
-    "flag": "🇩🇪",
-    "continent": "Europe",
-    "capital": "Berlin",
-    "tuition": "0€ Tuition at almost all Public Universities (Only €250-€350/sem semester ticket)",
-    "livingCost": "€934 / month (approx 1,20,000 BDT)",
-    "blockedAccount": "€11,904 (mandatory for German student visa in 2026/2027)",
-    "psw": "18 Months Job Search Visa (EU Blue Card path in 21-27 months)",
-    "ielts": "Safe: 6.5 (min 6.0 in all bands); Top TUs: 7.0; MOI acceptable in selected private/partner universities",
-    "cgpa": "Minimum 3.0/4.0; Competitive for DAAD/TUM: 3.5+",
-    "visaDhaka": "German Embassy Dhaka uses CSP / waiting list system (apply early as appointment queue can take 8-14 months)",
-    "successTip": "Apply through uni-assist or direct university portals by July 15 for Winter intake. DAAD EPOS requires 2 years of work experience."
-  },
-  "GBR": {
-    "nameEn": "United Kingdom",
-    "nameBn": "যুক্তরাজ্য",
-    "flag": "🇬🇧",
-    "continent": "Europe",
-    "capital": "London",
-    "tuition": "£14,000 - £26,000 / year (Wide scholarships from £2,000 discounts up to 100% Chevening/Commonwealth)",
-    "livingCost": "£1,023/month (Outside London) | £1,347/month (Inside London)",
-    "blockedAccount": "28-day Bank Solvency (Tuition balance + 9 months living cost)",
-    "psw": "2 Years Graduate Route Visa (3 Years for PhD)",
-    "ielts": "Overall 6.0 to 6.5 (many UK universities accept MOI / Duolingo or offer internal English test)",
-    "cgpa": "Undergrad: HSC GPA 4.0+ / Masters: 2.75+ for general, 3.3+ for Russell Group",
-    "visaDhaka": "VFS Global Dhaka (Processing 3-4 weeks standard, 5 days priority)",
-    "successTip": "UK CAS issuance requires strict credibility audit and genuine student intent. Chevening deadline is early November."
-  },
-  "USA": {
-    "nameEn": "United States",
-    "nameBn": "যুক্তরাষ্ট্র",
-    "flag": "🇺🇸",
-    "continent": "North America",
-    "capital": "Washington, D.C.",
-    "tuition": "$20,000 - $55,000 / year (Extensive Assistantships: TA/RA covering 100% tuition + monthly stipend for STEM Masters/PhD)",
-    "livingCost": "$1,000 - $1,800 / month depending on state",
-    "blockedAccount": "I-20 financial proof (1 year tuition + living demonstrated in bank sponsor)",
-    "psw": "3 Years STEM OPT (1 Year for non-STEM) with H-1B lottery eligibility",
-    "ielts": "IELTS 6.5 - 7.5 or TOEFL 80 - 100 or Duolingo 110 - 125",
-    "cgpa": "Safe: 3.2+; Competitive for TA/RA: 3.5+ with research publications or GRE",
-    "visaDhaka": "US Embassy Dhaka F-1 Visa interview (Crucial: Strong home ties, funding clarity, academic readiness)",
-    "successTip": "For graduate studies, contact professors directly with research fit. Fulbright deadline is usually May/June in Dhaka."
-  },
-  "ITA": {
-    "nameEn": "Italy",
-    "nameBn": "ইতালি",
-    "flag": "🇮🇹",
-    "continent": "Europe",
-    "capital": "Rome",
-    "tuition": "Low public university fees based on ISEE-Parificato family income (€150 - €2,000/yr)",
-    "livingCost": "€500 - €800 / month",
-    "blockedAccount": "Approx €6,000 - €7,000 in sponsor account (DSU recipients can get living stipend + free canteen)",
-    "psw": "1 Year Post-Study Permesso di Soggiorno (Job search or entrepreneurship)",
-    "ielts": "IELTS 6.0 - 6.5 (Some universities accept English MOI letter from Bangladesh)",
-    "cgpa": "Minimum 2.8/4.0; Competitive for IYT: 3.2+",
-    "visaDhaka": "Italian Embassy Dhaka (Requires Universitaly pre-enrolment, CIMEA / DoV, and VFS booking)",
-    "successTip": "Regional scholarships like DSU (Tuscany/Lombardy), LazioDisco (Rome), ER.GO (Bologna) cover up to €7,500/year plus free meals!"
-  },
-  "NLD": {
-    "nameEn": "Netherlands",
-    "nameBn": "নেদারল্যান্ডস",
-    "flag": "🇳🇱",
-    "continent": "Europe",
-    "capital": "Amsterdam",
-    "tuition": "€10,000 - €18,000 / year for Non-EU (Subsidized by NL Scholarship and university excellence funds)",
-    "livingCost": "€900 - €1,200 / month",
-    "blockedAccount": "Approx €14,000 / year deposited to university account for IND visa sponsor",
-    "psw": "1 Year 'Zoekjaar' (Orientation Year) visa for high-skilled job search",
-    "ielts": "Strict IELTS 6.5 (min 6.0) or 7.0 for research masters",
-    "cgpa": "Minimum 3.2+; Strong analytical/math foundation verified on Studielink",
-    "visaDhaka": "IND institutional sponsor handles MVV; student collects sticker at Dutch Embassy Dhaka within 2-3 weeks",
-    "successTip": "High English proficiency across 95% of society. Apply early (by Jan/Feb) for university housing as student housing is competitive."
-  },
-  "SWE": {
-    "nameEn": "Sweden",
-    "nameBn": "সুইডেন",
-    "flag": "🇸🇪",
-    "continent": "Europe",
-    "capital": "Stockholm",
-    "tuition": "SEK 90,000 - 150,000 / year (SI Global Professionals covers 100% tuition + SEK 12,000/mo stipend + travel grant)",
-    "livingCost": "SEK 9,500 - 11,500 / month (approx 1,00,000 BDT)",
-    "blockedAccount": "SEK 10,500/month for Migration Agency (Migrationsverket) residence permit",
-    "psw": "1 Year Job Search Visa after graduation",
-    "ielts": "Strict English 6 requirement: IELTS 6.5 (no band below 5.5)",
-    "cgpa": "Competitive: 3.3+ with 3,000 hours of demonstrated leadership/work experience for SI",
-    "visaDhaka": "Swedish Migration Agency online permit + biometric verification at Swedish Embassy Dhaka",
-    "successTip": "Centralized application via UniversityAdmissions.se opens in October and closes mid-January. SI application opens in February."
-  },
-  "FIN": {
-    "nameEn": "Finland",
-    "nameBn": "ফিনল্যান্ড",
-    "flag": "🇫🇮",
-    "continent": "Europe",
-    "capital": "Helsinki",
-    "tuition": "€10,000 - €13,000 / year (Finland Scholarship awards 100% waiver + €5,000 relocation grant; Universities offer 50-100% waivers)",
-    "livingCost": "€700 - €900 / month",
-    "blockedAccount": "€6,720 / year (€560/month) required by Migri for student residence permit",
-    "psw": "2 Years Job Search Residence Permit (one of the most generous in Europe!)",
-    "ielts": "IELTS 6.5 (min 5.5 in writing) or TOEFL 92",
-    "cgpa": "Minimum 3.0/4.0; 3.4+ strongly positioned for Finland Scholarship award",
-    "visaDhaka": "Migri online application + VFS Dhaka biometric appointment",
-    "successTip": "Joint Application (Studyinfo.fi) takes place in January for August intake. Students can work up to 30 hours per week!"
-  },
-  "JPN": {
-    "nameEn": "Japan",
-    "nameBn": "জাপান",
-    "flag": "🇯🇵",
-    "continent": "Asia",
-    "capital": "Tokyo",
-    "tuition": "National universities: ¥535,800/yr (approx $3,500 USD) + 50% or 100% tuition exemption available for foreign students",
-    "livingCost": "¥80,000 - ¥120,000 / month (approx 65,000 - 95,000 BDT)",
-    "blockedAccount": "Sponsor bank balance of 15-20 Lakh BDT for COE (Certificate of Eligibility)",
-    "psw": "Designated Activities Visa for 1-2 years job hunting in Japan",
-    "ielts": "IELTS 6.0 - 6.5 for English-taught degree programs (SGU / Global 30)",
-    "cgpa": "Minimum 3.0+; MEXT Embassy Track requires high academic standing and written exam",
-    "visaDhaka": "Japanese Embassy Dhaka issues visa within 5-7 working days after receiving university COE",
-    "successTip": "MEXT Scholarship covers 100% tuition + ¥144,000/month stipend + return airfare! University recommendation track deadline is Dec-Jan."
-  },
-  "KOR": {
-    "nameEn": "South Korea",
-    "nameBn": "দক্ষিণ কোরিয়া",
-    "flag": "🇰🇷",
-    "continent": "Asia",
-    "capital": "Seoul",
-    "tuition": "$2,000 - $5,000 / semester (Very generous university scholarships 30%-100% based on GPA/TOPIK)",
-    "livingCost": "600,000 - 900,000 KRW / month",
-    "blockedAccount": "Approx $10,000 - $20,000 bank statement depending on whether university is inside Seoul",
-    "psw": "D-10 Job Seeker Visa for up to 2 years with point-based transition to E-7 work visa",
-    "ielts": "IELTS 5.5 - 6.5 for English programs, or TOPIK Level 3+ for Korean programs",
-    "cgpa": "Minimum 2.8+; GKS scholarship requires top 20% ranking (CGPA 3.3+)",
-    "visaDhaka": "Korean Embassy Dhaka (requires Apostille / Embassy legalisation of academic certificates)",
-    "successTip": "Global Korea Scholarship (GKS) covers 100% tuition, monthly 1,000,000 KRW stipend, 1 year Korean language training, and airfare."
-  },
-  "CAN": {
-    "nameEn": "Canada",
-    "nameBn": "কানাডা",
-    "flag": "🇨🇦",
-    "continent": "North America",
-    "capital": "Ottawa",
-    "tuition": "CAD $18,000 - $38,000 / year",
-    "livingCost": "CAD $1,200 - $1,800 / month",
-    "blockedAccount": "GIC (Guaranteed Investment Certificate) approx CAD $20,635 + first year tuition receipt",
-    "psw": "Up to 3 Years Post-Graduation Work Permit (PGWP)",
-    "ielts": "Strict IELTS 6.5 (no band below 6.0) for university admission & study permit",
-    "cgpa": "Minimum 3.0+; Graduate research positions offer RA/TA stipends",
-    "visaDhaka": "IRCC online application + VFS Dhaka biometric appointment",
-    "successTip": "Research-based Master's in STEM often come with funded supervisor packages. Vanier and Trudeaux scholarships available for PhD."
-  },
-  "AUS": {
-    "nameEn": "Australia",
-    "nameBn": "অস্ট্রেলিয়া",
-    "flag": "🇦🇺",
-    "continent": "Oceania",
-    "capital": "Canberra",
-    "tuition": "AUD $28,000 - $46,000 / year (Vice-Chancellor scholarships offer 20%-50% tuition reduction)",
-    "livingCost": "AUD $2,000 / month (annual requirement: AUD $29,710 for visa)",
-    "blockedAccount": "Demonstrated 1-year living cost + remaining tuition + travel in credible bank history",
-    "psw": "2 to 4 Years Temporary Graduate (subclass 485) visa based on qualification & regional campus",
-    "ielts": "IELTS 6.5 (min 6.0 in each band) or PTE 58-64",
-    "cgpa": "Bachelor: 2.8+ / Master: 3.0+ (Group of Eight universities expect 3.2+)",
-    "visaDhaka": "Subclass 500 online visa via ImmiAccount + biometrics at VFS Dhaka (Genuine Student GS audit)",
-    "successTip": "Australia Awards (AAS) is 100% funded for Bangladeshi mid-career professionals. RTP scholarships cover full PhD fees + $32k stipend."
-  },
-  "HUN": {
-    "nameEn": "Hungary",
-    "nameBn": "হাঙ্গেরি",
-    "flag": "🇭🇺",
-    "continent": "Europe",
-    "capital": "Budapest",
-    "tuition": "100% Free Tuition under Stipendium Hungaricum",
-    "livingCost": "€400 - €600 / month (Budapest slightly higher than Debrecen/Szeged/Pécs)",
-    "blockedAccount": "Stipendium Hungaricum awardees are exempt from bank solvency!",
-    "psw": "9 Months Study-to-Work visa for job seeking in Hungary",
-    "ielts": "IELTS 5.5 - 6.5 or institutional English test",
-    "cgpa": "Minimum 2.8/4.0; Competitive for BD Education Ministry quota: 3.2+",
-    "visaDhaka": "Hungarian Embassy New Delhi / Consular services in Dhaka (Excellence Global assists with paperwork)",
-    "successTip": "Stipendium Hungaricum is one of the most accessible full-funding schemes for BD students: 100% tuition + monthly stipend + dorm/housing subsidy + health insurance! Application deadline: mid-January via DreamApply & BD MoE."
-  },
-  "TUR": {
-    "nameEn": "Türkiye",
-    "nameBn": "তুরস্ক",
-    "flag": "🇹🇷",
-    "continent": "Europe/Asia",
-    "capital": "Ankara",
-    "tuition": "100% Free under Türkiye Bursları (Public university fees are very low: $300-$1,500/yr)",
-    "livingCost": "$250 - $450 / month",
-    "blockedAccount": "Türkiye Bursları winners are 100% exempt from financial deposits",
-    "psw": "Short-term residence permit for job seeking in Turkey",
-    "ielts": "English programs require IELTS 6.5; Turkish programs provide 1 year free language prep",
-    "cgpa": "Undergraduate: 70% marks (HSC GPA 3.5+); Masters: 75% (CGPA 3.0+); Medicine: 90%",
-    "visaDhaka": "Turkish Embassy Dhaka (Direct visa issuance upon presenting TB scholarship award letter)",
-    "successTip": "Türkiye Bursları offers 100% free tuition, monthly stipend, university dorm accommodation, health insurance, and round-trip flight tickets! Apply annually from Jan 10 to Feb 20."
-  },
-  "SAU": {
-    "nameEn": "Saudi Arabia",
-    "nameBn": "সৌদি আরব",
-    "flag": "🇸🇦",
-    "continent": "Asia",
-    "capital": "Riyadh",
-    "tuition": "100% Free Tuition for accepted international graduate students at top universities (KAUST, KFUPM, KSU)",
-    "livingCost": "Zero (Fully covered by scholarship stipends + free on-campus housing)",
-    "blockedAccount": "None required — universities provide full sponsorship",
-    "psw": "High demand for AI, Petroleum, Renewable Energy, and Biotech specialists in Vision 2030 initiatives",
-    "ielts": "IELTS 6.5 or TOEFL 79 for KAUST / KFUPM",
-    "cgpa": "Competitive: 3.3+ with strong math/research background",
-    "visaDhaka": "Saudi Embassy Dhaka visa section through university electronic visa (Wakala)",
-    "successTip": "KAUST Fellowship is one of the world's most generous awards: 100% tuition waiver + $20,000 to $30,000 annual living stipend + free private apartment + relocation flights + medical coverage!"
-  },
+import { readFileSync, writeFileSync } from "node:fs";
+
+const briefs = JSON.parse(readFileSync("app/data/country-briefs.json", "utf8"));
+
+const newBriefs = {
   "KAZ": {
     "nameEn": "Kazakhstan",
     "nameBn": "কাজাখস্তান",
@@ -580,9 +374,7 @@
     "blockedAccount": "Demonstrated 1-year living funds + tuition receipt",
     "psw": "Up to 3 Years Post-Study Work Visa",
     "ielts": "IELTS 6.5 (min 6.0) or PTE 58",
-    "cgpa": "Minimum 3.0/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.0/4.0"
   },
   "NOR": {
     "nameEn": "Norway",
@@ -595,9 +387,7 @@
     "blockedAccount": "NOK 151,690 deposited into Norwegian university bank account for UDI residence permit",
     "psw": "1 Year Job Seeker Residence Permit after Master's graduation",
     "ielts": "Strict IELTS 6.5 (min 6.0 in all components)",
-    "cgpa": "Minimum 3.2/4.0 (strict ECTS conversion)",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.2/4.0 (strict ECTS conversion)"
   },
   "DNK": {
     "nameEn": "Denmark",
@@ -610,9 +400,7 @@
     "blockedAccount": "Demonstrated living funds (approx DKK 6,820/month) for SIRI residence permit",
     "psw": "3 Years Post-Study Job Search Residence Permit (Establishment Card)",
     "ielts": "Strict IELTS 6.5 (min 6.0 in all bands)",
-    "cgpa": "Minimum 3.2/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.2/4.0"
   },
   "MEX": {
     "nameEn": "Mexico",
@@ -625,9 +413,7 @@
     "blockedAccount": "Exempt for AMEXCID scholarship winners",
     "psw": "Temporary resident permit extendable for employment",
     "ielts": "English programs accept IELTS 6.0; Spanish programs require DELE B2",
-    "cgpa": "Minimum 8.5/10 (CGPA 3.4/4.0 or 80% marks)",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 8.5/10 (CGPA 3.4/4.0 or 80% marks)"
   },
   "BRA": {
     "nameEn": "Brazil",
@@ -640,9 +426,7 @@
     "blockedAccount": "Exempt under GCUB-Mob and PEC-PG scholarships",
     "psw": "Post-study work authorization with employer sponsorship",
     "ielts": "IELTS 6.0 or English MOI; Portuguese CELPE-Bras language prep provided",
-    "cgpa": "Minimum 3.0/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.0/4.0"
   },
   "ARE": {
     "nameEn": "United Arab Emirates",
@@ -655,9 +439,7 @@
     "blockedAccount": "None required — university issues student visa sponsorship",
     "psw": "Golden Visa (10-year residency) available for top university graduates (GPA 3.8+)",
     "ielts": "IELTS 6.5 or TOEFL 90; GRE recommended for engineering",
-    "cgpa": "Minimum 3.2+; MBZUAI requires 3.5+ in CS/Data Science/Math",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.2+; MBZUAI requires 3.5+ in CS/Data Science/Math"
   },
   "QAT": {
     "nameEn": "Qatar",
@@ -670,9 +452,7 @@
     "blockedAccount": "None required — university provides full financial sponsorship",
     "psw": "High demand in engineering, logistics, finance, and sports science",
     "ielts": "IELTS 6.0 - 6.5 or TOEFL 80",
-    "cgpa": "HSC GPA 4.5+ (UG); CGPA 3.2+ (Graduate)",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "HSC GPA 4.5+ (UG); CGPA 3.2+ (Graduate)"
   },
   "CYP": {
     "nameEn": "Cyprus",
@@ -685,9 +465,7 @@
     "blockedAccount": "Bank statement showing approx €5,000 - €7,000",
     "psw": "Short-term post-study extensions available",
     "ielts": "IELTS 5.5 - 6.0 or university internal English placement test",
-    "cgpa": "HSC GPA 3.0+; Undergrad CGPA 2.5+",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "HSC GPA 3.0+; Undergrad CGPA 2.5+"
   },
   "MLT": {
     "nameEn": "Malta",
@@ -700,9 +478,7 @@
     "blockedAccount": "€25 - €30 per day of stay in student bank account for Identity Malta visa",
     "psw": "6 Months Job Search Residence Permit in EU Schengen zone",
     "ielts": "IELTS 6.0 (min 5.5) or institutional English certificate",
-    "cgpa": "Minimum 2.8/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 2.8/4.0"
   },
   "EST": {
     "nameEn": "Estonia",
@@ -715,9 +491,7 @@
     "blockedAccount": "Approx €350/month for TRP (Temporary Residence Permit)",
     "psw": "9 Months Post-study Job Search Visa with Europe's highest density of tech unicorns",
     "ielts": "IELTS 5.5 - 6.5 or TOEFL 72",
-    "cgpa": "Minimum 3.0/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.0/4.0"
   },
   "LVA": {
     "nameEn": "Latvia",
@@ -730,9 +504,7 @@
     "blockedAccount": "Demonstrated minimum wage funds (€700/month or €8,400/year)",
     "psw": "9 Months Schengen Job Search Residence Permit",
     "ielts": "IELTS 5.5 - 6.0 or university English online test",
-    "cgpa": "HSC GPA 3.0+; Undergrad CGPA 2.6+",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "HSC GPA 3.0+; Undergrad CGPA 2.6+"
   },
   "LTU": {
     "nameEn": "Lithuania",
@@ -745,9 +517,7 @@
     "blockedAccount": "Approx €400/month for TRP residence permit",
     "psw": "12 Months Job Search Residence Permit in EU",
     "ielts": "IELTS 5.5 - 6.0 or English MOI",
-    "cgpa": "Minimum 2.8/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 2.8/4.0"
   },
   "BRN": {
     "nameEn": "Brunei Darussalam",
@@ -760,9 +530,7 @@
     "blockedAccount": "Exempt for BDGS awardees",
     "psw": "Direct research and teaching opportunities",
     "ielts": "IELTS 6.0 or credit in English Language O-level/HSC",
-    "cgpa": "Minimum 3.0/4.0 or HSC GPA 4.0+",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.0/4.0 or HSC GPA 4.0+"
   },
   "SGP": {
     "nameEn": "Singapore",
@@ -775,9 +543,7 @@
     "blockedAccount": "Demonstrated living costs for Student's Pass (STP) via ICA",
     "psw": "1 Year Long-Term Visit Pass (LTVP) for university graduates seeking employment",
     "ielts": "IELTS 6.5 - 7.0 or TOEFL 90",
-    "cgpa": "Competitive: 3.5+ with strong quantitative background",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Competitive: 3.5+ with strong quantitative background"
   },
   "TWN": {
     "nameEn": "Taiwan",
@@ -790,9 +556,7 @@
     "blockedAccount": "Exempt for government and ICDF scholarship holders",
     "psw": "Work permit extension points system for foreign graduates",
     "ielts": "IELTS 5.5 - 6.5 or TOCFL Level 3",
-    "cgpa": "Minimum 3.0/4.0; Competitive for MOE: 3.4+",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.0/4.0; Competitive for MOE: 3.4+"
   },
   "UZB": {
     "nameEn": "Uzbekistan",
@@ -805,9 +569,7 @@
     "blockedAccount": "Minimal solvency proof ($2,000 - $3,000)",
     "psw": "Employment permit via university employer sponsorship",
     "ielts": "IELTS 5.5 or English MOI; Russian/Uzbek preparatory courses available",
-    "cgpa": "Minimum 2.8/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 2.8/4.0"
   },
   "GEO": {
     "nameEn": "Georgia",
@@ -820,9 +582,7 @@
     "blockedAccount": "Bank solvency statement of approx $3,500 - $5,000",
     "psw": "Temporary residence permit renewable for business/employment",
     "ielts": "No mandatory IELTS; Skype/Zoom interview conducted by university",
-    "cgpa": "HSC GPA 3.5+ (PCB for Medicine); Undergrad CGPA 2.8+",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "HSC GPA 3.5+ (PCB for Medicine); Undergrad CGPA 2.8+"
   },
   "LKA": {
     "nameEn": "Sri Lanka",
@@ -835,9 +595,7 @@
     "blockedAccount": "Exempt for Presidential Scholarship awardees",
     "psw": "Research and academic collaborations",
     "ielts": "English MOI certificate or IELTS 6.0",
-    "cgpa": "Minimum 3.0/4.0; HSC GPA 4.0+",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.0/4.0; HSC GPA 4.0+"
   },
   "MUS": {
     "nameEn": "Mauritius",
@@ -850,9 +608,7 @@
     "blockedAccount": "Exempt for scholarship holders",
     "psw": "Young Professional Occupation Permit (YPOP) for graduates",
     "ielts": "IELTS 6.0 or HSC English Grade B",
-    "cgpa": "Minimum 3.0/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.0/4.0"
   },
   "LUX": {
     "nameEn": "Luxembourg",
@@ -865,9 +621,7 @@
     "blockedAccount": "Approx €950/month deposited in university escrow or scholarship guarantee",
     "psw": "9 Months Job Search Residence Permit in Europe's richest financial center",
     "ielts": "IELTS 6.5 or TOEFL 90",
-    "cgpa": "Minimum 3.3/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.3/4.0"
   },
   "BLR": {
     "nameEn": "Belarus",
@@ -880,9 +634,7 @@
     "blockedAccount": "Minimal solvency proof ($2,500 - $3,500)",
     "psw": "Temporary residence permit extendable with employer sponsorship",
     "ielts": "No IELTS needed; 1-year Russian preparatory course or English MOI",
-    "cgpa": "Minimum 2.8/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 2.8/4.0"
   },
   "BGR": {
     "nameEn": "Bulgaria",
@@ -895,9 +647,7 @@
     "blockedAccount": "Approx €3,000 in student bank account for Type D visa",
     "psw": "9 Months Schengen Job Search Residence Permit",
     "ielts": "IELTS 6.0 or university English placement examination",
-    "cgpa": "HSC GPA 3.0+; Undergrad CGPA 2.8+",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "HSC GPA 3.0+; Undergrad CGPA 2.8+"
   },
   "HRV": {
     "nameEn": "Croatia",
@@ -910,9 +660,7 @@
     "blockedAccount": "Approx €350/month for Croatian temporary stay permit",
     "psw": "1 Year Job Search Residence Permit in Schengen area",
     "ielts": "IELTS 6.0 or English MOI certificate",
-    "cgpa": "Minimum 2.8/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 2.8/4.0"
   },
   "SVN": {
     "nameEn": "Slovenia",
@@ -925,9 +673,7 @@
     "blockedAccount": "Basic subsistence proof (~€400/month) for residence permit",
     "psw": "9 Months Job Search Residence Permit in EU Schengen zone",
     "ielts": "IELTS 6.0 - 6.5 or English MOI",
-    "cgpa": "Minimum 3.0/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.0/4.0"
   },
   "ISL": {
     "nameEn": "Iceland",
@@ -940,9 +686,7 @@
     "blockedAccount": "ISK 217,799/month (~$1,600/month) for Directorate of Immigration residence permit",
     "psw": "6 Months Job Search Residence Permit after graduation",
     "ielts": "IELTS 6.5 (min 6.0) or TOEFL 79",
-    "cgpa": "Minimum 3.0/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.0/4.0"
   },
   "GRC": {
     "nameEn": "Greece",
@@ -955,9 +699,7 @@
     "blockedAccount": "Approx €400/month in bank statement for student visa",
     "psw": "Job seeker extensions available under EU framework",
     "ielts": "IELTS 6.0 or English MOI",
-    "cgpa": "Minimum 2.8/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 2.8/4.0"
   },
   "BHR": {
     "nameEn": "Bahrain",
@@ -970,9 +712,7 @@
     "blockedAccount": "Exempt for scholarship holders",
     "psw": "Opportunities in Gulf banking, fintech, and logistics hubs",
     "ielts": "IELTS 5.5 - 6.0 or institutional test",
-    "cgpa": "Minimum 3.0/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.0/4.0"
   },
   "JOR": {
     "nameEn": "Jordan",
@@ -985,9 +725,7 @@
     "blockedAccount": "Exempt for bilateral scholarship awardees",
     "psw": "Regional NGO, clinical training, and MENA consultancy pathways",
     "ielts": "IELTS 5.5 or English MOI; Arabic prep for humanities",
-    "cgpa": "Minimum 2.8/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 2.8/4.0"
   },
   "KWT": {
     "nameEn": "Kuwait",
@@ -1000,9 +738,7 @@
     "blockedAccount": "None required — state full sponsorship",
     "psw": "High-skilled employment in energy, petrochemical, and tech sectors",
     "ielts": "IELTS 5.5 - 6.0 or internal Kuwait University exam",
-    "cgpa": "Minimum 3.0/4.0 or HSC GPA 4.0+",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.0/4.0 or HSC GPA 4.0+"
   },
   "LBN": {
     "nameEn": "Lebanon",
@@ -1015,9 +751,7 @@
     "blockedAccount": "Exempt for scholarship awardees",
     "psw": "Regional NGO, development, and international organization opportunities",
     "ielts": "IELTS 6.5 or TOEFL 80 for AUB / LAU",
-    "cgpa": "Minimum 3.2/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.2/4.0"
   },
   "OMN": {
     "nameEn": "Oman",
@@ -1030,9 +764,7 @@
     "blockedAccount": "None required — university full sponsorship",
     "psw": "Research and engineering roles in Oman Vision 2040 projects",
     "ielts": "IELTS 6.0 - 6.5",
-    "cgpa": "Minimum 3.2/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.2/4.0"
   },
   "PSE": {
     "nameEn": "Palestine",
@@ -1045,9 +777,7 @@
     "blockedAccount": "Exempt under bilateral quota",
     "psw": "Academic and humanitarian research collaborations",
     "ielts": "English MOI or Arabic language proficiency",
-    "cgpa": "Minimum 3.0/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.0/4.0"
   },
   "ISR": {
     "nameEn": "Israel",
@@ -1060,8 +790,20 @@
     "blockedAccount": "University fellowship guarantee letter",
     "psw": "Postdoctoral research visa extensions",
     "ielts": "IELTS 6.5 or TOEFL 85",
-    "cgpa": "Minimum 3.5/4.0",
-    "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
-    "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+    "cgpa": "Minimum 3.5/4.0"
   }
+};
+
+// Ensure all new briefs have visaDhaka and successTip if not specified
+for (const [iso, b] of Object.entries(newBriefs)) {
+  if (!b.visaDhaka) {
+    b.visaDhaka = `Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.`;
+  }
+  if (!b.successTip) {
+    b.successTip = `Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap.`;
+  }
+  briefs[iso] = { ...briefs[iso], ...b };
 }
+
+writeFileSync("app/data/country-briefs.json", JSON.stringify(briefs, null, 2));
+console.log("Successfully updated app/data/country-briefs.json with total entries:", Object.keys(briefs).length);

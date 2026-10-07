@@ -64,7 +64,32 @@ const aliasMap = {
   "romania": "ROU",
   "bulgaria": "BGR",
   "croatia": "HRV",
-  "malta": "MLT"
+  "malta": "MLT",
+  "kazakhstan": "KAZ",
+  "kyrgyzstan": "KGZ",
+  "azerbaijan": "AZE",
+  "egypt": "EGY",
+  "morocco": "MAR",
+  "serbia": "SRB",
+  "cuba": "CUB",
+  "pakistan": "PAK",
+  "mexico": "MEX",
+  "brazil": "BRA",
+  "uzbekistan": "UZB",
+  "georgia": "GEO",
+  "sri lanka": "LKA",
+  "mauritius": "MUS",
+  "luxembourg": "LUX",
+  "belarus": "BLR",
+  "bahrain": "BHR",
+  "jordan": "JOR",
+  "kuwait": "KWT",
+  "lebanon": "LBN",
+  "oman": "OMN",
+  "qatar": "QAT",
+  "palestine": "PSE",
+  "israel": "ISR",
+  "iceland": "ISL"
 };
 
 const worldByCode = {};
