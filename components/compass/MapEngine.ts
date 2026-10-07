@@ -163,7 +163,7 @@ export class MapRenderer {
   worldData: WorldData | null = null;
   paths: Record<string, Path2D> = {};
   theme: ThemeTokens = THEMES.midnight;
-  selectedCountries: Set<string> = new Set();
+  selectedCountry: string | null = null;
   hoveredCountry: string | null = null;
   hoveredUniversity: University | null = null;
   mode: "scholarships" | "universities" | "top100" = "scholarships";
@@ -172,6 +172,7 @@ export class MapRenderer {
   showProfileColors: boolean = false;
   arcPulsePhase: number = 0;
   animationFrameId: number | null = null;
+
 
   // Viewport transforms
   scale: number = 1;
@@ -251,7 +252,7 @@ export class MapRenderer {
     const baseLineWidth = 0.85 / this.scale;
 
     for (const f of this.worldData.f) {
-      const isSelected = this.selectedCountries.has(f.i);
+      const isSelected = this.selectedCountry === f.i;
       const isHovered = this.hoveredCountry === f.i;
       const isBangladesh = f.i === "BGD";
       const path = this.paths[f.i];
@@ -268,7 +269,7 @@ export class MapRenderer {
         // Profile Match Coloring Mode
         const tier = this.countryFundingTiers[f.i];
         const color = FUNDING_COLORS[tier] || FUNDING_COLORS.other;
-        ctx.fillStyle = color.fill;
+        ctx.fillStyle = isSelected || isHovered ? t.v1 : color.fill;
         ctx.fill(path);
         ctx.strokeStyle = isSelected || isHovered ? "#FFFFFF" : color.stroke;
         ctx.lineWidth = (isSelected || isHovered ? 1.6 : 0.85) / this.scale;
@@ -313,7 +314,7 @@ export class MapRenderer {
     // 3. Tiny Countries Marker Dots (Singapore, Malta, Cyprus, etc.)
     for (const f of this.worldData.f) {
       if (!f.sm || f.i === "BGD") continue;
-      const isSelected = this.selectedCountries.has(f.i);
+      const isSelected = this.selectedCountry === f.i;
       const isHovered = this.hoveredCountry === f.i;
 
       ctx.beginPath();
@@ -328,13 +329,11 @@ export class MapRenderer {
     // 4. Dhaka Home Marker & Radar Pulse
     this.drawDhakaOrigin(ctx, t);
 
-    // 5. Flight Arcs from Dhaka to Selected Destinations
-    if (this.selectedCountries.size > 0) {
-      for (const destId of this.selectedCountries) {
-        const dest = this.worldData.f.find((x) => x.i === destId);
-        if (dest && destId !== "BGD") {
-          this.drawFlightArc(ctx, DHAKA_COORD, dest.c, t);
-        }
+    // 5. Flight Arc from Dhaka to Selected Destination
+    if (this.selectedCountry && this.selectedCountry !== "BGD") {
+      const dest = this.worldData.f.find((x) => x.i === this.selectedCountry);
+      if (dest) {
+        this.drawFlightArc(ctx, DHAKA_COORD, dest.c, t);
       }
     }
 
@@ -342,6 +341,7 @@ export class MapRenderer {
     if (this.mode === "top100") {
       this.drawUniversityPins(ctx, t);
     }
+
 
     ctx.restore(); // restore map transform
     ctx.restore(); // restore canvas dpr
@@ -507,18 +507,14 @@ export class MapRenderer {
     return { country: null, university: null, isHome: false };
   }
 
-  toggleCountrySelection(iso: string) {
+  selectCountry(iso: string | null) {
     if (iso === "BGD") return; // Non-selectable as study abroad destination
-    if (this.selectedCountries.has(iso)) {
-      this.selectedCountries.delete(iso);
-    } else {
-      this.selectedCountries.add(iso);
-    }
+    this.selectedCountry = this.selectedCountry === iso ? null : iso;
     this.render();
   }
 
   clearSelection() {
-    this.selectedCountries.clear();
+    this.selectedCountry = null;
     this.render();
   }
 
@@ -545,6 +541,12 @@ export class MapRenderer {
     targetIntake: string;
     totalScholarshipsCount: number;
     totalUnivCount: number;
+    featuredScholarship?: {
+      name: string;
+      country: string;
+      coverage: string;
+      studyLevel?: string;
+    };
   }): string {
     if (!this.worldData) return "";
 
@@ -595,7 +597,7 @@ export class MapRenderer {
     for (const f of this.worldData.f) {
       const path = this.paths[f.i];
       if (!path) continue;
-      const isSelected = this.selectedCountries.has(f.i);
+      const isSelected = this.selectedCountry === f.i;
 
       if (f.i === "BGD") {
         ctx.fillStyle = "#059669";
@@ -615,10 +617,10 @@ export class MapRenderer {
       }
     }
 
-    // Flight arcs from Dhaka
-    for (const destId of this.selectedCountries) {
-      const dest = this.worldData.f.find((x) => x.i === destId);
-      if (dest && destId !== "BGD") {
+    // Flight arc from Dhaka
+    if (this.selectedCountry && this.selectedCountry !== "BGD") {
+      const dest = this.worldData.f.find((x) => x.i === this.selectedCountry);
+      if (dest) {
         const [x0, y0] = DHAKA_COORD;
         const [x2, y2] = dest.c;
         const mx = (x0 + x2) / 2;
@@ -636,27 +638,44 @@ export class MapRenderer {
     ctx.restore();
 
     // 4. Bottom Statistics Ribbon
-    const bottomY = expH - 85;
-    ctx.fillStyle = "rgba(30, 44, 58, 0.85)";
-    ctx.fillRect(60, bottomY, expW - 120, 60);
+    const bottomY = expH - 95;
+    ctx.fillStyle = "rgba(30, 44, 58, 0.9)";
+    ctx.fillRect(60, bottomY, expW - 120, 75);
 
-    ctx.strokeStyle = "rgba(245, 176, 65, 0.3)";
-    ctx.strokeRect(60, bottomY, expW - 120, 60);
+    ctx.strokeStyle = "rgba(245, 176, 65, 0.4)";
+    ctx.strokeRect(60, bottomY, expW - 120, 75);
 
-    ctx.fillStyle = "#F5B041";
-    ctx.font = "bold 18px Inter, sans-serif";
-    const selectedCount = this.selectedCountries.size;
-    ctx.fillText(
-      `🎯 ${selectedCount} Target Destinations  •  💰 ${options.totalScholarshipsCount} Verified Awards  •  🏛️ ${options.totalUnivCount} Top Universities`,
-      90,
-      bottomY + 36,
-    );
+    if (options.featuredScholarship) {
+      ctx.fillStyle = "#F5B041";
+      ctx.font = "bold 18px Inter, sans-serif";
+      ctx.fillText(
+        `🎯 Target Goal: ${options.featuredScholarship.name} (${options.featuredScholarship.country})`,
+        85,
+        bottomY + 30,
+      );
+
+      ctx.fillStyle = "#E2E8F0";
+      ctx.font = "500 14px Inter, sans-serif";
+      ctx.fillText(
+        `💰 Funding: ${options.featuredScholarship.coverage}  •  🎓 Level: ${options.featuredScholarship.studyLevel || "All Levels"}  •  Intake: ${options.targetIntake}`,
+        85,
+        bottomY + 56,
+      );
+    } else {
+      ctx.fillStyle = "#F5B041";
+      ctx.font = "bold 18px Inter, sans-serif";
+      ctx.fillText(
+        `🎯 Study Abroad Blueprint  •  💰 ${options.totalScholarshipsCount} Verified Awards  •  🏛️ ${options.totalUnivCount} Top Universities`,
+        85,
+        bottomY + 45,
+      );
+    }
 
     // EG Watermark
     ctx.fillStyle = "#64748B";
     ctx.font = "500 13px Inter, sans-serif";
     ctx.textAlign = "right";
-    ctx.fillText("Excellence Global Consultancy  •  egconsultancy.com.bd", expW - 80, bottomY + 36);
+    ctx.fillText("Excellence Global Consultancy  •  egconsultancy.com.bd", expW - 80, bottomY + 45);
 
     return offCanvas.toDataURL("image/png");
   }

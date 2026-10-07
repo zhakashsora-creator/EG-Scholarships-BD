@@ -292,11 +292,18 @@ test("EG Global Study Compass interactive map app and data assets are available 
   assert.match(compassPage, /compass-hud/);
   assert.match(compassPage, /Match My Profile/);
   assert.match(compassPage, /Download My Map/);
+  assert.match(compassPage, /View details/);
+  assert.doesNotMatch(compassPage, /View match analysis/);
+  assert.match(compassPage, /isScholarshipMatch/);
+  assert.match(compassPage, /featuredScholarship/);
   assert.match(mapRedirect, /redirect\("\/compass"\)/);
   assert.match(mapEngine, /DHAKA_COORD/);
   assert.match(mapEngine, /drawDhakaOrigin/);
   assert.match(mapEngine, /generateExportCard/);
+  assert.match(mapEngine, /selectCountry/);
   assert.match(compassCss, /\.hudRibbon/);
+  assert.match(compassCss, /\.welcomeHero/);
+  assert.match(compassCss, /\.detailModalBox/);
 
   const world = JSON.parse(worldData);
   assert.ok(world.f.length >= 190);
