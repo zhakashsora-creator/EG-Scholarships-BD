@@ -1063,5 +1063,20 @@
     "cgpa": "Minimum 3.5/4.0",
     "visaDhaka": "Processed via designated Embassy/VFS mission or electronic visa with university sponsorship letter.",
     "successTip": "Apply early with verified academic transcripts and strong statement of purpose. Contact Excellence Global team for document audit and roadmap."
+  },
+  "HKG": {
+    "nameEn": "Hong Kong",
+    "nameBn": "হংকং",
+    "flag": "🇭🇰",
+    "continent": "Asia",
+    "capital": "Victoria",
+    "tuition": "Full Tuition Waiver under HKPFS / HKD 140,000 - 180,000 / year for self-funded",
+    "livingCost": "$600 - $900 / month (approx 72,000 - 110,000 BDT)",
+    "blockedAccount": "Bank solvency showing 1st year tuition + HKD 60,000 living costs (Exempt for HKPFS / full scholarship holders)",
+    "psw": "2 Years IANG Visa (Immigration Arrangements for Non-local Graduates) with no job offer required at graduation",
+    "ielts": "IELTS 6.5 (min 5.5-6.0 in each subscore) or TOEFL 80-85+",
+    "cgpa": "HSC GPA 5.0 for UG Scholarships; Undergrad CGPA 3.5+ for HKPFS / PhD Studentships",
+    "visaDhaka": "Chinese Visa Application Centre / Chinese Embassy in Dhaka with HK Immigration Department e-Visa",
+    "successTip": "Hong Kong universities (HKU #17, CUHK #36, HKUST #47) offer world-class English-medium education and the highest PhD stipends in Asia (HKD 337,200/yr). 2-year post-study IANG work visa allows effortless transition to global finance, AI, and multinational tech firms."
   }
 }

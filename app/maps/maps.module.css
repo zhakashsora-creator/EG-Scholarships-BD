@@ -1,0 +1,1367 @@
+/* Scoped CSS for EG Scholarships — Global Study Compass */
+
+.compassShell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--cp-bg, #16222F);
+  color: var(--cp-text, #F8FAFC);
+  font-family: var(--font-inter, system-ui, -apple-system, sans-serif);
+  overflow-x: hidden;
+}
+
+/* 1. Header Navigation */
+.navHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(22, 34, 47, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brandWrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brandLogo {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+.brandTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brandBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #F5B041;
+  color: #16222F;
+  padding: 2px 7px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+}
+
+.brandSub {
+  font-size: 0.78rem;
+  color: #94A3B8;
+  font-weight: 500;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+.actionBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.actionBtnPrimary {
+  background: #F5B041;
+  color: #16222F;
+  border-color: #F5B041;
+}
+
+.actionBtnPrimary:hover {
+  background: #E59866;
+  border-color: #E59866;
+  color: #16222F;
+}
+
+/* Theme Swatches */
+.themeWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+}
+
+.themeSwatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.themeSwatch:hover {
+  transform: scale(1.15);
+}
+
+.themeSwatchActive {
+  border-color: #F5B041;
+  box-shadow: 0 0 8px rgba(245, 176, 65, 0.6);
+}
+
+/* 2. Zero-Overlap Dynamic HUD Ribbon */
+.hudRibbon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  background: var(--cp-hud-bg, #1E2C3A);
+  border-bottom: 1px solid var(--cp-hud-border, #34495E);
+  min-height: 52px;
+  transition: background-color 0.2s, border-color 0.2s;
+  z-index: 50;
+}
+
+.hudLeft {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.hudFlag {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.hudCountryName {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.hudCountryBn {
+  font-size: 0.85rem;
+  color: #94A3B8;
+  margin-left: 6px;
+  font-weight: 600;
+}
+
+.hudPills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hudPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.08);
+  color: #E2E8F0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hudPillGold {
+  background: rgba(245, 176, 65, 0.15);
+  color: #F5B041;
+  border-color: rgba(245, 176, 65, 0.3);
+}
+
+.hudPillGreen {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10B981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.hudPillBlue {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38BDF8;
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.hudPrompt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #94A3B8;
+}
+
+.hudPrompt strong {
+  color: #F5B041;
+}
+
+.hudRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 3. Main Workspace Area (Split Screen) */
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 430px;
+  flex: 1;
+  position: relative;
+  background: var(--cp-bg, #16222F);
+}
+
+@media (max-width: 1100px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Map Column */
+.mapColumn {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mapToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px;
+  background: rgba(30, 44, 58, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.modeTabs {
+  display: flex;
+  gap: 4px;
+}
+
+.tabBtn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94A3B8;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tabBtn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tabBtnActive {
+  background: #F5B041;
+  color: #16222F;
+  border-color: #F5B041;
+}
+
+.canvasWrap {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.mapCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  cursor: default;
+  border-radius: 8px;
+}
+
+/* Map Legend / Footer */
+.mapFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: rgba(22, 34, 47, 0.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.78rem;
+}
+
+.legendItems {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #CBD5E1;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.selectionPill {
+  background: rgba(245, 176, 65, 0.15);
+  color: #F5B041;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.clearBtn {
+  background: none;
+  border: none;
+  color: #94A3B8;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.75rem;
+  margin-left: 6px;
+}
+
+/* 4. Right Side Window Panel */
+.windowPanel {
+  display: flex;
+  flex-direction: column;
+  background: var(--cp-hud-bg, #1E2C3A);
+  height: calc(100vh - 120px);
+  position: sticky;
+  top: 60px;
+  overflow-y: auto;
+}
+
+.panelHeader {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(30, 44, 58, 0.6);
+}
+
+.countryHero {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.heroFlag {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.heroTitle {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.heroBn {
+  font-size: 0.95rem;
+  color: #94A3B8;
+  margin-left: 8px;
+  font-weight: 600;
+}
+
+.heroSub {
+  font-size: 0.8rem;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+/* BD Perspective Brief Box */
+.briefBox {
+  margin: 16px 20px;
+  padding: 14px 16px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(245, 176, 65, 0.2);
+  border-radius: 10px;
+}
+
+.briefHeading {
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #F5B041;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.briefGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
+.briefRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #CBD5E1;
+  line-height: 1.4;
+}
+
+.briefRow b {
+  color: #F8FAFC;
+  min-width: 100px;
+  font-size: 0.78rem;
+}
+
+.briefTip {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  font-size: 0.78rem;
+  color: #94A3B8;
+  font-style: italic;
+}
+
+/* Cards List */
+.panelContent {
+  padding: 0 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94A3B8;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Scholarship Card */
+.scholarshipCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 14px;
+  transition: all 0.2s ease;
+}
+
+.scholarshipCard:hover {
+  border-color: rgba(245, 176, 65, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-1px);
+}
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.cardName {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.3;
+}
+
+.tierBadge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.tierFullyFunded {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10B981;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.tierFullTuition {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38BDF8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.tierPartial {
+  background: rgba(245, 158, 11, 0.2);
+  color: #F59E0B;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.tierOther {
+  background: rgba(148, 163, 184, 0.2);
+  color: #94A3B8;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.cardProvider {
+  font-size: 0.78rem;
+  color: #94A3B8;
+  margin-bottom: 6px;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.74rem;
+  color: #CBD5E1;
+  margin-bottom: 10px;
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.cardBtn {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cardBtnPrimary {
+  background: rgba(245, 176, 65, 0.2);
+  color: #F5B041;
+  border: 1px solid rgba(245, 176, 65, 0.4);
+}
+
+.cardBtnPrimary:hover {
+  background: #F5B041;
+  color: #16222F;
+}
+
+.cardBtnSecondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #CBD5E1;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cardBtnSecondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+}
+
+/* University Card */
+.univCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  transition: all 0.2s;
+}
+
+.univCard:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.univRank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: rgba(245, 176, 65, 0.15);
+  color: #F5B041;
+  font-weight: 900;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  border: 1px solid rgba(245, 176, 65, 0.3);
+}
+
+.univRank small {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.univInfo {
+  flex: 1;
+}
+
+.univName {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.3;
+}
+
+.univCity {
+  font-size: 0.76rem;
+  color: #94A3B8;
+  margin-top: 2px;
+}
+
+.univStrengths {
+  font-size: 0.74rem;
+  color: #CBD5E1;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.univPsw {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.12);
+  color: #38BDF8;
+}
+
+/* Modals & Drawers */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modalBox {
+  background: #1E2C3A;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 650px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.modalHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: #94A3B8;
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.closeBtn:hover {
+  color: #FFFFFF;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formGroup label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #CBD5E1;
+}
+
+.formGroup select,
+.formGroup input {
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(15, 23, 42, 0.6);
+  color: #FFFFFF;
+  font-size: 0.88rem;
+  font-family: inherit;
+}
+
+.formGroup select:focus,
+.formGroup input:focus {
+  outline: none;
+  border-color: #F5B041;
+}
+
+.exportPreview {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+}
+
+/* ==========================================================================
+   4. Welcome / Idle Panel Styling (When No Country is Selected)
+   ========================================================================== */
+.welcomeWrap {
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.welcomeHero {
+  background: linear-gradient(135deg, rgba(245, 176, 65, 0.12) 0%, rgba(52, 152, 219, 0.08) 100%);
+  border: 1px solid rgba(245, 176, 65, 0.25);
+  border-radius: 12px;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.welcomeHeroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #F5B041;
+  background: rgba(245, 176, 65, 0.15);
+  padding: 3px 10px;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.welcomeHeroTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.welcomeHeroSub {
+  font-size: 0.82rem;
+  color: #CBD5E1;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.welcomeHeroMotto {
+  font-size: 0.76rem;
+  color: #F5B041;
+  font-weight: 600;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* Key Stats Grid */
+.welcomeStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.welcomeStatCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.welcomeStatNum {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #F5B041;
+}
+
+.welcomeStatLabel {
+  font-size: 0.72rem;
+  color: #94A3B8;
+  font-weight: 500;
+}
+
+/* 3 Easy Steps Walkthrough */
+.welcomeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.welcomeSectionTitle {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #CBD5E1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.welcomeStepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.welcomeStepItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: #94A3B8;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.welcomeStepNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(52, 152, 219, 0.2);
+  color: #38BDF8;
+  font-weight: 800;
+  font-size: 0.72rem;
+  flex-shrink: 0;
+}
+
+.welcomeStepItem strong {
+  color: #F8FAFC;
+}
+
+/* Quick Explore Popular Destinations Chips */
+.welcomeChipsWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.welcomeChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.04);
+  color: #E2E8F0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.welcomeChip:hover {
+  background: rgba(245, 176, 65, 0.15);
+  border-color: rgba(245, 176, 65, 0.4);
+  color: #F5B041;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   5. Scholarship Detail In-Page Modal (Center Screen)
+   ========================================================================== */
+.detailModalBox {
+  background: #1E2C3A;
+  border: 1px solid rgba(245, 176, 65, 0.35);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 680px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detailHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detailTitleWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detailTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.detailProvider {
+  font-size: 0.82rem;
+  color: #94A3B8;
+  font-weight: 500;
+}
+
+.detailMetaPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.detailMetaPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+  color: #CBD5E1;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.detailSections {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detailSectionCard {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detailSectionHeader {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #F5B041;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.detailSectionBody {
+  font-size: 0.84rem;
+  color: #E2E8F0;
+  line-height: 1.5;
+}
+
+.detailActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ==========================================================================
+   6. Match My Profile Filter Banner & Empty States
+   ========================================================================== */
+.matchBanner {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.matchBannerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.matchBannerText {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #A7F3D0;
+}
+
+.matchToggleBtn {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.matchToggleBtn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.noMatchNotice {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  color: #94A3B8;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+
+/* ==========================================================================
+   7. Zoom Controls Overlay (Canvas)
+   ========================================================================== */
+.zoomControls {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  background: rgba(22, 34, 47, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  z-index: 25;
+}
+
+.zoomBtn {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  color: #FFFFFF;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.zoomBtn:hover {
+  background: rgba(245, 176, 65, 0.25);
+  border-color: #F5B041;
+  color: #F5B041;
+  transform: scale(1.05);
+}
+
+.zoomBtn:active {
+  transform: scale(0.95);
+}
+
+.zoomBadge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #F5B041;
+  letter-spacing: 0.02em;
+  padding: 2px 0;
+  user-select: none;
+}
+
+/* ==========================================================================
+   8. Global Funding Filter Bar
+   ========================================================================== */
+.fundingFilterBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  background: rgba(30, 44, 58, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.fundingFilterLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94A3B8;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.fundingFilterPills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.fundingFilterPill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #CBD5E1;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.fundingFilterPill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+}
+
+.fundingFilterPillActive {
+  background: #F5B041 !important;
+  color: #16222F !important;
+  border-color: #F5B041 !important;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(245, 176, 65, 0.35);
+}
+
+.fundingFilterPillGreenActive {
+  background: #10B981 !important;
+  color: #FFFFFF !important;
+  border-color: #10B981 !important;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+}
+
+.fundingFilterPillBlueActive {
+  background: #38BDF8 !important;
+  color: #0F172A !important;
+  border-color: #38BDF8 !important;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
+}
+
+.fundingFilterPillAmberActive {
+  background: #F59E0B !important;
+  color: #16222F !important;
+  border-color: #F59E0B !important;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+}
+
+/* ==========================================================================
+   9. Country Empty State (0 Scholarships)
+   ========================================================================== */
+.emptyCountryCard {
+  background: rgba(30, 44, 58, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 22px;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.emptyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(230, 126, 34, 0.18);
+  color: #F5B041;
+  border: 1px solid rgba(245, 176, 65, 0.3);
+  align-self: flex-start;
+}
+
+.emptyTitle {
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.emptyText {
+  font-size: 0.85rem;
+  color: #CBD5E1;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.emptyGuidanceBox {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.emptyGuidanceTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #F5B041;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.emptyGuidanceText {
+  font-size: 0.78rem;
+  color: #94A3B8;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.emptyChipsWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.emptyChip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.emptyChip:hover {
+  background: #F5B041;
+  color: #16222F;
+  border-color: #F5B041;
+}
+
+.emptyCtaBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: #059669;
+  color: #FFFFFF;
+  text-decoration: none;
+  border: 1px solid #10B981;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.emptyCtaBtn:hover {
+  background: #10B981;
+  transform: translateY(-1px);
+}

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function MapRedirectPage() {
-  redirect("/compass");
+  redirect("/maps");
 }

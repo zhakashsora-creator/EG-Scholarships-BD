@@ -276,34 +276,43 @@ test("Best Finds filters are shareable and complete results paginate without cha
   assert.doesNotMatch(dashboard, /matches\.slice\(0,\s*10\)/);
 });
 
-test("EG Global Study Compass interactive map app and data assets are available and integrated", async () => {
-  const [compassPage, mapRedirect, mapEngine, compassCss, worldData, geoIndex, briefs, univs] = await Promise.all([
+test("EG Global Study Maps interactive map app and data assets are available and integrated", async () => {
+  const [mapsPage, compassRedirect, mapRedirect, mapEngine, mapsCss, worldData, geoIndex, briefs, univs] = await Promise.all([
+    readFile(new URL("../app/maps/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/compass/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/map/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../components/compass/MapEngine.ts", import.meta.url), "utf8"),
-    readFile(new URL("../app/compass/compass.module.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/maps/maps.module.css", import.meta.url), "utf8"),
     readFile(new URL("../public/world.json", import.meta.url), "utf8"),
     readFile(new URL("../app/data/geo-scholarship-index.json", import.meta.url), "utf8"),
     readFile(new URL("../app/data/country-briefs.json", import.meta.url), "utf8"),
     readFile(new URL("../app/data/universities.json", import.meta.url), "utf8"),
   ]);
 
-  assert.match(compassPage, /GlobalStudyCompassPage/);
-  assert.match(compassPage, /compass-hud/);
-  assert.match(compassPage, /Match My Profile/);
-  assert.match(compassPage, /Download My Map/);
-  assert.match(compassPage, /View details/);
-  assert.doesNotMatch(compassPage, /View match analysis/);
-  assert.match(compassPage, /isScholarshipMatch/);
-  assert.match(compassPage, /featuredScholarship/);
-  assert.match(mapRedirect, /redirect\("\/compass"\)/);
+  assert.match(mapsPage, /GlobalStudyMapsPage/);
+  assert.match(mapsPage, /compass-hud/);
+  assert.match(mapsPage, /Match My Profile/);
+  assert.match(mapsPage, /Download My Map/);
+  assert.match(mapsPage, /View details/);
+  assert.doesNotMatch(mapsPage, /View match analysis/);
+  assert.match(mapsPage, /isScholarshipMatch/);
+  assert.match(mapsPage, /featuredScholarship/);
+  assert.match(mapsPage, /fundingFilter/);
+  assert.match(mapsPage, /zoomControls/);
+  assert.match(compassRedirect, /redirect\("\/maps"\)/);
+  assert.match(mapRedirect, /redirect\("\/maps"\)/);
   assert.match(mapEngine, /DHAKA_COORD/);
   assert.match(mapEngine, /drawDhakaOrigin/);
   assert.match(mapEngine, /generateExportCard/);
   assert.match(mapEngine, /selectCountry/);
-  assert.match(compassCss, /\.hudRibbon/);
-  assert.match(compassCss, /\.welcomeHero/);
-  assert.match(compassCss, /\.detailModalBox/);
+  assert.match(mapEngine, /zoomIn/);
+  assert.match(mapEngine, /activeFundingFilter/);
+  assert.match(mapsCss, /\.hudRibbon/);
+  assert.match(mapsCss, /\.welcomeHero/);
+  assert.match(mapsCss, /\.detailModalBox/);
+  assert.match(mapsCss, /\.zoomControls/);
+  assert.match(mapsCss, /\.fundingFilterBar/);
+  assert.match(mapsCss, /\.emptyCountryCard/);
 
   const world = JSON.parse(worldData);
   assert.ok(world.f.length >= 190);

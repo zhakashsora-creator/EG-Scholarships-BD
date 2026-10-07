@@ -174,11 +174,19 @@ export class MapRenderer {
   animationFrameId: number | null = null;
 
 
-  // Viewport transforms
+  // Viewport transforms & zoom controls
+  baseScale: number = 1;
+  baseOffsetX: number = 0;
+  baseOffsetY: number = 10;
+  zoomLevel: number = 1;
+  panX: number = 0;
+  panY: number = 0;
   scale: number = 1;
   offsetX: number = 0;
   offsetY: number = 0;
   dpr: number = 1;
+  activeFundingFilter: "all" | "fully_funded" | "full_tuition" | "partial" = "all";
+  geoIndexData: Record<string, any> = {};
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -206,11 +214,26 @@ export class MapRenderer {
     this.countryFundingTiers = tiers;
   }
 
+  setGeoIndexData(data: Record<string, any>) {
+    this.geoIndexData = data;
+  }
+
+  setFundingFilter(filter: "all" | "fully_funded" | "full_tuition" | "partial") {
+    this.activeFundingFilter = filter;
+    this.render();
+  }
+
   setTheme(themeId: string) {
     if (THEMES[themeId]) {
       this.theme = THEMES[themeId];
       this.render();
     }
+  }
+
+  updateTransform() {
+    this.scale = this.baseScale * this.zoomLevel;
+    this.offsetX = this.baseOffsetX + this.panX;
+    this.offsetY = this.baseOffsetY + this.panY;
   }
 
   resize() {
@@ -222,10 +245,67 @@ export class MapRenderer {
     this.canvas.width = width * this.dpr;
     this.canvas.height = height * this.dpr;
 
-    this.scale = width / this.worldData.w;
-    this.offsetX = 0;
-    this.offsetY = 10;
+    this.baseScale = width / this.worldData.w;
+    this.baseOffsetX = 0;
+    this.baseOffsetY = 10;
+    this.updateTransform();
     this.render();
+  }
+
+  zoomIn(factor: number = 1.25, focal?: [number, number]): number {
+    const nextZoom = Math.min(4.5, this.zoomLevel * factor);
+    if (focal) {
+      const [fx, fy] = focal;
+      const prevScale = this.scale;
+      const newScale = this.baseScale * nextZoom;
+      this.panX = fx - (fx - this.offsetX) * (newScale / prevScale) - this.baseOffsetX;
+      this.panY = fy - (fy - this.offsetY) * (newScale / prevScale) - this.baseOffsetY;
+    }
+    this.zoomLevel = nextZoom;
+    this.updateTransform();
+    this.render();
+    return Math.round(this.zoomLevel * 100);
+  }
+
+  zoomOut(factor: number = 1.25, focal?: [number, number]): number {
+    const nextZoom = Math.max(0.85, this.zoomLevel / factor);
+    if (nextZoom <= 1.05) {
+      this.zoomLevel = 1.0;
+      this.panX = 0;
+      this.panY = 0;
+    } else if (focal) {
+      const [fx, fy] = focal;
+      const prevScale = this.scale;
+      const newScale = this.baseScale * nextZoom;
+      this.panX = fx - (fx - this.offsetX) * (newScale / prevScale) - this.baseOffsetX;
+      this.panY = fy - (fy - this.offsetY) * (newScale / prevScale) - this.baseOffsetY;
+      this.zoomLevel = nextZoom;
+    } else {
+      this.zoomLevel = nextZoom;
+    }
+    this.updateTransform();
+    this.render();
+    return Math.round(this.zoomLevel * 100);
+  }
+
+  resetZoom(): number {
+    this.zoomLevel = 1.0;
+    this.panX = 0;
+    this.panY = 0;
+    this.updateTransform();
+    this.render();
+    return 100;
+  }
+
+  pan(dx: number, dy: number) {
+    this.panX += dx;
+    this.panY += dy;
+    this.updateTransform();
+    this.render();
+  }
+
+  getZoomPercent(): number {
+    return Math.round(this.zoomLevel * 100);
   }
 
   render() {
@@ -301,6 +381,30 @@ export class MapRenderer {
         ctx.strokeStyle = "#FFFFFF";
         ctx.lineWidth = 1.5 / this.scale;
         ctx.stroke(path);
+      } else if (this.activeFundingFilter !== "all") {
+        const geo = this.geoIndexData[f.i];
+        let hasTier = false;
+        if (geo) {
+          if (this.activeFundingFilter === "fully_funded") hasTier = (geo.fullyFundedCount || 0) > 0;
+          else if (this.activeFundingFilter === "full_tuition") hasTier = (geo.fullTuitionCount || 0) > 0;
+          else if (this.activeFundingFilter === "partial") hasTier = (geo.partialCount || 0) > 0;
+        }
+
+        if (hasTier) {
+          const tierColor = FUNDING_COLORS[this.activeFundingFilter] || FUNDING_COLORS.fully_funded;
+          ctx.fillStyle = tierColor.fill;
+          ctx.fill(path);
+          ctx.strokeStyle = tierColor.stroke;
+          ctx.lineWidth = 1.3 / this.scale;
+          ctx.stroke(path);
+        } else {
+          // Dimmed non-matching countries
+          ctx.fillStyle = t.id === "daylight" || t.id === "emerald" ? "#EEF2F6" : "#1B2836";
+          ctx.fill(path);
+          ctx.strokeStyle = t.stroke;
+          ctx.lineWidth = 0.5 / this.scale;
+          ctx.stroke(path);
+        }
       } else {
         // Default Country
         ctx.fillStyle = t.land;
@@ -316,13 +420,30 @@ export class MapRenderer {
       if (!f.sm || f.i === "BGD") continue;
       const isSelected = this.selectedCountry === f.i;
       const isHovered = this.hoveredCountry === f.i;
+      const geo = this.geoIndexData[f.i];
+
+      let dotColor = t.dot;
+      let dotSize = 4;
+      if (this.activeFundingFilter !== "all" && geo) {
+        let hasTier = false;
+        if (this.activeFundingFilter === "fully_funded") hasTier = (geo.fullyFundedCount || 0) > 0;
+        else if (this.activeFundingFilter === "full_tuition") hasTier = (geo.fullTuitionCount || 0) > 0;
+        else if (this.activeFundingFilter === "partial") hasTier = (geo.partialCount || 0) > 0;
+        if (hasTier) {
+          dotColor = FUNDING_COLORS[this.activeFundingFilter].fill;
+          dotSize = 5.5;
+        } else {
+          dotColor = "rgba(100, 116, 139, 0.4)";
+          dotSize = 2.8;
+        }
+      }
 
       ctx.beginPath();
-      ctx.arc(f.c[0], f.c[1], isSelected || isHovered ? 5.5 : 4, 0, Math.PI * 2);
-      ctx.fillStyle = isSelected || isHovered ? t.v1 : t.dot;
+      ctx.arc(f.c[0], f.c[1], isSelected || isHovered ? 6 : dotSize, 0, Math.PI * 2);
+      ctx.fillStyle = isSelected || isHovered ? t.v1 : dotColor;
       ctx.fill();
       ctx.lineWidth = 1.5 / this.scale;
-      ctx.strokeStyle = t.halo;
+      ctx.strokeStyle = isSelected || isHovered ? "#FFFFFF" : t.halo;
       ctx.stroke();
     }
 
