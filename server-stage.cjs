@@ -5,7 +5,9 @@ const { existsSync, readFileSync, writeFileSync } = require("node:fs");
 const { join } = require("node:path");
 const { execFileSync } = require("node:child_process");
 
-const archiveName = existsSync(join(__dirname, "next-build-5560853.zip"))
+const archiveName = existsSync(join(__dirname, "next-build-268d5df.zip"))
+  ? "next-build-268d5df.zip"
+  : existsSync(join(__dirname, "next-build-5560853.zip"))
   ? "next-build-5560853.zip"
   : existsSync(join(__dirname, "next-build-18de7f0.zip"))
   ? "next-build-18de7f0.zip"
@@ -34,7 +36,7 @@ const archiveName = existsSync(join(__dirname, "next-build-5560853.zip"))
   : existsSync(join(__dirname, "namecheap-linux-build.zip"))
   ? "namecheap-linux-build.zip"
   : "next-build-803a1bf.zip";
-const expectedDeployment = "5560853 Linux hosting build";
+const expectedDeployment = "268d5df Linux hosting build";
 
 const archivePath = join(__dirname, archiveName);
 const deploymentMarker = join(__dirname, ".next", "DEPLOY_COMMIT");
