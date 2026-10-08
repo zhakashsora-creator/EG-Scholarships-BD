@@ -488,11 +488,11 @@ export class MapRenderer {
     ctx.lineWidth = 1.5 / this.scale;
     ctx.stroke();
 
-    // Dhaka Home Label
+    // BD Origin Label
     ctx.font = `bold ${Math.max(9, Math.round(11 / this.scale))}px Inter, sans-serif`;
     ctx.fillStyle = "#F5B041";
     ctx.textAlign = "center";
-    ctx.fillText("ঢাকা (HOME)", dx, dy - 12);
+    ctx.fillText("BD", dx, dy - 10);
     ctx.restore();
   }
 
@@ -738,11 +738,25 @@ export class MapRenderer {
       }
     }
 
-    // Flight arc from Dhaka
+    // BD Origin Marker & Label on Export Card
+    const [x0, y0] = DHAKA_COORD;
+    ctx.beginPath();
+    ctx.arc(x0, y0, 4 / mapScale, 0, Math.PI * 2);
+    ctx.fillStyle = "#E11D48";
+    ctx.fill();
+    ctx.strokeStyle = "#FFFFFF";
+    ctx.lineWidth = 1.4 / mapScale;
+    ctx.stroke();
+
+    ctx.font = `bold ${Math.round(11 / mapScale)}px Inter, sans-serif`;
+    ctx.fillStyle = "#F5B041";
+    ctx.textAlign = "center";
+    ctx.fillText("BD", x0, y0 - 8 / mapScale);
+
+    // Flight arc from BD
     if (this.selectedCountry && this.selectedCountry !== "BGD") {
       const dest = this.worldData.f.find((x) => x.i === this.selectedCountry);
       if (dest) {
-        const [x0, y0] = DHAKA_COORD;
         const [x2, y2] = dest.c;
         const mx = (x0 + x2) / 2;
         const my = (y0 + y2) / 2;
@@ -752,11 +766,96 @@ export class MapRenderer {
         ctx.moveTo(x0, y0);
         ctx.quadraticCurveTo(mx, my - arcHeight, x2, y2);
         ctx.strokeStyle = "#F5B041";
-        ctx.lineWidth = 1.6 / mapScale;
+        ctx.lineWidth = 2 / mapScale;
         ctx.stroke();
+
+        // Destination target pin
+        ctx.beginPath();
+        ctx.arc(x2, y2, 4 / mapScale, 0, Math.PI * 2);
+        ctx.fillStyle = "#F5B041";
+        ctx.fill();
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.lineWidth = 1.2 / mapScale;
+        ctx.stroke();
+
+        ctx.font = `bold ${Math.round(10 / mapScale)}px Inter, sans-serif`;
+        ctx.fillStyle = "#FFFFFF";
+        ctx.textAlign = "center";
+        ctx.fillText(dest.n, x2, y2 - 8 / mapScale);
       }
     }
     ctx.restore();
+
+    // 3.5 Floating Scholarship Window on Export Card (Social Media Story/Feed Anchor)
+    if (options.featuredScholarship) {
+      const cardX = 60;
+      const cardY = expH - 265;
+      const cardW = 440;
+      const cardH = 150;
+
+      // Card Background (Glassmorphism)
+      ctx.fillStyle = "rgba(22, 34, 47, 0.94)";
+      ctx.beginPath();
+      // Safe rounded rect for all canvas contexts
+      if (typeof ctx.roundRect === "function") {
+        ctx.roundRect(cardX, cardY, cardW, cardH, 12);
+      } else {
+        ctx.rect(cardX, cardY, cardW, cardH);
+      }
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(245, 176, 65, 0.55)";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Top badge
+      ctx.fillStyle = "rgba(16, 185, 129, 0.2)";
+      ctx.beginPath();
+      if (typeof ctx.roundRect === "function") {
+        ctx.roundRect(cardX + 16, cardY + 14, 110, 22, 6);
+      } else {
+        ctx.rect(cardX + 16, cardY + 14, 110, 22);
+      }
+      ctx.fill();
+      ctx.strokeStyle = "rgba(16, 185, 129, 0.5)";
+      ctx.stroke();
+
+      ctx.fillStyle = "#10B981";
+      ctx.font = "bold 11px Inter, sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("🟢 TARGET AWARD", cardX + 24, cardY + 29);
+
+      // Country tag
+      ctx.fillStyle = "#94A3B8";
+      ctx.font = "600 12px Inter, sans-serif";
+      ctx.fillText(`📍 ${options.featuredScholarship.country}`, cardX + 140, cardY + 29);
+
+      // Title
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = "bold 16px Inter, sans-serif";
+      const titleText =
+        options.featuredScholarship.name.length > 40
+          ? options.featuredScholarship.name.slice(0, 38) + "..."
+          : options.featuredScholarship.name;
+      ctx.fillText(titleText, cardX + 16, cardY + 62);
+
+      // Coverage & details
+      ctx.fillStyle = "#F5B041";
+      ctx.font = "600 13px Inter, sans-serif";
+      ctx.fillText(`💰 Coverage: ${options.featuredScholarship.coverage}`, cardX + 16, cardY + 90);
+
+      ctx.fillStyle = "#CBD5E1";
+      ctx.font = "500 12px Inter, sans-serif";
+      ctx.fillText(
+        `🎓 Level: ${options.featuredScholarship.studyLevel || "All Programs"}  •  Intake: ${options.targetIntake}`,
+        cardX + 16,
+        cardY + 112,
+      );
+
+      ctx.fillStyle = "#38BDF8";
+      ctx.font = "bold 11px Inter, sans-serif";
+      ctx.fillText("✓ Verified by EG Scholarships Desk", cardX + 16, cardY + 134);
+    }
 
     // 4. Bottom Statistics Ribbon
     const bottomY = expH - 95;

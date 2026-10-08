@@ -375,6 +375,7 @@ export default function GlobalStudyMapsPage() {
       if (country.i === "BGD") return;
       const nextIso = selectedIso === country.i ? null : country.i;
       setSelectedIso(nextIso);
+      setDetailScholarship(null);
       rendererRef.current.selectCountry(country.i);
     }
   };
@@ -383,6 +384,7 @@ export default function GlobalStudyMapsPage() {
     if (iso === "BGD") return;
     const nextIso = selectedIso === iso ? null : iso;
     setSelectedIso(nextIso);
+    setDetailScholarship(null);
     if (rendererRef.current) {
       rendererRef.current.selectCountry(iso);
     }
@@ -390,6 +392,7 @@ export default function GlobalStudyMapsPage() {
 
   const handleClearSelection = () => {
     setSelectedIso(null);
+    setDetailScholarship(null);
     if (rendererRef.current) {
       rendererRef.current.clearSelection();
     }
@@ -442,26 +445,42 @@ export default function GlobalStudyMapsPage() {
   const handleOpenExportModal = () => {
     if (!rendererRef.current) return;
     let featuredObj: { name: string; country: string; coverage: string; studyLevel?: string } | undefined;
-    if (featuredScholarshipId !== "none" && activeGeo) {
-      const found = activeGeo.items.find((item) => item.id === featuredScholarshipId);
-      if (found) {
-        featuredObj = {
-          name: found.name,
-          country: activeGeo.countryEn,
-          coverage: found.coverage || "Full Tuition",
-          studyLevel: found.studyLevel,
-        };
-      }
-    } else if (activeGeo && activeGeo.items.length > 0) {
-      const topOne = activeGeo.items[0];
+    const targetItem =
+      (featuredScholarshipId !== "none" && activeGeo?.items.find((item) => item.id === featuredScholarshipId)) ||
+      detailScholarship ||
+      (activeGeo && activeGeo.items.length > 0 ? activeGeo.items[0] : null);
+
+    if (targetItem) {
       featuredObj = {
-        name: topOne.name,
-        country: activeGeo.countryEn,
-        coverage: topOne.coverage || "Full Tuition",
-        studyLevel: topOne.studyLevel,
+        name: targetItem.name,
+        country: activeGeo?.countryEn || countryNameEn,
+        coverage: targetItem.coverage || "Full Tuition",
+        studyLevel: targetItem.studyLevel,
       };
+      setFeaturedScholarshipId(targetItem.id);
     }
 
+    const card = rendererRef.current.generateExportCard({
+      studentName: studentName || "Tahmid",
+      targetIntake: "2026/27 Intake",
+      totalScholarshipsCount: activeGeo?.totalCount || 635,
+      totalUnivCount: activeUniversities.length || 100,
+      featuredScholarship: featuredObj,
+    });
+    setExportCardUrl(card);
+    setIsExportModalOpen(true);
+  };
+
+  // Quick Export & Share Single Featured Scholarship to Socials
+  const handleShareScholarship = (item: ScholarshipItem) => {
+    setFeaturedScholarshipId(item.id);
+    if (!rendererRef.current) return;
+    const featuredObj = {
+      name: item.name,
+      country: activeGeo?.countryEn || countryNameEn,
+      coverage: item.coverage || "Full Tuition",
+      studyLevel: item.studyLevel,
+    };
     const card = rendererRef.current.generateExportCard({
       studentName: studentName || "Tahmid",
       targetIntake: "2026/27 Intake",
@@ -561,8 +580,8 @@ export default function GlobalStudyMapsPage() {
           {isHoveredHome ? (
             <div className={styles.hudPrompt}>
               <span className={styles.hudFlag}>🇧🇩</span>
-              <strong>বাংলাদেশ (ঢাকা) — আপনার হোম লোকেশন</strong>
-              <span>উচ্চশিক্ষার লক্ষ্য হিসেবে বিশ্বের যেকোনো গন্তব্য দেশ ক্লিক করুন (Dhaka Origin) ↗</span>
+              <strong>বাংলাদেশ (BD) — হোম লোকেশন</strong>
+              <span>উচ্চশিক্ষার লক্ষ্য হিসেবে বিশ্বের যেকোনো গন্তব্য দেশ ক্লিক করুন (BD Origin) ↗</span>
             </div>
           ) : hudTarget ? (
             <>
@@ -718,6 +737,131 @@ export default function GlobalStudyMapsPage() {
                 ⟲
               </button>
             </div>
+
+            {/* Floating Scholarship Details Pop-Up Window on the Map */}
+            {detailScholarship && (
+              <div
+                className={styles.floatingDetailWindow}
+                onClick={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-label="Scholarship Details"
+              >
+                <div className={styles.floatingDetailHeader}>
+                  <div className={styles.floatingHeaderTop}>
+                    <div className={styles.floatingHeaderBadges}>
+                      <span
+                        className={`${styles.tierBadge} ${
+                          detailScholarship.fundingTier === "fully_funded"
+                            ? styles.tierFullyFunded
+                            : detailScholarship.fundingTier === "full_tuition"
+                            ? styles.tierFullTuition
+                            : detailScholarship.fundingTier === "partial"
+                            ? styles.tierPartial
+                            : styles.tierOther
+                        }`}
+                      >
+                        {detailScholarship.fundingTier === "fully_funded"
+                          ? "🟢 Fully Funded"
+                          : detailScholarship.fundingTier === "full_tuition"
+                          ? "🔵 100% Tuition Waiver"
+                          : "🟡 Partial Scholarship"}
+                      </span>
+                      <span className={styles.floatingCountryBadge}>
+                        {countryFlag} {countryNameEn} {countryNameBn ? `(${countryNameBn})` : ""}
+                      </span>
+                    </div>
+                    <button
+                      className={styles.floatingCloseBtn}
+                      onClick={() => setDetailScholarship(null)}
+                      aria-label="Close details"
+                      title="Close window"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <h3 className={styles.floatingTitle}>{detailScholarship.name}</h3>
+                  <div className={styles.floatingProvider}>
+                    🏛️ {detailScholarship.provider}
+                  </div>
+                </div>
+
+                <div className={styles.floatingDetailBody}>
+                  {detailScholarship.overallSummary ? (
+                    <>
+                      <div className={styles.floatingSectionCard}>
+                        <div className={styles.floatingSectionHeader}>
+                          <span>🏷️</span> খরচ ও টিউশন ফি (Cost & Tuition)
+                        </div>
+                        <p className={styles.floatingSectionText}>{detailScholarship.overallSummary.cost}</p>
+                      </div>
+
+                      <div className={styles.floatingSectionCard}>
+                        <div className={styles.floatingSectionHeader}>
+                          <span>💰</span> সুবিধা ও আবাসন ভাতা (Benefits & Living)
+                        </div>
+                        <p className={styles.floatingSectionText}>{detailScholarship.overallSummary.benefits}</p>
+                      </div>
+
+                      <div className={styles.floatingSectionCard}>
+                        <div className={styles.floatingSectionHeader}>
+                          <span>📋</span> যোগ্যতা ও আবেদন প্রক্রিয়া (Eligibility & Strategy)
+                        </div>
+                        <p className={styles.floatingSectionText}>{detailScholarship.overallSummary.other}</p>
+                      </div>
+                    </>
+                  ) : (
+                    <div className={styles.floatingSectionCard}>
+                      <div className={styles.floatingSectionHeader}>
+                        <span>💰</span> স্কলারশিপ কাভারেজ
+                      </div>
+                      <p className={styles.floatingSectionText}>
+                        {detailScholarship.coverage || "ফান্ডিং ও স্কলারশিপের বিবরণ অফিসিয়াল পোর্টালে বিস্তারিত রয়েছে।"}
+                      </p>
+                    </div>
+                  )}
+
+                  <div className={styles.floatingMetaGrid}>
+                    <div className={styles.floatingMetaItem}>
+                      <b>🎓 প্রোগ্রাম:</b> {detailScholarship.studyLevel || "সকল প্রোগ্রাম"}
+                    </div>
+                    <div className={styles.floatingMetaItem}>
+                      <b>📅 ডেডলাইন:</b> {detailScholarship.deadline || "Upcoming Intake"}
+                    </div>
+                    <div className={styles.floatingMetaItem}>
+                      <b>🔍 স্ট্যাটাস:</b> {detailScholarship.status || "Active / Verified"}
+                    </div>
+                    <div className={styles.floatingMetaItem}>
+                      <b>🛡️ পরামর্শ:</b> EG Research Desk
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.floatingDetailFooter}>
+                  <button
+                    className={styles.floatingShareBtn}
+                    onClick={() => handleShareScholarship(detailScholarship)}
+                    title="Export / Share this scholarship card to socials"
+                  >
+                    <span>📸</span> সোশ্যালে শেয়ার (Share Card)
+                  </button>
+                  <a
+                    className={styles.floatingSourceBtn}
+                    href={detailScholarship.officialSource}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="Visit official portal"
+                  >
+                    <span>🌐</span> অফিসিয়াল পোর্টাল ↗
+                  </a>
+                  <button
+                    className={styles.floatingDismissBtn}
+                    onClick={() => setDetailScholarship(null)}
+                  >
+                    বন্ধ করুন
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Bottom Map Legend */}
@@ -725,7 +869,7 @@ export default function GlobalStudyMapsPage() {
             <div className={styles.legendItems}>
               <div className={styles.legendItem}>
                 <span className={styles.legendDot} style={{ background: "#059669" }}></span>
-                <span>🇧🇩 ঢাকা (Home Origin)</span>
+                <span>🇧🇩 BD</span>
               </div>
               <div className={styles.legendItem}>
                 <span className={styles.legendDot} style={{ background: "#F5B041" }}></span>
@@ -1149,115 +1293,6 @@ export default function GlobalStudyMapsPage() {
         </aside>
       </section>
 
-      {/* =========================================================================
-          MODAL 1: In-Page Scholarship Details (Zero Login Barrier)
-          ========================================================================= */}
-      {detailScholarship && (
-        <div className={styles.detailModalOverlay} onClick={() => setDetailScholarship(null)}>
-          <div className={styles.detailModalBox} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.detailModalHeader}>
-              <div>
-                <span
-                  className={`${styles.tierBadge} ${
-                    detailScholarship.fundingTier === "fully_funded"
-                      ? styles.tierFullyFunded
-                      : detailScholarship.fundingTier === "full_tuition"
-                      ? styles.tierFullTuition
-                      : detailScholarship.fundingTier === "partial"
-                      ? styles.tierPartial
-                      : styles.tierOther
-                  }`}
-                >
-                  {detailScholarship.fundingTier === "fully_funded"
-                    ? "🟢 Fully Funded"
-                    : detailScholarship.fundingTier === "full_tuition"
-                    ? "🔵 100% Tuition Waiver"
-                    : "🟡 Partial Scholarship"}
-                </span>
-                <h2 className={styles.detailModalTitle}>{detailScholarship.name}</h2>
-                <div className={styles.detailModalProvider}>
-                  🏛️ {detailScholarship.provider} • 📍 {countryNameEn}
-                </div>
-              </div>
-              <button
-                className={styles.detailModalClose}
-                onClick={() => setDetailScholarship(null)}
-                aria-label="Close modal"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className={styles.detailModalBody}>
-              {detailScholarship.overallSummary ? (
-                <>
-                  <div className={styles.detailSummaryCard}>
-                    <div className={styles.detailCardTitle}>
-                      <span>🏷️</span> খরচ ও টিউশন ফি (Cost & Tuition)
-                    </div>
-                    <p className={styles.detailCardText}>{detailScholarship.overallSummary.cost}</p>
-                  </div>
-
-                  <div className={styles.detailSummaryCard}>
-                    <div className={styles.detailCardTitle}>
-                      <span>💰</span> সুবিধা ও আবাসন ভাতা (Benefits & Living)
-                    </div>
-                    <p className={styles.detailCardText}>{detailScholarship.overallSummary.benefits}</p>
-                  </div>
-
-                  <div className={styles.detailSummaryCard}>
-                    <div className={styles.detailCardTitle}>
-                      <span>📋</span> যোগ্যতা ও আবেদন প্রক্রিয়া (Eligibility & Strategy)
-                    </div>
-                    <p className={styles.detailCardText}>{detailScholarship.overallSummary.other}</p>
-                  </div>
-                </>
-              ) : (
-                <div className={styles.detailSummaryCard}>
-                  <div className={styles.detailCardTitle}>
-                    <span>💰</span> স্কলারশিপ কাভারেজ
-                  </div>
-                  <p className={styles.detailCardText}>
-                    {detailScholarship.coverage || "ফান্ডিং ও স্কলারশিপের বিবরণ অফিসিয়াল পোর্টালে বিস্তারিত রয়েছে।"}
-                  </p>
-                </div>
-              )}
-
-              <div className={styles.detailMetaGrid}>
-                <div className={styles.detailMetaItem}>
-                  <b>🎓 স্টাডি লেভেল:</b> {detailScholarship.studyLevel || "সকল প্রোগ্রাম"}
-                </div>
-                <div className={styles.detailMetaItem}>
-                  <b>📅 আবেদনের ডেডলাইন:</b> {detailScholarship.deadline || "Upcoming Intake"}
-                </div>
-                <div className={styles.detailMetaItem}>
-                  <b>🔍 ভেরিফিকেশন স্ট্যাটাস:</b> {detailScholarship.status || "Active / Verified"}
-                </div>
-                <div className={styles.detailMetaItem}>
-                  <b>🛡️ মূল্যায়ন পরামর্শদাতা:</b> Excellence Global Research Desk
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.detailModalFooter}>
-              <a
-                className={`${styles.cardBtn} ${styles.cardBtnPrimary}`}
-                href={detailScholarship.officialSource}
-                target="_blank"
-                rel="noreferrer"
-              >
-                অফিসিয়াল বিশ্ববিদ্যালয় পোর্টালে যান ↗
-              </a>
-              <button
-                className={`${styles.cardBtn} ${styles.cardBtnSecondary}`}
-                onClick={() => setDetailScholarship(null)}
-              >
-                বন্ধ করুন
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* =========================================================================
           MODAL 2: Match My Profile (Personalized Profile Filter)
