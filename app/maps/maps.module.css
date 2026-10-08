@@ -229,15 +229,19 @@
 /* 3. Main Workspace Area (Split Screen) */
 .mainGrid {
   display: grid;
-  grid-template-columns: 1fr 430px;
+  grid-template-columns: minmax(0, 1fr) 430px;
   flex: 1;
   position: relative;
   background: var(--cp-bg, #16222F);
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 @media (max-width: 1100px) {
   .mainGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -247,6 +251,16 @@
   flex-direction: column;
   position: relative;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1100px) {
+  .mapColumn {
+    border-right: none;
+  }
 }
 
 .mapToolbar {
@@ -367,29 +381,59 @@
   position: sticky;
   top: 60px;
   overflow-y: auto;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+@media (max-width: 1100px) {
+  .windowPanel {
+    position: static;
+    height: auto;
+    max-height: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
 }
 
 .panelHeader {
   padding: 16px 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(30, 44, 58, 0.6);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .countryHero {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.countryHero > div {
+  flex: 1;
+  min-width: 0;
 }
 
 .heroFlag {
   font-size: 2.2rem;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .heroTitle {
   font-size: 1.3rem;
   font-weight: 800;
   color: #FFFFFF;
+  line-height: 1.25;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .heroBn {
@@ -402,58 +446,105 @@
 .heroSub {
   font-size: 0.8rem;
   color: #64748B;
-  margin-top: 2px;
+  margin-top: 3px;
+  line-height: 1.4;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 /* BD Perspective Brief Box */
 .briefBox {
-  margin: 16px 20px;
-  padding: 14px 16px;
-  background: rgba(15, 23, 42, 0.5);
-  border: 1px solid rgba(245, 176, 65, 0.2);
-  border-radius: 10px;
+  margin: 14px 18px;
+  padding: 16px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(245, 176, 65, 0.25);
+  border-radius: 12px;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: calc(100% - 36px);
+  width: auto;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
 .briefHeading {
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
   color: #F5B041;
-  letter-spacing: 0.06em;
-  margin-bottom: 10px;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  line-height: 1.4;
+  word-break: break-word;
 }
 
 .briefGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
 }
 
 .briefRow {
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  color: #CBD5E1;
-  line-height: 1.4;
+  flex-direction: column;
+  gap: 4px;
+  padding: 9px 12px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+}
+
+.briefRow:hover {
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(245, 176, 65, 0.25);
 }
 
 .briefRow b {
-  color: #F8FAFC;
-  min-width: 100px;
-  font-size: 0.78rem;
+  color: #F5B041;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.02em;
+}
+
+.briefRow span {
+  color: #E2E8F0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
 
 .briefTip {
-  margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.1);
-  font-size: 0.78rem;
-  color: #94A3B8;
-  font-style: italic;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(245, 176, 65, 0.08);
+  border-left: 3px solid #F5B041;
+  border-radius: 8px;
+  font-size: 0.80rem;
+  color: #E2E8F0;
+  line-height: 1.55;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+}
+
+.briefTip strong {
+  color: #F5B041;
+  font-weight: 800;
+  margin-right: 4px;
 }
 
 /* Cards List */
@@ -462,6 +553,10 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .sectionTitle {
@@ -474,6 +569,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Scholarship Card */
@@ -483,6 +583,11 @@
   border-radius: 10px;
   padding: 14px;
   transition: all 0.2s ease;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .scholarshipCard:hover {
@@ -495,15 +600,22 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 6px;
+  gap: 10px;
+  margin-bottom: 8px;
+  min-width: 0;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .cardName {
+  flex: 1 1 200px;
+  min-width: 0;
   font-size: 0.95rem;
   font-weight: 700;
   color: #FFFFFF;
-  line-height: 1.3;
+  line-height: 1.35;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .tierBadge {
@@ -513,6 +625,7 @@
   padding: 2px 7px;
   border-radius: 999px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .tierFullyFunded {
@@ -543,6 +656,9 @@
   font-size: 0.78rem;
   color: #94A3B8;
   margin-bottom: 6px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
 
 .cardMeta {
@@ -552,6 +668,9 @@
   font-size: 0.74rem;
   color: #CBD5E1;
   margin-bottom: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
+  width: 100%;
 }
 
 .cardActions {
@@ -559,18 +678,22 @@
   align-items: center;
   gap: 8px;
   margin-top: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+  width: 100%;
 }
 
 .cardBtn {
   font-size: 0.75rem;
   font-weight: 600;
-  padding: 5px 10px;
+  padding: 6px 12px;
   border-radius: 6px;
   text-decoration: none;
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  box-sizing: border-box;
 }
 
 .cardBtnPrimary {
@@ -604,6 +727,11 @@
   display: flex;
   gap: 12px;
   transition: all 0.2s;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .univCard:hover {
@@ -635,6 +763,7 @@
 
 .univInfo {
   flex: 1;
+  min-width: 0;
 }
 
 .univName {
@@ -642,12 +771,16 @@
   font-weight: 700;
   color: #FFFFFF;
   line-height: 1.3;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .univCity {
   font-size: 0.76rem;
   color: #94A3B8;
   margin-top: 2px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .univStrengths {
@@ -655,6 +788,8 @@
   color: #CBD5E1;
   margin-top: 6px;
   line-height: 1.4;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .univPsw {
@@ -777,6 +912,11 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .welcomeHero {
@@ -787,6 +927,10 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .welcomeHeroBadge {
@@ -810,6 +954,8 @@
   color: #FFFFFF;
   line-height: 1.3;
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .welcomeHeroSub {
@@ -817,6 +963,8 @@
   color: #CBD5E1;
   line-height: 1.45;
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .welcomeHeroMotto {
@@ -1524,11 +1672,16 @@
   background: rgba(30, 44, 58, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 22px;
-  margin-top: 16px;
+  padding: 20px;
+  margin-top: 14px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .emptyBadge {
@@ -1551,13 +1704,17 @@
   color: #FFFFFF;
   line-height: 1.45;
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .emptyText {
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   color: #CBD5E1;
   line-height: 1.6;
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .emptyGuidanceBox {
@@ -1568,6 +1725,10 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .emptyGuidanceTitle {
@@ -1584,6 +1745,8 @@
   color: #94A3B8;
   line-height: 1.5;
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .emptyChipsWrap {
@@ -1628,6 +1791,10 @@
   text-decoration: none;
   border: 1px solid #10B981;
   transition: all 0.2s ease;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+  word-break: break-word;
   margin-top: 8px;
 }
 
@@ -1842,6 +2009,128 @@
     height: auto;
     max-height: none;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .panelHeader {
+    padding: 12px 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .countryHero {
+    gap: 10px;
+  }
+
+  .heroFlag {
+    font-size: 1.8rem;
+  }
+
+  .heroTitle {
+    font-size: 1.15rem;
+  }
+
+  .heroSub {
+    font-size: 0.74rem;
+  }
+
+  .briefBox {
+    margin: 12px 12px;
+    padding: 12px 14px;
+    max-width: calc(100% - 24px);
+    width: auto;
+    box-sizing: border-box;
+    border-radius: 10px;
+  }
+
+  .briefHeading {
+    font-size: 0.74rem;
+    margin-bottom: 10px;
+  }
+
+  .briefGrid {
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .briefRow {
+    padding: 8px 10px;
+    gap: 3px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .briefRow b {
+    font-size: 0.72rem;
+  }
+
+  .briefRow span {
+    font-size: 0.80rem;
+    line-height: 1.45;
+  }
+
+  .briefTip {
+    font-size: 0.76rem;
+    padding: 8px 12px;
+    margin-top: 10px;
+  }
+
+  .panelContent {
+    padding: 0 12px 24px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .scholarshipCard {
+    padding: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .cardName {
+    font-size: 0.90rem;
+  }
+
+  .cardMeta {
+    font-size: 0.72rem;
+    gap: 8px;
+  }
+
+  .cardActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .cardActions .cardBtn {
+    justify-content: center;
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+  }
+
+  .emptyCountryCard {
+    padding: 14px;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .welcomeWrap {
+    padding: 16px 12px;
+    gap: 16px;
+  }
+
+  .welcomeHero {
+    padding: 16px 14px;
+  }
+
+  .welcomeHeroTitle {
+    font-size: 1.1rem;
   }
 
   /* Pop-Up Modal Responsive Styling */
