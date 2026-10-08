@@ -159,8 +159,15 @@ export default function GlobalStudyMapsPage() {
   const [isHoveredHome, setIsHoveredHome] = useState<boolean>(false);
   const [selectedIso, setSelectedIso] = useState<string | null>(null);
   const selectedIsoRef = useRef<string | null>(null);
+  const lastTouchTimeRef = useRef<number>(0);
+  const windowPanelRef = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
     selectedIsoRef.current = selectedIso;
+    if (rendererRef.current) {
+      rendererRef.current.selectedCountry = selectedIso;
+      rendererRef.current.render();
+    }
   }, [selectedIso]);
 
   // In-Page Detail Modal (Zero Login Barrier)
@@ -218,13 +225,14 @@ export default function GlobalStudyMapsPage() {
 
     window.addEventListener("resize", handleResize);
 
-    // Mobile Touch Gestures: Swipe-to-pan, 2-finger pinch-to-zoom, and tap-to-select
+    // Mobile Touch Gestures: Swipe-to-pan, 2-finger pinch-to-zoom, and reliable tap-to-select
     const touchState = {
       mode: "none" as "none" | "pan" | "pinch",
       startX: 0,
       startY: 0,
       lastX: 0,
       lastY: 0,
+      startTime: 0,
       startDist: 0,
       lastDist: 0,
       focalX: 0,
@@ -233,6 +241,7 @@ export default function GlobalStudyMapsPage() {
     };
 
     const handleTouchStart = (e: TouchEvent) => {
+      lastTouchTimeRef.current = Date.now();
       if (e.touches.length === 1) {
         const t = e.touches[0];
         const rect = canvas.getBoundingClientRect();
@@ -241,6 +250,7 @@ export default function GlobalStudyMapsPage() {
         touchState.startY = t.clientY;
         touchState.lastX = t.clientX;
         touchState.lastY = t.clientY;
+        touchState.startTime = Date.now();
         touchState.startDist = 0;
         touchState.lastDist = 0;
         touchState.focalX = t.clientX - rect.left;
@@ -256,6 +266,7 @@ export default function GlobalStudyMapsPage() {
         touchState.startY = (t0.clientY + t1.clientY) / 2;
         touchState.lastX = touchState.startX;
         touchState.lastY = touchState.startY;
+        touchState.startTime = Date.now();
         touchState.startDist = dist;
         touchState.lastDist = dist;
         touchState.focalX = touchState.startX - rect.left;
@@ -265,6 +276,7 @@ export default function GlobalStudyMapsPage() {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
+      lastTouchTimeRef.current = Date.now();
       if (e.cancelable) {
         e.preventDefault();
       }
@@ -276,7 +288,8 @@ export default function GlobalStudyMapsPage() {
         const dy = t.clientY - touchState.lastY;
         const totalDist = Math.hypot(t.clientX - touchState.startX, t.clientY - touchState.startY);
 
-        if (totalDist > 5) {
+        // 12px deadzone ensures natural finger touch tremor doesn't accidentally trigger drag
+        if (totalDist > 12) {
           touchState.hasMoved = true;
           rendererRef.current.pan(dx, dy);
         }
@@ -326,23 +339,36 @@ export default function GlobalStudyMapsPage() {
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
-      if (touchState.mode === "pan" && !touchState.hasMoved) {
-        // Quick tap without movement -> Select/Deselect country
-        if (rendererRef.current) {
-          const { country, isHome } = rendererRef.current.hitTest(touchState.startX, touchState.startY);
-          if (!isHome && country) {
-            if (country.i !== "BGD") {
-              const currentIso = selectedIsoRef.current;
-              const nextIso = currentIso === country.i ? null : country.i;
-              setSelectedIso(nextIso);
-              setDetailScholarship(null);
-              rendererRef.current.selectCountry(country.i);
-            }
-          } else if (!isHome && !country) {
-            setSelectedIso(null);
+      lastTouchTimeRef.current = Date.now();
+      const totalDist = Math.hypot(touchState.lastX - touchState.startX, touchState.lastY - touchState.startY);
+      const isTap = touchState.mode === "pan" && (!touchState.hasMoved || totalDist < 16);
+
+      if (isTap && rendererRef.current) {
+        // Quick tap: Select/Deselect country reliably
+        const { country, isHome } = rendererRef.current.hitTest(touchState.startX, touchState.startY);
+        if (!isHome && country) {
+          if (country.i !== "BGD") {
+            const currentIso = selectedIsoRef.current;
+            const nextIso = currentIso === country.i ? null : country.i;
+            setSelectedIso(nextIso);
             setDetailScholarship(null);
-            rendererRef.current.clearSelection();
+            setHoveredCountry(null);
+            rendererRef.current.hoveredCountry = null;
+            rendererRef.current.setSelectedCountry(nextIso);
+
+            // On mobile devices, smoothly bring the panel into clear view so the user immediately sees the country header & details
+            if (typeof window !== "undefined" && window.innerWidth <= 768 && windowPanelRef.current && nextIso) {
+              setTimeout(() => {
+                windowPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+              }, 50);
+            }
           }
+        } else if (!isHome && !country) {
+          setSelectedIso(null);
+          setDetailScholarship(null);
+          setHoveredCountry(null);
+          rendererRef.current.hoveredCountry = null;
+          rendererRef.current.clearSelection();
         }
       }
 
@@ -354,6 +380,8 @@ export default function GlobalStudyMapsPage() {
       } else if (e.touches.length === 1) {
         const t = e.touches[0];
         touchState.mode = "pan";
+        touchState.startX = t.clientX;
+        touchState.startY = t.clientY;
         touchState.lastX = t.clientX;
         touchState.lastY = t.clientY;
         touchState.hasMoved = true;
@@ -361,6 +389,7 @@ export default function GlobalStudyMapsPage() {
     };
 
     const handleTouchCancel = () => {
+      lastTouchTimeRef.current = Date.now();
       touchState.mode = "none";
       touchState.hasMoved = false;
       hasDraggedRef.current = false;
@@ -474,6 +503,7 @@ export default function GlobalStudyMapsPage() {
 
   // Drag-to-pan handlers
   const handleCanvasMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (Date.now() - lastTouchTimeRef.current < 1200) return;
     if (e.button === 0) {
       dragStartRef.current = { x: e.clientX, y: e.clientY };
       hasDraggedRef.current = false;
@@ -482,6 +512,8 @@ export default function GlobalStudyMapsPage() {
   };
 
   const handleCanvasMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (Date.now() - lastTouchTimeRef.current < 1200) return;
+
     if (isDragging && dragStartRef.current && rendererRef.current) {
       const dx = e.clientX - dragStartRef.current.x;
       const dy = e.clientY - dragStartRef.current.y;
@@ -506,11 +538,13 @@ export default function GlobalStudyMapsPage() {
   };
 
   const handleCanvasMouseUp = () => {
+    if (Date.now() - lastTouchTimeRef.current < 1200) return;
     setIsDragging(false);
     dragStartRef.current = null;
   };
 
   const handleCanvasMouseLeave = () => {
+    if (Date.now() - lastTouchTimeRef.current < 1200) return;
     setIsDragging(false);
     dragStartRef.current = null;
     if (!rendererRef.current) return;
@@ -523,6 +557,8 @@ export default function GlobalStudyMapsPage() {
   };
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (Date.now() - lastTouchTimeRef.current < 1200) return;
+
     if (hasDraggedRef.current) {
       hasDraggedRef.current = false;
       return;
@@ -538,7 +574,9 @@ export default function GlobalStudyMapsPage() {
       const nextIso = selectedIso === country.i ? null : country.i;
       setSelectedIso(nextIso);
       setDetailScholarship(null);
-      rendererRef.current.selectCountry(country.i);
+      setHoveredCountry(null);
+      rendererRef.current.hoveredCountry = null;
+      rendererRef.current.setSelectedCountry(nextIso);
     }
   };
 
@@ -547,23 +585,64 @@ export default function GlobalStudyMapsPage() {
     const nextIso = selectedIso === iso ? null : iso;
     setSelectedIso(nextIso);
     setDetailScholarship(null);
+    setHoveredCountry(null);
     if (rendererRef.current) {
-      rendererRef.current.selectCountry(iso);
+      rendererRef.current.setSelectedCountry(nextIso);
+    }
+    if (typeof window !== "undefined" && window.innerWidth <= 768 && windowPanelRef.current && nextIso) {
+      setTimeout(() => {
+        windowPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 50);
     }
   };
 
   const handleClearSelection = () => {
     setSelectedIso(null);
     setDetailScholarship(null);
+    setHoveredCountry(null);
     if (rendererRef.current) {
       rendererRef.current.clearSelection();
     }
   };
 
+  // Comprehensive Country Brief Resolver with Fallback for all 197 world countries
+  const resolveCountryBrief = (iso: string, feature?: CountryFeature | null): CountryBrief => {
+    if (countryBriefs[iso]) return countryBriefs[iso];
+    const nameEn = feature?.n || iso;
+    const nameBn = feature?.b || "";
+    const continentMap: Record<string, string> = {
+      af: "Africa",
+      as: "Asia",
+      eu: "Europe",
+      na: "North America",
+      sa: "South America",
+      oc: "Oceania",
+    };
+    const continent = feature?.ct ? continentMap[feature.ct] || feature.ct.toUpperCase() : "Global Destination";
+    return {
+      nameEn,
+      nameBn,
+      flag: "🌍",
+      continent,
+      capital: "National Capital",
+      tuition: "বিশ্ববিদ্যালয় ও প্রোগ্রামভেদে ভিন্ন (স্ব-অর্থায়ন $1,500 - $6,000/বছর)",
+      livingCost: "$200 - $550 / month (প্রায় ২৪,০০০ - ৬৫,০০০ BDT)",
+      blockedAccount: "প্রোগ্রাম ও সংশ্লিষ্ট দূতাবাস নির্দেশনা অনুযায়ী ন্যূনতম ব্যাংক ব্যালেন্স",
+      psw: "সংশ্লিষ্ট দেশের অভিবাসন ও নিয়োগকর্তা স্পন্সরশিপ সাপেক্ষ",
+      ielts: "সাধারণত ৬.০ - ৬.৫ ব্যান্ড (বা ইংলিশ মিডিয়াম সার্টিফিকেট)",
+      cgpa: "স্নাতক/স্নাতকোত্তর প্রোগ্রামের সাধারণ ন্যূনতম জিপিএ/সিজিপিএ",
+      visaDhaka: "সংশ্লিষ্ট দূতাবাস / ভিএফএস গ্লোবাল বা ইলেকট্রনিক স্টাডি পারমিটের মাধ্যমে আবেদন",
+      successTip: "বিশ্ববিদ্যালয়ের অফিসিয়াল পোর্টালে অ্যাডমিশন ডেটলাইন, টিউশন ফি কাঠামো ও আন্তর্জাতিক শিক্ষার্থী রিকোয়ারমেন্টস যাচাই করুন।",
+    };
+  };
+
   // Country Info Resolution
   const selectedFeature = worldData?.f.find((x) => x.i === selectedIso) || null;
   const activeGeo = selectedIso ? geoIndex[selectedIso] : null;
-  const activeBrief = selectedIso ? countryBriefs[selectedIso] : null;
+  const activeBrief = useMemo(() => {
+    if (!selectedIso) return null;
+    return resolveCountryBrief(selectedIso, selectedFeature);
+  }, [selectedIso, selectedFeature]);
 
   const countryNameEn = activeBrief?.nameEn || selectedFeature?.n || selectedIso || "";
   const countryNameBn = activeBrief?.nameBn || selectedFeature?.b || "";
@@ -600,7 +679,10 @@ export default function GlobalStudyMapsPage() {
 
   // HUD Data
   const hudTarget = hoveredCountry || (selectedIso ? worldData?.f.find((x) => x.i === selectedIso) : null);
-  const hudBrief = hudTarget ? countryBriefs[hudTarget.i] : null;
+  const hudBrief = useMemo(() => {
+    if (!hudTarget) return null;
+    return resolveCountryBrief(hudTarget.i, hudTarget);
+  }, [hudTarget]);
   const hudGeo = hudTarget ? geoIndex[hudTarget.i] : null;
 
   // Handle Opening Social Export Modal
@@ -958,7 +1040,7 @@ export default function GlobalStudyMapsPage() {
         </div>
 
         {/* Right Column: Sliding Window Panel */}
-        <aside className={styles.windowPanel}>
+        <aside ref={windowPanelRef} className={styles.windowPanel}>
           {selectedIso ? (
             <>
               {/* Country Hero Header */}

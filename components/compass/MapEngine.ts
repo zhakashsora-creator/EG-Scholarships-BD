@@ -623,17 +623,44 @@ export class MapRenderer {
       }
     }
 
+    // 5. Tolerance sampling for mobile touch imprecision (within ~4-5px contact radius)
+    const tolerance = 4.5 / this.scale;
+    const offsets = [
+      [tolerance, 0],
+      [-tolerance, 0],
+      [0, tolerance],
+      [0, -tolerance],
+      [tolerance, tolerance],
+      [-tolerance, -tolerance],
+    ];
+    for (const [ox, oy] of offsets) {
+      for (const f of this.worldData.f) {
+        const path = this.paths[f.i];
+        if (path && this.ctx.isPointInPath(path, mx + ox, my + oy)) {
+          return { country: f, university: null, isHome: f.i === "BGD" };
+        }
+      }
+    }
+
     return { country: null, university: null, isHome: false };
+  }
+
+  setSelectedCountry(iso: string | null) {
+    this.selectedCountry = iso === "BGD" ? null : iso;
+    this.hoveredCountry = null;
+    this.render();
   }
 
   selectCountry(iso: string | null) {
     if (iso === "BGD") return; // Non-selectable as study abroad destination
     this.selectedCountry = this.selectedCountry === iso ? null : iso;
+    this.hoveredCountry = null;
     this.render();
   }
 
   clearSelection() {
     this.selectedCountry = null;
+    this.hoveredCountry = null;
     this.render();
   }
 

@@ -14,6 +14,21 @@
     "visaDhaka": "German Embassy Dhaka uses CSP / waiting list system (apply early as appointment queue can take 8-14 months)",
     "successTip": "Apply through uni-assist or direct university portals by July 15 for Winter intake. DAAD EPOS requires 2 years of work experience."
   },
+  "ETH": {
+    "nameEn": "Ethiopia",
+    "nameBn": "ইথিওপিয়া",
+    "flag": "🇪🇹",
+    "continent": "Africa",
+    "capital": "Addis Ababa",
+    "tuition": "$1,500 - $3,500 / year (Addis Ababa University & public universities; AU bilateral quotas available)",
+    "livingCost": "$150 - $300 / month (approx 18,000 - 36,000 BDT — highly economical)",
+    "blockedAccount": "Minimal bank solvency proof ($2,000 - $3,000) or official sponsoring agency letter",
+    "psw": "Work permit subject to employer sponsorship and institutional research roles",
+    "ielts": "IELTS 5.5 - 6.0 or English Medium of Instruction (MOI) certificate from Bangladesh",
+    "cgpa": "Minimum 2.8 / 4.0 for postgraduate programs",
+    "visaDhaka": "Processed via Embassy of Ethiopia / electronic business & student visa portal with university admission letter",
+    "successTip": "Addis Ababa University is the premier research institution in the Horn of Africa with specialized programs in public health, agriculture, and development studies."
+  },
   "GBR": {
     "nameEn": "United Kingdom",
     "nameBn": "যুক্তরাজ্য",
