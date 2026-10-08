@@ -158,6 +158,10 @@ export default function GlobalStudyMapsPage() {
   const [hoveredUniversity, setHoveredUniversity] = useState<University | null>(null);
   const [isHoveredHome, setIsHoveredHome] = useState<boolean>(false);
   const [selectedIso, setSelectedIso] = useState<string | null>(null);
+  const selectedIsoRef = useRef<string | null>(null);
+  useEffect(() => {
+    selectedIsoRef.current = selectedIso;
+  }, [selectedIso]);
 
   // In-Page Detail Modal (Zero Login Barrier)
   const [detailScholarship, setDetailScholarship] = useState<ScholarshipItem | null>(null);
@@ -192,9 +196,10 @@ export default function GlobalStudyMapsPage() {
 
   // 2. Initialize MapRenderer once canvas & data are ready
   useEffect(() => {
-    if (!canvasRef.current || !worldData) return;
+    const canvas = canvasRef.current;
+    if (!canvas || !worldData) return;
 
-    const renderer = new MapRenderer(canvasRef.current);
+    const renderer = new MapRenderer(canvas);
     renderer.setWorldData(worldData);
     renderer.setUniversities(universities);
     renderer.setGeoIndexData(geoIndex);
@@ -213,9 +218,166 @@ export default function GlobalStudyMapsPage() {
 
     window.addEventListener("resize", handleResize);
 
+    // Mobile Touch Gestures: Swipe-to-pan, 2-finger pinch-to-zoom, and tap-to-select
+    const touchState = {
+      mode: "none" as "none" | "pan" | "pinch",
+      startX: 0,
+      startY: 0,
+      lastX: 0,
+      lastY: 0,
+      startDist: 0,
+      lastDist: 0,
+      focalX: 0,
+      focalY: 0,
+      hasMoved: false,
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        const t = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        touchState.mode = "pan";
+        touchState.startX = t.clientX;
+        touchState.startY = t.clientY;
+        touchState.lastX = t.clientX;
+        touchState.lastY = t.clientY;
+        touchState.startDist = 0;
+        touchState.lastDist = 0;
+        touchState.focalX = t.clientX - rect.left;
+        touchState.focalY = t.clientY - rect.top;
+        touchState.hasMoved = false;
+      } else if (e.touches.length >= 2) {
+        const t0 = e.touches[0];
+        const t1 = e.touches[1];
+        const dist = Math.hypot(t0.clientX - t1.clientX, t0.clientY - t1.clientY);
+        const rect = canvas.getBoundingClientRect();
+        touchState.mode = "pinch";
+        touchState.startX = (t0.clientX + t1.clientX) / 2;
+        touchState.startY = (t0.clientY + t1.clientY) / 2;
+        touchState.lastX = touchState.startX;
+        touchState.lastY = touchState.startY;
+        touchState.startDist = dist;
+        touchState.lastDist = dist;
+        touchState.focalX = touchState.startX - rect.left;
+        touchState.focalY = touchState.startY - rect.top;
+        touchState.hasMoved = true;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+      if (!rendererRef.current) return;
+
+      if (touchState.mode === "pan" && e.touches.length === 1) {
+        const t = e.touches[0];
+        const dx = t.clientX - touchState.lastX;
+        const dy = t.clientY - touchState.lastY;
+        const totalDist = Math.hypot(t.clientX - touchState.startX, t.clientY - touchState.startY);
+
+        if (totalDist > 5) {
+          touchState.hasMoved = true;
+          rendererRef.current.pan(dx, dy);
+        }
+        touchState.lastX = t.clientX;
+        touchState.lastY = t.clientY;
+      } else if (e.touches.length >= 2) {
+        const t0 = e.touches[0];
+        const t1 = e.touches[1];
+        const dist = Math.hypot(t0.clientX - t1.clientX, t0.clientY - t1.clientY);
+        const rect = canvas.getBoundingClientRect();
+        const midX = (t0.clientX + t1.clientX) / 2;
+        const midY = (t0.clientY + t1.clientY) / 2;
+        const focalX = midX - rect.left;
+        const focalY = midY - rect.top;
+
+        if (touchState.mode !== "pinch") {
+          touchState.mode = "pinch";
+          touchState.lastDist = dist;
+          touchState.lastX = midX;
+          touchState.lastY = midY;
+          touchState.hasMoved = true;
+          return;
+        }
+
+        // 1. Pan while pinching
+        const pdx = midX - touchState.lastX;
+        const pdy = midY - touchState.lastY;
+        if (Math.hypot(pdx, pdy) > 1) {
+          rendererRef.current.pan(pdx, pdy);
+        }
+        touchState.lastX = midX;
+        touchState.lastY = midY;
+
+        // 2. Zoom relative to pinch focal point
+        if (touchState.lastDist > 0 && Math.abs(dist - touchState.lastDist) > 1) {
+          const ratio = dist / touchState.lastDist;
+          let newPercent: number;
+          if (ratio >= 1) {
+            newPercent = rendererRef.current.zoomIn(ratio, [focalX, focalY]);
+          } else {
+            newPercent = rendererRef.current.zoomOut(1 / ratio, [focalX, focalY]);
+          }
+          setZoomPercent(newPercent);
+          touchState.lastDist = dist;
+        }
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (touchState.mode === "pan" && !touchState.hasMoved) {
+        // Quick tap without movement -> Select/Deselect country
+        if (rendererRef.current) {
+          const { country, isHome } = rendererRef.current.hitTest(touchState.startX, touchState.startY);
+          if (!isHome && country) {
+            if (country.i !== "BGD") {
+              const currentIso = selectedIsoRef.current;
+              const nextIso = currentIso === country.i ? null : country.i;
+              setSelectedIso(nextIso);
+              setDetailScholarship(null);
+              rendererRef.current.selectCountry(country.i);
+            }
+          } else if (!isHome && !country) {
+            setSelectedIso(null);
+            setDetailScholarship(null);
+            rendererRef.current.clearSelection();
+          }
+        }
+      }
+
+      hasDraggedRef.current = true; // Prevents synthetic mouse click from firing
+
+      if (e.touches.length === 0) {
+        touchState.mode = "none";
+        touchState.hasMoved = false;
+      } else if (e.touches.length === 1) {
+        const t = e.touches[0];
+        touchState.mode = "pan";
+        touchState.lastX = t.clientX;
+        touchState.lastY = t.clientY;
+        touchState.hasMoved = true;
+      }
+    };
+
+    const handleTouchCancel = () => {
+      touchState.mode = "none";
+      touchState.hasMoved = false;
+      hasDraggedRef.current = false;
+    };
+
+    canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
+    canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+    canvas.addEventListener("touchend", handleTouchEnd, { passive: false });
+    canvas.addEventListener("touchcancel", handleTouchCancel, { passive: false });
+
     return () => {
       renderer.stopAnimation();
       window.removeEventListener("resize", handleResize);
+      canvas.removeEventListener("touchstart", handleTouchStart);
+      canvas.removeEventListener("touchmove", handleTouchMove);
+      canvas.removeEventListener("touchend", handleTouchEnd);
+      canvas.removeEventListener("touchcancel", handleTouchCancel);
     };
   }, [worldData]);
 
@@ -737,131 +899,6 @@ export default function GlobalStudyMapsPage() {
                 ⟲
               </button>
             </div>
-
-            {/* Floating Scholarship Details Pop-Up Window on the Map */}
-            {detailScholarship && (
-              <div
-                className={styles.floatingDetailWindow}
-                onClick={(e) => e.stopPropagation()}
-                role="dialog"
-                aria-label="Scholarship Details"
-              >
-                <div className={styles.floatingDetailHeader}>
-                  <div className={styles.floatingHeaderTop}>
-                    <div className={styles.floatingHeaderBadges}>
-                      <span
-                        className={`${styles.tierBadge} ${
-                          detailScholarship.fundingTier === "fully_funded"
-                            ? styles.tierFullyFunded
-                            : detailScholarship.fundingTier === "full_tuition"
-                            ? styles.tierFullTuition
-                            : detailScholarship.fundingTier === "partial"
-                            ? styles.tierPartial
-                            : styles.tierOther
-                        }`}
-                      >
-                        {detailScholarship.fundingTier === "fully_funded"
-                          ? "🟢 Fully Funded"
-                          : detailScholarship.fundingTier === "full_tuition"
-                          ? "🔵 100% Tuition Waiver"
-                          : "🟡 Partial Scholarship"}
-                      </span>
-                      <span className={styles.floatingCountryBadge}>
-                        {countryFlag} {countryNameEn} {countryNameBn ? `(${countryNameBn})` : ""}
-                      </span>
-                    </div>
-                    <button
-                      className={styles.floatingCloseBtn}
-                      onClick={() => setDetailScholarship(null)}
-                      aria-label="Close details"
-                      title="Close window"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                  <h3 className={styles.floatingTitle}>{detailScholarship.name}</h3>
-                  <div className={styles.floatingProvider}>
-                    🏛️ {detailScholarship.provider}
-                  </div>
-                </div>
-
-                <div className={styles.floatingDetailBody}>
-                  {detailScholarship.overallSummary ? (
-                    <>
-                      <div className={styles.floatingSectionCard}>
-                        <div className={styles.floatingSectionHeader}>
-                          <span>🏷️</span> খরচ ও টিউশন ফি (Cost & Tuition)
-                        </div>
-                        <p className={styles.floatingSectionText}>{detailScholarship.overallSummary.cost}</p>
-                      </div>
-
-                      <div className={styles.floatingSectionCard}>
-                        <div className={styles.floatingSectionHeader}>
-                          <span>💰</span> সুবিধা ও আবাসন ভাতা (Benefits & Living)
-                        </div>
-                        <p className={styles.floatingSectionText}>{detailScholarship.overallSummary.benefits}</p>
-                      </div>
-
-                      <div className={styles.floatingSectionCard}>
-                        <div className={styles.floatingSectionHeader}>
-                          <span>📋</span> যোগ্যতা ও আবেদন প্রক্রিয়া (Eligibility & Strategy)
-                        </div>
-                        <p className={styles.floatingSectionText}>{detailScholarship.overallSummary.other}</p>
-                      </div>
-                    </>
-                  ) : (
-                    <div className={styles.floatingSectionCard}>
-                      <div className={styles.floatingSectionHeader}>
-                        <span>💰</span> স্কলারশিপ কাভারেজ
-                      </div>
-                      <p className={styles.floatingSectionText}>
-                        {detailScholarship.coverage || "ফান্ডিং ও স্কলারশিপের বিবরণ অফিসিয়াল পোর্টালে বিস্তারিত রয়েছে।"}
-                      </p>
-                    </div>
-                  )}
-
-                  <div className={styles.floatingMetaGrid}>
-                    <div className={styles.floatingMetaItem}>
-                      <b>🎓 প্রোগ্রাম:</b> {detailScholarship.studyLevel || "সকল প্রোগ্রাম"}
-                    </div>
-                    <div className={styles.floatingMetaItem}>
-                      <b>📅 ডেডলাইন:</b> {detailScholarship.deadline || "Upcoming Intake"}
-                    </div>
-                    <div className={styles.floatingMetaItem}>
-                      <b>🔍 স্ট্যাটাস:</b> {detailScholarship.status || "Active / Verified"}
-                    </div>
-                    <div className={styles.floatingMetaItem}>
-                      <b>🛡️ পরামর্শ:</b> EG Research Desk
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.floatingDetailFooter}>
-                  <button
-                    className={styles.floatingShareBtn}
-                    onClick={() => handleShareScholarship(detailScholarship)}
-                    title="Export / Share this scholarship card to socials"
-                  >
-                    <span>📸</span> সোশ্যালে শেয়ার (Share Card)
-                  </button>
-                  <a
-                    className={styles.floatingSourceBtn}
-                    href={detailScholarship.officialSource}
-                    target="_blank"
-                    rel="noreferrer"
-                    title="Visit official portal"
-                  >
-                    <span>🌐</span> অফিসিয়াল পোর্টাল ↗
-                  </a>
-                  <button
-                    className={styles.floatingDismissBtn}
-                    onClick={() => setDetailScholarship(null)}
-                  >
-                    বন্ধ করুন
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Bottom Map Legend */}
@@ -1293,6 +1330,138 @@ export default function GlobalStudyMapsPage() {
         </aside>
       </section>
 
+      {/* =========================================================================
+          MODAL 1: Scholarship Instant Detail Pop-Up (Full Screen Overlay)
+          ========================================================================= */}
+      {detailScholarship && (
+        <div
+          className={styles.detailModalOverlay}
+          onClick={() => setDetailScholarship(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Scholarship Details"
+        >
+          <div
+            className={styles.detailModalBox}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.detailHeader}>
+              <div className={styles.detailTitleWrap}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 6 }}>
+                  <span
+                    className={`${styles.tierBadge} ${
+                      detailScholarship.fundingTier === "fully_funded"
+                        ? styles.tierFullyFunded
+                        : detailScholarship.fundingTier === "full_tuition"
+                        ? styles.tierFullTuition
+                        : detailScholarship.fundingTier === "partial"
+                        ? styles.tierPartial
+                        : styles.tierOther
+                    }`}
+                  >
+                    {detailScholarship.fundingTier === "fully_funded"
+                      ? "🟢 Fully Funded (সম্পূর্ণ ফান্ডেড)"
+                      : detailScholarship.fundingTier === "full_tuition"
+                      ? "🔵 100% Tuition Waiver (টিউশন ফ্রি)"
+                      : "🟡 Partial Scholarship (আংশিক স্কলারশিপ)"}
+                  </span>
+                  <span className={styles.floatingCountryBadge}>
+                    {countryFlag} {countryNameEn} {countryNameBn ? `(${countryNameBn})` : ""}
+                  </span>
+                </div>
+                <h2 className={styles.detailTitle}>{detailScholarship.name}</h2>
+                <div className={styles.detailProvider}>
+                  🏛️ {detailScholarship.provider}
+                </div>
+              </div>
+
+              <button
+                className={styles.detailModalClose}
+                onClick={() => setDetailScholarship(null)}
+                aria-label="Close details"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.detailSections}>
+              {detailScholarship.overallSummary ? (
+                <>
+                  <div className={styles.detailSectionCard}>
+                    <div className={styles.detailSectionHeader}>
+                      <span>🏷️</span> খরচ ও টিউশন ফি (Cost & Tuition)
+                    </div>
+                    <div className={styles.detailSectionBody}>{detailScholarship.overallSummary.cost}</div>
+                  </div>
+
+                  <div className={styles.detailSectionCard}>
+                    <div className={styles.detailSectionHeader}>
+                      <span>💰</span> সুবিধা ও আবাসন ভাতা (Benefits & Living)
+                    </div>
+                    <div className={styles.detailSectionBody}>{detailScholarship.overallSummary.benefits}</div>
+                  </div>
+
+                  <div className={styles.detailSectionCard}>
+                    <div className={styles.detailSectionHeader}>
+                      <span>📋</span> যোগ্যতা ও আবেদন প্রক্রিয়া (Eligibility & Strategy)
+                    </div>
+                    <div className={styles.detailSectionBody}>{detailScholarship.overallSummary.other}</div>
+                  </div>
+                </>
+              ) : (
+                <div className={styles.detailSectionCard}>
+                  <div className={styles.detailSectionHeader}>
+                    <span>💰</span> স্কলারশিপ কাভারেজ
+                  </div>
+                  <div className={styles.detailSectionBody}>
+                    {detailScholarship.coverage || "ফান্ডিং ও স্কলারশিপের বিবরণ অফিসিয়াল পোর্টালে বিস্তারিত রয়েছে।"}
+                  </div>
+                </div>
+              )}
+
+              <div className={styles.detailMetaPills}>
+                <div className={styles.detailMetaPill}>
+                  <b style={{ color: "#F5B041" }}>🎓 প্রোগ্রাম:</b> {detailScholarship.studyLevel || "সকল প্রোগ্রাম"}
+                </div>
+                <div className={styles.detailMetaPill}>
+                  <b style={{ color: "#F5B041" }}>📅 ডেডলাইন:</b> {detailScholarship.deadline || "Upcoming Intake"}
+                </div>
+                <div className={styles.detailMetaPill}>
+                  <b style={{ color: "#F5B041" }}>🔍 স্ট্যাটাস:</b> {detailScholarship.status || "Active / Verified"}
+                </div>
+                <div className={styles.detailMetaPill}>
+                  <b style={{ color: "#F5B041" }}>🛡️ যাচাইকরণ:</b> EG Research Desk Verified
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.detailActions}>
+              <button
+                className={`${styles.cardBtn} ${styles.cardBtnPrimary}`}
+                onClick={() => handleShareScholarship(detailScholarship)}
+                title="Export / Share this scholarship card to socials"
+              >
+                <span>📸</span> সোশ্যালে শেয়ার (Share Card)
+              </button>
+              <a
+                className={`${styles.cardBtn} ${styles.cardBtnSecondary}`}
+                href={detailScholarship.officialSource}
+                target="_blank"
+                rel="noreferrer"
+                title="Visit official portal"
+              >
+                <span>🌐</span> অফিসিয়াল পোর্টাল ↗
+              </a>
+              <button
+                className={`${styles.cardBtn} ${styles.cardBtnSecondary}`}
+                onClick={() => setDetailScholarship(null)}
+              >
+                বন্ধ করুন
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* =========================================================================
           MODAL 2: Match My Profile (Personalized Profile Filter)

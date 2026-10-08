@@ -240,26 +240,30 @@ export class MapRenderer {
     if (!this.worldData) return;
     const rect = this.canvas.getBoundingClientRect();
     const width = rect.width || 1000;
-    const height = Math.round(width * (this.worldData.h / this.worldData.w) + 20);
+    // On mobile screens, give enough vertical touch real estate (at least 270px)
+    const height =
+      width < 640
+        ? Math.max(270, Math.round(width * 0.65))
+        : Math.round(width * (this.worldData.h / this.worldData.w) + 20);
 
     this.canvas.width = width * this.dpr;
     this.canvas.height = height * this.dpr;
 
     this.baseScale = width / this.worldData.w;
     this.baseOffsetX = 0;
-    this.baseOffsetY = 10;
+    this.baseOffsetY = Math.max(10, (height - this.worldData.h * this.baseScale) / 2);
     this.updateTransform();
     this.render();
   }
 
   zoomIn(factor: number = 1.25, focal?: [number, number]): number {
-    const nextZoom = Math.min(4.5, this.zoomLevel * factor);
+    const nextZoom = Math.min(5.0, this.zoomLevel * factor);
     if (focal) {
       const [fx, fy] = focal;
       const prevScale = this.scale;
       const newScale = this.baseScale * nextZoom;
-      this.panX = fx - (fx - this.offsetX) * (newScale / prevScale) - this.baseOffsetX;
-      this.panY = fy - (fy - this.offsetY) * (newScale / prevScale) - this.baseOffsetY;
+      this.panX = fx - (fx - (this.baseOffsetX + this.panX)) * (newScale / prevScale) - this.baseOffsetX;
+      this.panY = fy - (fy - (this.baseOffsetY + this.panY)) * (newScale / prevScale) - this.baseOffsetY;
     }
     this.zoomLevel = nextZoom;
     this.updateTransform();
@@ -268,21 +272,15 @@ export class MapRenderer {
   }
 
   zoomOut(factor: number = 1.25, focal?: [number, number]): number {
-    const nextZoom = Math.max(0.85, this.zoomLevel / factor);
-    if (nextZoom <= 1.05) {
-      this.zoomLevel = 1.0;
-      this.panX = 0;
-      this.panY = 0;
-    } else if (focal) {
+    const nextZoom = Math.max(0.8, this.zoomLevel / factor);
+    if (focal) {
       const [fx, fy] = focal;
       const prevScale = this.scale;
       const newScale = this.baseScale * nextZoom;
-      this.panX = fx - (fx - this.offsetX) * (newScale / prevScale) - this.baseOffsetX;
-      this.panY = fy - (fy - this.offsetY) * (newScale / prevScale) - this.baseOffsetY;
-      this.zoomLevel = nextZoom;
-    } else {
-      this.zoomLevel = nextZoom;
+      this.panX = fx - (fx - (this.baseOffsetX + this.panX)) * (newScale / prevScale) - this.baseOffsetX;
+      this.panY = fy - (fy - (this.baseOffsetY + this.panY)) * (newScale / prevScale) - this.baseOffsetY;
     }
+    this.zoomLevel = nextZoom;
     this.updateTransform();
     this.render();
     return Math.round(this.zoomLevel * 100);

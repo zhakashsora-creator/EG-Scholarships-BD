@@ -303,6 +303,7 @@
   max-width: 100%;
   cursor: default;
   border-radius: 8px;
+  touch-action: none;
 }
 
 /* Map Legend / Footer */
@@ -1633,4 +1634,267 @@
 .emptyCtaBtn:hover {
   background: #10B981;
   transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   10. Comprehensive Mobile Responsive Optimizations (Mobile Chrome / Touch)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .navHeader {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  .brandWrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .brandLogo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brandTitle {
+    font-size: 0.98rem;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .brandBadge {
+    font-size: 0.65rem;
+    padding: 1px 6px;
+  }
+
+  .brandSub {
+    display: none; /* Hide dense slogan on mobile headers for crisp layout */
+  }
+
+  .headerActions {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 8px;
+    padding-bottom: 2px;
+  }
+
+  .headerActions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .actionBtn {
+    flex-shrink: 0;
+    padding: 6px 11px;
+    font-size: 0.76rem;
+    white-space: nowrap;
+  }
+
+  .themeWrap {
+    flex-shrink: 0;
+    margin-left: 2px;
+  }
+
+  .hudRibbon {
+    padding: 8px 14px;
+    min-height: 42px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .hudLeft {
+    width: 100%;
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hudPrompt {
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  .hudCountryName {
+    font-size: 0.95rem;
+  }
+
+  .hudPills {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding-bottom: 2px;
+    gap: 6px;
+  }
+
+  .hudPills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hudPill {
+    flex-shrink: 0;
+    font-size: 0.72rem;
+    padding: 2px 8px;
+  }
+
+  .mapToolbar {
+    padding: 8px 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .modeTabs {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding-bottom: 2px;
+    gap: 6px;
+  }
+
+  .modeTabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tabBtn {
+    flex-shrink: 0;
+    padding: 6px 11px;
+    font-size: 0.74rem;
+    white-space: nowrap;
+  }
+
+  .selectionPill {
+    align-self: flex-start;
+    font-size: 0.74rem;
+    padding: 3px 8px;
+  }
+
+  .fundingFilterBar {
+    padding: 8px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .fundingFilterPills {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding-bottom: 3px;
+    gap: 6px;
+  }
+
+  .fundingFilterPills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fundingFilterPill {
+    flex-shrink: 0;
+    font-size: 0.72rem;
+    padding: 4px 9px;
+    white-space: nowrap;
+  }
+
+  .canvasWrap {
+    padding: 4px;
+    min-height: 270px;
+  }
+
+  .zoomControls {
+    right: 12px;
+    bottom: 12px;
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .zoomBtn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+  }
+
+  .mapFooter {
+    padding: 8px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 0.72rem;
+  }
+
+  .windowPanel {
+    position: static;
+    height: auto;
+    max-height: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Pop-Up Modal Responsive Styling */
+  .detailModalOverlay {
+    padding: 10px;
+    align-items: flex-end;
+  }
+
+  .detailModalBox {
+    padding: 18px 16px;
+    max-height: 86vh;
+    border-radius: 16px 16px 12px 12px;
+    gap: 12px;
+  }
+
+  .detailTitle {
+    font-size: 1.05rem;
+    line-height: 1.3;
+  }
+
+  .detailProvider {
+    font-size: 0.78rem;
+  }
+
+  .detailSectionCard {
+    padding: 10px 12px;
+  }
+
+  .detailSectionBody {
+    font-size: 0.8rem;
+  }
+
+  .detailMetaPills {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .detailMetaPill {
+    font-size: 0.7rem;
+    padding: 4px 6px;
+  }
+
+  .detailActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .detailActions .cardBtn {
+    justify-content: center;
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 0.8rem;
+  }
 }
