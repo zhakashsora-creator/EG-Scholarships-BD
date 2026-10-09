@@ -420,10 +420,9 @@ export class MapRenderer {
       const isHovered = this.hoveredCountry === f.i;
       const geo = this.geoIndexData[f.i];
 
-      // Delete the special dots for islands which don't have any scholarships
-      // Position f.c and country data/hit-testing remain 100% intact
+      // Only draw special marker dots for tiny states/islands that actually have scholarships
       const hasScholarships = geo && (geo.totalCount || 0) > 0;
-      if (!hasScholarships && !isSelected && !isHovered) {
+      if (!hasScholarships) {
         continue;
       }
 
@@ -609,11 +608,24 @@ export class MapRenderer {
       }
     }
 
-    // 3. Check Tiny Countries (f.sm)
+    // 3. Check Polygons with isPointInPath FIRST (Exact country match)
+    for (const f of this.worldData.f) {
+      const path = this.paths[f.i];
+      if (path && this.ctx.isPointInPath(path, mx, my)) {
+        return { country: f, university: null, isHome: f.i === "BGD" };
+      }
+    }
+
+    // 4. Check Tiny Islands / Microstates (f.sm) for clicks in open water
+    // Only check countries with f.sm that actually have scholarships
     let bestTiny: CountryFeature | null = null;
-    let minD = 14;
+    let minD = 10;
     for (const f of this.worldData.f) {
       if (f.sm && f.i !== "BGD") {
+        const geo = this.geoIndexData[f.i];
+        const hasScholarships = geo && (geo.totalCount || 0) > 0;
+        if (!hasScholarships) continue;
+
         const d = Math.hypot(mx - f.c[0], my - f.c[1]);
         if (d < minD) {
           minD = d;
@@ -622,14 +634,6 @@ export class MapRenderer {
       }
     }
     if (bestTiny) return { country: bestTiny, university: null, isHome: false };
-
-    // 4. Check Polygons with isPointInPath
-    for (const f of this.worldData.f) {
-      const path = this.paths[f.i];
-      if (path && this.ctx.isPointInPath(path, mx, my)) {
-        return { country: f, university: null, isHome: f.i === "BGD" };
-      }
-    }
 
     // 5. Tolerance sampling for mobile touch imprecision (within ~4-5px contact radius)
     const tolerance = 4.5 / this.scale;
