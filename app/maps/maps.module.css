@@ -405,6 +405,7 @@
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  flex-shrink: 0;
 }
 
 .countryHero {
@@ -463,7 +464,8 @@
   min-width: 0;
   max-width: calc(100% - 36px);
   width: auto;
-  overflow: hidden;
+  overflow: visible;
+  flex-shrink: 0;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
@@ -557,6 +559,7 @@
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  flex-shrink: 0;
 }
 
 .sectionTitle {
@@ -917,6 +920,7 @@
   max-width: 100%;
   min-width: 0;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .welcomeHero {
@@ -1682,6 +1686,7 @@
   max-width: 100%;
   min-width: 0;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .emptyBadge {

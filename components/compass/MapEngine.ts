@@ -420,6 +420,13 @@ export class MapRenderer {
       const isHovered = this.hoveredCountry === f.i;
       const geo = this.geoIndexData[f.i];
 
+      // Delete the special dots for islands which don't have any scholarships
+      // Position f.c and country data/hit-testing remain 100% intact
+      const hasScholarships = geo && (geo.totalCount || 0) > 0;
+      if (!hasScholarships && !isSelected && !isHovered) {
+        continue;
+      }
+
       let dotColor = t.dot;
       let dotSize = 4;
       if (this.activeFundingFilter !== "all" && geo) {
@@ -431,6 +438,7 @@ export class MapRenderer {
           dotColor = FUNDING_COLORS[this.activeFundingFilter].fill;
           dotSize = 5.5;
         } else {
+          if (!isSelected && !isHovered) continue;
           dotColor = "rgba(100, 116, 139, 0.4)";
           dotSize = 2.8;
         }
