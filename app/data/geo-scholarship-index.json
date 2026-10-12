@@ -681,25 +681,21 @@
   "BEL": {
     "iso": "BEL",
     "countryEn": "Belgium",
-    "totalCount": 6,
-    "fullyFundedCount": 3,
-    "fullTuitionCount": 1,
-    "partialCount": 2,
+    "totalCount": 3,
+    "fullyFundedCount": 2,
+    "fullTuitionCount": 0,
+    "partialCount": 1,
     "otherCount": 0,
     "scholarshipIds": [
       "EU-0080",
-      "EU-0081",
-      "EU-0079",
       "EUR-BE-001",
-      "EUR-BE-002",
-      "BE-001"
+      "EUR-BE-002"
     ],
     "studyLevels": [
       "Bachelor's specialisation",
       "Master's",
       "Continuing education",
-      "Master's degree",
-      "Master's Degree"
+      "Master's degree"
     ],
     "intakes": [],
     "items": [
@@ -717,38 +713,6 @@
           "cost": "Full scholarship · International travel, living allowance, tuition/registration, insurance and other support",
           "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations. International return travel subsidy provided. Statutory student health insurance covered.",
           "other": "Academics: Nationals of eligible developing countries with relevant professional experience. Language: Programme-specific; verify on the official page. Route: Separate ARES application"
-        }
-      },
-      {
-        "id": "EU-0081",
-        "name": "ICP Connect Scholarships",
-        "provider": "VLIR-UOS",
-        "coverage": "Tuition, travel, insurance and living allowance",
-        "fundingTier": "partial",
-        "studyLevel": "Master's",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://www.vliruos.be/en/scholarships/6",
-        "overallSummary": {
-          "cost": "Full scholarship · Tuition, travel, insurance and living allowance",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations. International return travel subsidy provided. Statutory student health insurance covered.",
-          "other": "Academics: Applicants from eligible countries to selected development-oriented master's programmes. Language: Programme-specific; verify on the official page. Route: Apply to participating programme"
-        }
-      },
-      {
-        "id": "EU-0079",
-        "name": "Master Mind Scholarship",
-        "provider": "Government of Flanders",
-        "coverage": "€10,000 grant per academic year plus tuition-fee waiver at host institution · EUR 10,000",
-        "fundingTier": "full_tuition",
-        "studyLevel": "Master's",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://www.studyinflanders.be/scholarships/master-mind-scholarships",
-        "overallSummary": {
-          "cost": "100% tuition fee waiver covered by provider. Living expenses and housing are student-financed.",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: Outstanding international applicant nominated by participating Flemish institution. Language: Programme-specific; verify on the official page. Route: Apply to host institution for nomination"
         }
       },
       {
@@ -781,129 +745,6 @@
           "cost": "100% full tuition fee waiver for the complete 1 or 2-year duration of the Master's programme.",
           "benefits": "Monthly allowance of approx. €1,400, comprehensive insurance, international round-trip airfare, housing allowance, and study materials.",
           "other": "Targeted at development professionals committed to contributing to their home country's sustainable development."
-        }
-      },
-      {
-        "id": "BE-001",
-        "name": "Master Mind Scholarships Flanders",
-        "provider": "Flemish Ministry of Education and Training & Study in Flanders",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's Degree",
-        "deadline": "2026-04-28",
-        "status": "Active / Verified",
-        "officialSource": "https://www.studyinflanders.be",
-        "overallSummary": {
-          "cost": "আন্তর্জাতিক ছাত্রদের সাধারণ টিউশন ফি (প্রতি বছর €৪,০০০-€৮,০০০) সম্পূর্ণ মওকুফ করে স্থানীয় ফি-তে (মাত্র €১৩১/বছর) সীমিত করা হয়।",
-          "benefits": "প্রতি শিক্ষাবর্ষের জন্য €১০,০০০ ইউরো (প্রায় ১৩,০০,০০০ টাকা) সরাসরি জীবনযাত্রার অনুদান প্রদান করা হয়।",
-          "other": "কেইউ লিউভেন (KU Leuven) ও গেন্ট ইউনিভার্সিটি ইউরোপের সেরা ৫০ বিশ্ববিদ্যালয়ের অন্তর্ভুক্ত। বেলজিয়ামের ব্রাসেলসে ইইউ সদর দপ্তর হওয়ায় আন্তর্জাতিক ক্যারিয়ারের দারুণ সুযোগ মেলে।"
-        }
-      }
-    ]
-  },
-  "CAN": {
-    "iso": "CAN",
-    "countryEn": "Canada",
-    "totalCount": 5,
-    "fullyFundedCount": 4,
-    "fullTuitionCount": 0,
-    "partialCount": 0,
-    "otherCount": 1,
-    "scholarshipIds": [
-      "BD-038",
-      "BD-040",
-      "BD-039",
-      "CA-001",
-      "CA-002"
-    ],
-    "studyLevels": [
-      "Master's",
-      "professional degree",
-      "Undergraduate",
-      "Undergraduate (Bachelor - 4 Years)",
-      "Master's Degree",
-      "Professional Studies"
-    ],
-    "intakes": [],
-    "items": [
-      {
-        "id": "BD-038",
-        "name": "McCall MacBain Scholarship",
-        "provider": "McGill University",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's / professional degree",
-        "deadline": "2026-08-19",
-        "status": "Closed for 2027 admission",
-        "officialSource": "https://mccallmacbainscholars.org/apply/",
-        "overallSummary": {
-          "cost": "100% full tuition fee covered (McCall MacBain Scholarship). Minimal student union/administrative registration fees may apply.",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
-          "other": "Academics: Meets McGill programme admission; first bachelor's timing criteria. Language: McGill programme requirement. Route: Separate scholarship application, then McGill programme application"
-        }
-      },
-      {
-        "id": "BD-040",
-        "name": "Lester B. Pearson International Scholarship",
-        "provider": "University of Toronto",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Undergraduate",
-        "deadline": "",
-        "status": "Annual—monitor",
-        "officialSource": "https://future.utoronto.ca/pearson-scholarships",
-        "overallSummary": {
-          "cost": "100% full tuition fee covered (Lester B. Pearson International Scholarship). Minimal student union/administrative registration fees may apply.",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
-          "other": "Academics: Exceptional academic achievement. Language: U of T admission requirement. Route: School nomination, U of T application, then scholarship form"
-        }
-      },
-      {
-        "id": "BD-039",
-        "name": "UBC International Scholars Program",
-        "provider": "University of British Columbia",
-        "coverage": "Need-and-merit based; up to full demonstrated need",
-        "fundingTier": "other",
-        "studyLevel": "Undergraduate",
-        "deadline": "",
-        "status": "Annual—monitor",
-        "officialSource": "https://you.ubc.ca/financial-planning/scholarships-awards-international-students/international-scholars/",
-        "overallSummary": {
-          "cost": "Need-and-merit based; up to full demonstrated need · Can cover tuition according to assessed need · Living costs may be included in need assessment",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
-          "other": "Academics: Outstanding secondary-school achievement. Language: UBC admission requirement. Route: School/NGO nomination plus UBC application and award application"
-        }
-      },
-      {
-        "id": "CA-001",
-        "name": "Lester B. Pearson International Scholarship (University of Toronto)",
-        "provider": "University of Toronto",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Undergraduate (Bachelor - 4 Years)",
-        "deadline": "2026-11-30",
-        "status": "Active / Verified",
-        "officialSource": "https://future.utoronto.ca/pearson",
-        "overallSummary": {
-          "cost": "৪ বছরের সম্পূর্ণ আন্তর্জাতিক টিউশন ফি, বইয়ের খরচ এবং ইউনিভার্সিটির সকল প্রাসঙ্গিক ইনসিডেন্টাল ফি সম্পূর্ণ ফ্রি।",
-          "benefits": "টরন্টো বিশ্ববিদ্যালয়ের নিজস্ব রেসিডেন্সে ৪ বছরের সম্পূর্ণ ফ্রি থাকার ও খাওয়ার ব্যবস্থা (মোট ফান্ডিং মূল্য প্রায় $৩০০,০০০+ কানাডিয়ান ডলার)।",
-          "other": "কানাডার এক নম্বর বিশ্ববিদ্যালয় ইউ অব টি-এর সবচেয়ে প্রেস্টিজিয়াস আন্ডারগ্র্যাজুয়েট স্কলারশিপ। বিশ্বের সেরা সম্ভাবনাময় তরুণদের এই ফেলোশিপ দেওয়া হয়।"
-        }
-      },
-      {
-        "id": "CA-002",
-        "name": "McCall MacBain Scholarship (McGill University)",
-        "provider": "McCall MacBain Foundation & McGill University",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's Degree / Professional Studies",
-        "deadline": "2026-08-21",
-        "status": "Active / Verified",
-        "officialSource": "https://www.mccallmacbainscholars.org",
-        "overallSummary": {
-          "cost": "ম্যাকগিল বিশ্ববিদ্যালয়ে সম্পূর্ণ প্রোগ্রামের ১০০% টিউশন ফি এবং সংশ্লিষ্ট ক্যাম্পাস ফি মওকুফ।",
-          "benefits": "কানাডায় জীবনযাত্রার ব্যয়ের জন্য প্রতি মাসে $২,০০০ ক্যাড (CAD) নগদ স্টাইপেন্ড (প্রায় ১,৮০,০০০ টাকা) এবং মন্ট্রিয়েলে আসার জন্য এককালীন রিলোকেশন গ্রান্ট।",
-          "other": "কানাডার রোডস স্কলারশিপ হিসেবে খ্যাত ম্যাককল ম্যাকবেইন ফেলোদের নিবিড় লিডারশিপ ট্রেনিং, মেন্টরশিপ এবং আন্তর্জাতিক নেটওয়ার্কিং সরবরাহ করে।"
         }
       }
     ]
@@ -1074,24 +915,20 @@
   "CZE": {
     "iso": "CZE",
     "countryEn": "Czechia",
-    "totalCount": 5,
-    "fullyFundedCount": 3,
+    "totalCount": 3,
+    "fullyFundedCount": 2,
     "fullTuitionCount": 0,
     "partialCount": 1,
-    "otherCount": 1,
+    "otherCount": 0,
     "scholarshipIds": [
       "EU-0091",
-      "EU-0089",
       "EU-0090",
-      "EUR-CZ-001",
-      "CZ-001"
+      "EUR-CZ-001"
     ],
     "studyLevels": [
       "Bachelor's",
       "Master's",
-      "PhD",
-      "Master's follow-up",
-      "Master"
+      "PhD"
     ],
     "intakes": [],
     "items": [
@@ -1109,22 +946,6 @@
           "cost": "Partial tuition grant / fee reduction (Tuition policy / discount · No tuition for public/state university degree programmes taught in Czech, subject to statutory limits · CZK 0). Remaining tuition and living costs paid by student.",
           "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
           "other": "Academics: Student admitted to Czech-taught public-university programme. Language: Programme-specific; verify on the official page. Route: Automatic by programme language/policy"
-        }
-      },
-      {
-        "id": "EU-0089",
-        "name": "Government Scholarships for Developing Countries",
-        "provider": "Government of the Czech Republic",
-        "coverage": "Study costs and monthly scholarship under bilateral development programme",
-        "fundingTier": "other",
-        "studyLevel": "Master's follow-up / PhD",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://www.msmt.cz/eu-and-international-affairs/government-scholarships-developing-countries",
-        "overallSummary": {
-          "cost": "Full scholarship · Study costs and monthly scholarship under bilateral development programme",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: Citizen of an eligible country applying to designated programmes/languages. Language: Programme-specific; verify on the official page. Route: Online government application / embassy route"
         }
       },
       {
@@ -1158,30 +979,14 @@
           "benefits": "Monthly living stipend of CZK 14,000 for Master's students (CZK 15,000 for PhD) covering accommodation and meals.",
           "other": "Czechia offers very safe living conditions, high academic standards, and central European travel access."
         }
-      },
-      {
-        "id": "CZ-001",
-        "name": "Czech Republic Government Foreign Development Scholarships",
-        "provider": "Ministry of Education, Youth and Sports (MEYS) & Ministry of Foreign Affairs of the Czech Republic",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master / PhD",
-        "deadline": "2026-09-30",
-        "status": "Active / Verified",
-        "officialSource": "https://www.msmt.cz",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি ওয়েভার এবং প্রিপারেটরি ল্যাঙ্গুয়েজ প্রোগ্রামের সম্পূর্ণ খরচ প্রদান করা হয়।",
-          "benefits": "মাস্টার্স শিক্ষার্থীদের জন্য প্রতি মাসে ১৪,০০০ চেক কোরুনা (CZK) এবং পিএইচডি শিক্ষার্থীদের জন্য ১৫,০০০ চেক কোরুনা মাসিক জীবনযাত্রার ভাতা ও ক্যাটারিং ভর্তুকি।",
-          "other": "চেক প্রজাতন্ত্র সেন্ট্রাল ইউরোপের প্রাণকেন্দ্রে অবস্থিত নিরাপদ ও উন্নত দেশ। প্রাগে অবস্থিত ঐতিহ্যবাহী চার্লস ইউনিভার্সিটিতে উচ্চশিক্ষার সুযোগ অত্যন্ত মর্যাদাপূর্ণ।"
-        }
       }
     ]
   },
   "DNK": {
     "iso": "DNK",
     "countryEn": "Denmark",
-    "totalCount": 6,
-    "fullyFundedCount": 3,
+    "totalCount": 5,
+    "fullyFundedCount": 2,
     "fullTuitionCount": 3,
     "partialCount": 0,
     "otherCount": 0,
@@ -1190,14 +995,12 @@
       "EU-0072",
       "EU-0069",
       "EU-0070",
-      "EUR-DK-001",
-      "DK-001"
+      "EUR-DK-001"
     ],
     "studyLevels": [
       "Master's",
       "Bachelor's",
-      "Master's degree",
-      "Master's Degree"
+      "Master's degree"
     ],
     "intakes": [],
     "items": [
@@ -1280,22 +1083,6 @@
           "benefits": "Monthly living grant contribution of DKK 3,000 to DKK 6,000 to assist with living and accommodation costs.",
           "other": "Awarded to the most talented international applicants. High post-study work rights in Denmark."
         }
-      },
-      {
-        "id": "DK-001",
-        "name": "Danish Government Scholarships for Highly Qualified Non-EU/EEA Students",
-        "provider": "Danish Agency for Higher Education and Science & Danish Universities",
-        "coverage": "Full tuition",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's Degree",
-        "deadline": "2026-01-15",
-        "status": "Active / Verified",
-        "officialSource": "https://studyindenmark.dk",
-        "overallSummary": {
-          "cost": "ডেনমার্কের শীর্ষ বিশ্ববিদ্যালয়ে সম্পূর্ণ বা সিংহভাগ আন্তর্জাতিক টিউশন ফি মওকুফ।",
-          "benefits": "অনেক ক্ষেত্রে টিউশন মওকুফের পাশাপাশি ডেনমার্কে জীবনযাত্রার ব্যয়ের জন্য মাসিক সম্মানজনক অনুদান প্রদান করা হয়।",
-          "other": "ডেনমার্কের ডিটিইউ (DTU) ও কোপেনহেগেন বিশ্ববিদ্যালয় বিশ্বমানের গবেষণাগার। পড়াশোনা শেষে ৩ বছরের পোস্ট-স্টাডি ওয়ার্ক পারমিট নিশ্চিত।"
-        }
       }
     ]
   },
@@ -1374,13 +1161,12 @@
   "FIN": {
     "iso": "FIN",
     "countryEn": "Finland",
-    "totalCount": 13,
-    "fullyFundedCount": 2,
-    "fullTuitionCount": 9,
+    "totalCount": 11,
+    "fullyFundedCount": 1,
+    "fullTuitionCount": 8,
     "partialCount": 2,
     "otherCount": 0,
     "scholarshipIds": [
-      "EU-0021",
       "EU-0024",
       "EU-0025",
       "EU-0022",
@@ -1391,34 +1177,16 @@
       "EU-0027",
       "EU-0029",
       "EUR-FI-001",
-      "EUR-FI-002",
-      "FI-001"
+      "EUR-FI-002"
     ],
     "studyLevels": [
-      "Bachelor's",
       "Master's",
+      "Bachelor's",
       "PhD",
-      "Master's degree",
-      "Master"
+      "Master's degree"
     ],
     "intakes": [],
     "items": [
-      {
-        "id": "EU-0021",
-        "name": "Aalto University Excellence Scholarship",
-        "provider": "Aalto University",
-        "coverage": "100% tuition fee waiver",
-        "fundingTier": "full_tuition",
-        "studyLevel": "Bachelor's / Master's",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://www.aalto.fi/en/admission-services/scholarships-and-tuition-fees",
-        "overallSummary": {
-          "cost": "100% full tuition fee covered (Aalto University Excellence Scholarship). Minimal student union/administrative registration fees may apply.",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: Highest-achieving tuition-fee-liable applicants. Language: Programme-specific; verify on the official page. Route: Apply within admission form"
-        }
-      },
       {
         "id": "EU-0024",
         "name": "Early Bird Discount",
@@ -1594,31 +1362,15 @@
           "benefits": "Complete relief from tuition fees at Finland's highest-ranked university for innovation and design.",
           "other": "Renewed automatically for Year 2 upon completing at least 55 ECTS credits in Year 1."
         }
-      },
-      {
-        "id": "FI-001",
-        "name": "Finland Scholarship for International Master's & PhD Students",
-        "provider": "Ministry of Education and Culture of Finland & Finnish National Agency for Education (EDUFI)",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master / PhD",
-        "deadline": "2026-01-21",
-        "status": "Active / Verified",
-        "officialSource": "https://www.studyinfinland.fi",
-        "overallSummary": {
-          "cost": "মাস্টার্স মেয়াদের ১০০% সম্পূর্ণ আন্তর্জাতিক টিউশন ফি মওকুফ (বাৎসরিক মূল্য প্রায় €১২,০০০-€১৮,০০০ ইউরো)।",
-          "benefits": "ফিনল্যান্ডে পৌঁছানোর পর প্রাথমিক আবাসন ও সেটেলমেন্ট ব্যয়ের জন্য সরাসরি শিক্ষার্থীর ব্যাংক অ্যাকাউন্টে €৫,০০০ ইউরো (প্রায় ৬,৫০,০০০ টাকা) নগদ অনুদান।",
-          "other": "ফিনল্যান্ড বিশ্বের সবচেয়ে সুখী ও নিরাপদ দেশ। ফিনল্যান্ডে স্নাতক শেষে দুই বছরের পোস্ট-স্টাডি জব-সিকিং ভিসা পাওয়া যায় এবং সহজেই ইউরোপীয় পিআর (PR) আবেদন করা যায়।"
-        }
       }
     ]
   },
   "FRA": {
     "iso": "FRA",
     "countryEn": "France",
-    "totalCount": 12,
-    "fullyFundedCount": 4,
-    "fullTuitionCount": 3,
+    "totalCount": 10,
+    "fullyFundedCount": 3,
+    "fullTuitionCount": 2,
     "partialCount": 4,
     "otherCount": 1,
     "scholarshipIds": [
@@ -1626,14 +1378,12 @@
       "EU-0049",
       "EU-0045",
       "EU-0044",
-      "EU-0047",
       "BD-016",
       "EU-0046",
       "INTAKE-032",
       "EUR-FR-001",
       "EUR-FR-002",
-      "EUR-FR-003",
-      "FR-001"
+      "EUR-FR-003"
     ],
     "studyLevels": [
       "Master's",
@@ -1706,22 +1456,6 @@
           "cost": "Stipend scholarship · Monthly allowance plus travel, insurance and activity support; tuition is not automatically paid by Eiffel",
           "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations. International return travel subsidy provided. Statutory student health insurance covered.",
           "other": "Academics: International applicant nominated by a French institution in priority fields. Language: Programme-specific; verify on the official page. Route: Institutional nomination only"
-        }
-      },
-      {
-        "id": "EU-0047",
-        "name": "Émile Boutmy Scholarship",
-        "provider": "Émile Boutmy / Sciences Po",
-        "coverage": "Multiple award levels, from partial tuition grants to substantial/full tuition support",
-        "fundingTier": "full_tuition",
-        "studyLevel": "Bachelor's / Master's",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://www.sciencespo.fr/students/en/fees-funding/bursaries-financial-aid/emile-boutmy-scholarship/",
-        "overallSummary": {
-          "cost": "100% full tuition fee covered (Émile Boutmy Scholarship). Minimal student union/administrative registration fees may apply.",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: First-time non-EU applicant whose household is not tax-resident in EU. Language: Programme-specific; verify on the official page. Route: Request during admissions application"
         }
       },
       {
@@ -1819,32 +1553,16 @@
           "benefits": "€10,000 net per year paid in monthly installments over 10 consecutive months, plus up to €1,000 reimbursement for international travel and visa fees.",
           "other": "Renewable for second year of master's subject to academic performance. Paris-Saclay is ranked #1 in France and top 15 worldwide."
         }
-      },
-      {
-        "id": "FR-001",
-        "name": "France Excellence Eiffel Scholarship",
-        "provider": "Ministry for Europe and Foreign Affairs (France) & Campus France",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master / PhD",
-        "deadline": "2026-01-10",
-        "status": "Active / Verified",
-        "officialSource": "https://www.campusfrance.org",
-        "overallSummary": {
-          "cost": "ফরাসি পাবলিক বিশ্ববিদ্যালয়গুলোতে আন্তর্জাতিক শিক্ষার্থীদের সকল টিউশন ফি সম্পূর্ণ মওকুফ।",
-          "benefits": "মাস্টার্স গবেষকদের জন্য মাসিক ১,১৮১ ইউরো এবং পিএইচডি গবেষকদের জন্য ১,৮০০ ইউরো (প্রায় ২,৪০,০০০ টাকা) নগদ মাসিক ভাতা, রিটার্ন বিমান টিকিট, রেলওয়ে ট্রাভেল কার্ড ও সার্বিক স্বাস্থ্য বীমা।",
-          "other": "ফ্রান্স সরকারের সর্বোচ্চ মর্যাদাপূর্ণ আইফেল এক্সিলেন্স স্কলারশিপ। ক্যাম্পাস ফ্রান্স ঢাকা (ধানমন্ডি আঁলিয়ঁস ফ্রঁসেজ) শিক্ষার্থীদের প্রি-ডিপার্চার ওরিয়েন্টেশন প্রদান করে।"
-        }
       }
     ]
   },
   "DEU": {
     "iso": "DEU",
     "countryEn": "Germany",
-    "totalCount": 17,
-    "fullyFundedCount": 7,
+    "totalCount": 15,
+    "fullyFundedCount": 6,
     "fullTuitionCount": 0,
-    "partialCount": 7,
+    "partialCount": 6,
     "otherCount": 3,
     "scholarshipIds": [
       "BD-014",
@@ -1853,7 +1571,6 @@
       "EU-0009",
       "EU-0011",
       "EU-0008",
-      "EU-0007",
       "EU-0005",
       "EU-0010",
       "INTAKE-033",
@@ -1862,7 +1579,6 @@
       "EUR-DE-002",
       "EUR-DE-003",
       "EUR-DE-004",
-      "DE-001",
       "DE-002"
     ],
     "studyLevels": [
@@ -1971,22 +1687,6 @@
           "cost": "Foundation scholarship · Monthly stipend; health-insurance and family supplements may apply",
           "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations. Statutory student health insurance covered.",
           "other": "Academics: Strong academic record, social-democratic engagement and German proficiency. Language: Programme-specific; verify on the official page. Route: Separate foundation application"
-        }
-      },
-      {
-        "id": "EU-0007",
-        "name": "Scholarships for International Students",
-        "provider": "Heinrich Böll Foundation",
-        "coverage": "Monthly stipend and study/research allowances according to programme rules",
-        "fundingTier": "partial",
-        "studyLevel": "Master's / PhD",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://www.boell.de/en/scholarships",
-        "overallSummary": {
-          "cost": "Foundation scholarship · Monthly stipend and study/research allowances according to programme rules",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
-          "other": "Academics: Excellent international students with social/political engagement and alignment with foundation values. Language: Programme-specific; verify on the official page. Route: Separate foundation application"
         }
       },
       {
@@ -2115,22 +1815,6 @@
           "cost": "100% tuition-free public university study.",
           "benefits": "€934/month base stipend plus €300/month individual allowance; health insurance subsidies; family allowances if applicable.",
           "other": "Strong commitment to green values, democracy, ecology, and human rights required. German language competence strongly prioritized."
-        }
-      },
-      {
-        "id": "DE-001",
-        "name": "DAAD Development-Related Postgraduate Courses (EPOS)",
-        "provider": "German Academic Exchange Service (DAAD)",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master / PhD",
-        "deadline": "2026-09-30",
-        "status": "Active / Verified",
-        "officialSource": "https://www.daad.de",
-        "overallSummary": {
-          "cost": "জার্মান পাবলিক বিশ্ববিদ্যালয়ে ১০০% ফ্রি টিউশন ফি (শুধু সেমিস্টার টিকেট ফি প্রযোজ্য)।",
-          "benefits": "মাস্টার্সের জন্য প্রতি মাসে €৯৩৪ ইউরো এবং পিএইচডির জন্য €১,৩০০ ইউরো মাসিক জীবনযাত্রার ভাতা, ঢাকা-জার্মানি রাউন্ডট্রিপ বিমান টিকিট, স্বাস্থ্য বীমা ও বাধ্যতামূলক ব্লকড অ্যাকাউন্টের প্রয়োজন নেই।",
-          "other": "ডিএএডি ইপোস বাংলাদেশি তরুণ পেশাজীবীদের জন্য জার্মানির সবচেয়ে চাহিদাসম্পন্ন স্কলারশিপ। ২ বছরের কাজের অভিজ্ঞতা থাকলে সরাসরি আবেদন করা যায়।"
         }
       },
       {
@@ -2347,31 +2031,21 @@
   "HUN": {
     "iso": "HUN",
     "countryEn": "Hungary",
-    "totalCount": 7,
-    "fullyFundedCount": 7,
+    "totalCount": 3,
+    "fullyFundedCount": 3,
     "fullTuitionCount": 0,
     "partialCount": 0,
     "otherCount": 0,
     "scholarshipIds": [
       "EU-0059",
-      "EU-0058",
-      "BD-010",
       "EU-0060",
-      "INTAKE-030",
-      "EUR-HU-001",
-      "HU-001"
+      "EUR-HU-001"
     ],
     "studyLevels": [
       "Master's",
       "Bachelor's",
-      "One-tier",
       "PhD",
-      "one-tier",
-      "Bachelor",
-      "Master",
-      "Doctoral",
-      "One-Tier",
-      "One-Tier Master"
+      "One-Tier"
     ],
     "intakes": [],
     "items": [
@@ -2392,38 +2066,6 @@
         }
       },
       {
-        "id": "EU-0058",
-        "name": "Stipendium Hungaricum",
-        "provider": "Government of Hungary",
-        "coverage": "Tuition-free education, monthly stipend, accommodation contribution/dormitory and medical insurance",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Bachelor's / Master's / One-tier / PhD",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://stipendiumhungaricum.hu/",
-        "overallSummary": {
-          "cost": "Full scholarship · Tuition-free education, monthly stipend, accommodation contribution/dormitory and medical insurance",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations. Statutory student health insurance covered.",
-          "other": "Academics: Applicant from a sending-partner country nominated under bilateral arrangement. Language: Programme-specific; verify on the official page. Route: Online application plus sending-partner process"
-        }
-      },
-      {
-        "id": "BD-010",
-        "name": "Stipendium Hungaricum—Bangladesh",
-        "provider": "Participating Hungarian universities",
-        "coverage": "Substantially funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Bachelor's / Master's / one-tier / PhD",
-        "deadline": "2026-01-15",
-        "status": "Closed—2027 cycle opens late 2026",
-        "officialSource": "https://stipendiumhungaricum.hu/",
-        "overallSummary": {
-          "cost": "Substantially funded · Tuition-free · Monthly stipend",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
-          "other": "Academics: Programme-specific; Bangladesh nomination scoring also applies. Language: Programme-specific. Route: Tempus portal plus Bangladesh Ministry process"
-        }
-      },
-      {
         "id": "EU-0060",
         "name": "International Scholarship Portfolio",
         "provider": "University of Debrecen",
@@ -2440,22 +2082,6 @@
         }
       },
       {
-        "id": "INTAKE-030",
-        "name": "Stipendium Hungaricum — Bangladesh",
-        "provider": "Government of Hungary / Bangladesh sending partner",
-        "coverage": "Full / substantial",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Bachelor / Master / One-tier / Doctoral",
-        "deadline": "2026-01-15",
-        "status": "Closed—2027 cycle opens late 2026",
-        "officialSource": "https://stipendiumhungaricum.hu/country/bangladesh/",
-        "overallSummary": {
-          "cost": "Tuition, monthly stipend, accommodation contribution and medical insurance",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations. Statutory student health insurance covered.",
-          "other": "Academics: Academic eligibility plus sending-partner and host requirements. Language: Programme-specific. Route: Apply in Stipendium Hungaricum system and follow Bangladesh sending-partner process"
-        }
-      },
-      {
         "id": "EUR-HU-001",
         "name": "Stipendium Hungaricum Scholarship Programme (Bangladesh Quota 2027/28)",
         "provider": "Tempus Public Foundation / Ministry of Foreign Affairs and Trade of Hungary",
@@ -2469,22 +2095,6 @@
           "cost": "100% tuition-free education for the full statutory degree duration at Hungarian state universities.",
           "benefits": "Monthly stipend (HUF 43,700 for BA/MA; HUF 140,000 for PhD 1st phase, HUF 180,000 2nd phase), free dormitory accommodation or HUF 40,000/month housing allowance, and statutory health insurance up to HUF 65,000/year.",
           "other": "Bangladesh has a dedicated bilateral quota of 140+ annual scholarships across Bachelor's, Master's, and PhD levels. Must complete local Ministry of Education nomination."
-        }
-      },
-      {
-        "id": "HU-001",
-        "name": "Stipendium Hungaricum Scholarship (Bangladesh Bilateral Quota - 140 Awards)",
-        "provider": "Tempus Public Foundation & Ministry of Foreign Affairs and Trade of Hungary",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Bachelor / One-Tier Master / Master / PhD",
-        "deadline": "2026-01-15",
-        "status": "Active / Verified",
-        "officialSource": "https://stipendiumhungaricum.hu",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি ওয়েভার ইউরোপীয় ইউনিয়নের শেঙ্গেনভুক্ত হাঙ্গেরির রাষ্ট্রীয় বিশ্ববিদ্যালয়গুলোতে।",
-          "benefits": "মাস্টার্স পর্যন্ত প্রতি মাসে ৪৩,৭০০ হাঙ্গেরিয়ান ফোরিন্ট (HUF) এবং পিএইচডির জন্য ৮৩,৭০০ থেকে ১৪০,০০০ ফোরিন্ট মাসিক ভাতা, ক্যাম্পাসের ফ্রি ডরমিটরি বা আবাসন অনুদান এবং ৬৫,০০০ ফোরিন্ট পর্যন্ত স্বাস্থ্য বীমা।",
-          "other": "হাঙ্গেরি সরকার বাংলাদেশীদের জন্য বার্ষিক ১৪০টি নিশ্চিত পূর্ণাঙ্গ বৃত্তি প্রদান করে। শিক্ষা মন্ত্রণালয়ের shed.gov.bd-তে আবেদন করার পর মৌখিক পরীক্ষার মাধ্যমে ১৪০ জন চূড়ান্ত মনোনয়ন পান। নয়া দিল্লি হাঙ্গেরিয়ান দূতাবাস দ্রুত ভিসা সম্পন্ন করে।"
         }
       }
     ]
@@ -2546,64 +2156,26 @@
   "IRL": {
     "iso": "IRL",
     "countryEn": "Ireland",
-    "totalCount": 7,
-    "fullyFundedCount": 2,
+    "totalCount": 4,
+    "fullyFundedCount": 1,
     "fullTuitionCount": 1,
-    "partialCount": 3,
-    "otherCount": 1,
+    "partialCount": 2,
+    "otherCount": 0,
     "scholarshipIds": [
-      "EU-0077",
-      "INTAKE-031",
       "EU-0076",
       "EU-0078",
       "EUR-IE-001",
-      "EUR-IE-002",
-      "IE-001"
+      "EUR-IE-002"
     ],
     "studyLevels": [
+      "Research Master's",
+      "PhD",
       "Bachelor's",
       "Master's",
-      "postgraduate diploma",
-      "PhD",
-      "Research Master's",
-      "Master's degree",
-      "Master",
-      "PhD (1 Year Funded)"
+      "Master's degree"
     ],
     "intakes": [],
     "items": [
-      {
-        "id": "EU-0077",
-        "name": "Global Excellence Scholarships",
-        "provider": "Trinity College Dublin",
-        "coverage": "Competitive tuition fee reduction; value differs by level/faculty",
-        "fundingTier": "partial",
-        "studyLevel": "Bachelor's / Master's",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://www.tcd.ie/study/international/scholarships/",
-        "overallSummary": {
-          "cost": "Partial tuition grant / fee reduction (Tuition reduction · Competitive tuition fee reduction; value differs by level/faculty). Remaining tuition and living costs paid by student.",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: International fee-paying applicant with strong academic record. Language: Programme-specific; verify on the official page. Route: Separate scholarship application"
-        }
-      },
-      {
-        "id": "INTAKE-031",
-        "name": "Government of Ireland International Education Scholarship",
-        "provider": "Government of Ireland",
-        "coverage": "Full fee waiver for one year plus €10,000 stipend · EUR 10,000",
-        "fundingTier": "other",
-        "studyLevel": "Master's / postgraduate diploma / PhD",
-        "deadline": "2026-03-12",
-        "status": "Closed—2027 cycle opens late 2026",
-        "officialSource": "https://hea.ie/policy/internationalisation/goi-ies/",
-        "overallSummary": {
-          "cost": "Full fee waiver + stipend · Full fee waiver for one year plus €10,000 stipend · EUR 10,000",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
-          "other": "Academics: High-calibre non-EU/EEA student with an offer from an eligible Irish institution. Language: Programme-specific; verify on the official page. Route: Separate national application"
-        }
-      },
       {
         "id": "EU-0076",
         "name": "Government of Ireland Postgraduate Scholarship Programme",
@@ -2666,22 +2238,6 @@
           "cost": "Provides a €2,000 to €5,000 direct deduction from first-year international tuition fees at Ireland's #1 university.",
           "benefits": "Immediate fee reduction on total payable tuition fee.",
           "other": "Awarded based on academic achievement and potential contribution to the Trinity community."
-        }
-      },
-      {
-        "id": "IE-001",
-        "name": "Government of Ireland International Education Scholarships (GOI-IES)",
-        "provider": "Higher Education Authority (HEA) & Department of Further and Higher Education, Research, Innovation and Science",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master / PhD (1 Year Funded)",
-        "deadline": "2026-03-13",
-        "status": "Active / Verified",
-        "officialSource": "https://hea.ie",
-        "overallSummary": {
-          "cost": "আইরিশ বিশ্ববিদ্যালয়ের ১০০% সম্পূর্ণ টিউশন ফি ও রেজিস্ট্রেশন ফি পূর্ণ মওকুফ।",
-          "benefits": "উচ্চশিক্ষা কর্তৃপক্ষের পক্ষ থেকে ১ বছরের জন্য সরাসরি শিক্ষার্থীর ব্যাংক অ্যাকাউন্টে €১০,০০০ ইউরো (প্রায় ১৩,০০,০০০ টাকা) নগদ জীবনযাত্রার অনুদান।",
-          "other": "আয়ারল্যান্ড ইউরোপের প্রধান ইংরেজিভাষী অর্থনৈতিক হাব এবং প্রযুক্তি রাজধানী। মাস্টার্স শেষে ২ বছরের পোস্ট-স্টাডি ওয়ার্ক ভিসা (Third Level Graduate Scheme) নিশ্চিত থাকে।"
         }
       }
     ]
@@ -2793,10 +2349,10 @@
   "ITA": {
     "iso": "ITA",
     "countryEn": "Italy",
-    "totalCount": 15,
-    "fullyFundedCount": 7,
+    "totalCount": 13,
+    "fullyFundedCount": 6,
     "fullTuitionCount": 4,
-    "partialCount": 4,
+    "partialCount": 3,
     "otherCount": 0,
     "scholarshipIds": [
       "EU-0054",
@@ -2807,12 +2363,10 @@
       "INTAKE-036",
       "EU-0057",
       "EU-0056",
-      "INTAKE-037",
       "EUR-IT-001",
       "EUR-IT-002",
       "EUR-IT-003",
       "EUR-IT-004",
-      "IT-001",
       "IT-002"
     ],
     "studyLevels": [
@@ -2821,11 +2375,8 @@
       "PhD",
       "Research",
       "Arts",
-      "Master",
       "AFAM",
-      "Language",
       "Master of Science",
-      "AFAM (Fine Arts & Music)",
       "Master's Degree (Laurea Magistrale - 2 Years)"
     ],
     "intakes": [],
@@ -2959,22 +2510,6 @@
         }
       },
       {
-        "id": "INTAKE-037",
-        "name": "MAECI Grants for Foreign Students",
-        "provider": "Italian Ministry of Foreign Affairs and International Cooperation",
-        "coverage": "Substantial",
-        "fundingTier": "partial",
-        "studyLevel": "Master / AFAM / PhD / Research / Language",
-        "deadline": "2026-03-26",
-        "status": "Closed—2027 cycle opens late 2026",
-        "officialSource": "https://studyinitaly.esteri.it/",
-        "overallSummary": {
-          "cost": "Monthly grant and insurance under call terms; tuition treatment depends on institution",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: Age, qualification and language rules vary by study type. Language: Programme-specific. Route: Apply through the official Study in Italy portal"
-        }
-      },
-      {
         "id": "EUR-IT-001",
         "name": "Italian Government MAECI Scholarships for Foreign Students",
         "provider": "Ministry of Foreign Affairs and International Cooperation (MAECI), Italy",
@@ -3039,22 +2574,6 @@
         }
       },
       {
-        "id": "IT-001",
-        "name": "MAECI Italian Government Scholarships for Foreign Citizens",
-        "provider": "Ministry of Foreign Affairs and International Cooperation (MAECI), Government of Italy",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master / PhD / AFAM (Fine Arts & Music)",
-        "deadline": "2026-06-14",
-        "status": "Active / Verified",
-        "officialSource": "https://studyinitaly.esteri.it",
-        "overallSummary": {
-          "cost": "ইতালিয়ান রাষ্ট্রীয় বিশ্ববিদ্যালয়ে ১০০% সম্পূর্ণ টিউশন ফি ও রেজিস্ট্রেশন ফি মওকুফ।",
-          "benefits": "প্রতি মাসে সরাসরি শিক্ষার্থীর ব্যাংক অ্যাকাউন্টে €৯০০ ইউরো (প্রায় ১,২০,০০০ টাকা) নগদ লিভিং স্টাইপেন্ড এবং জাতীয় স্বাস্থ্য বীমা।",
-          "other": "ইতালির সবচেয়ে প্রেস্টিজিয়াস সরকারি বৃত্তি। ইতালি দূতাবাস ঢাকা সরাসরি এই বৃত্তির অধীনে ভিসা ফাস্ট-ট্র্যাকে প্রক্রিয়া করে।"
-        }
-      },
-      {
         "id": "IT-002",
         "name": "Invest Your Talent in Italy (IYT) Scholarship",
         "provider": "MAECI, ITA (Italian Trade Agency) & Uni-Italia",
@@ -3075,8 +2594,8 @@
   "JPN": {
     "iso": "JPN",
     "countryEn": "Japan",
-    "totalCount": 8,
-    "fullyFundedCount": 8,
+    "totalCount": 7,
+    "fullyFundedCount": 7,
     "fullTuitionCount": 0,
     "partialCount": 0,
     "otherCount": 0,
@@ -3085,7 +2604,6 @@
       "BD-007",
       "BD-008",
       "GLB-JP-001",
-      "JP-001",
       "JP-006",
       "JP-007",
       "JP-008"
@@ -3097,8 +2615,6 @@
       "Undergraduate",
       "PhD",
       "Research",
-      "Research Students (Master",
-      "PhD)",
       "Master's Degree",
       "Bachelor's (4.5 Years)"
     ],
@@ -3166,22 +2682,6 @@
           "cost": "100% full tuition fees, matriculation fees, and entrance examination fees waived at Japanese national universities.",
           "benefits": "Monthly stipend of ¥143,000 (Research/Master's) to ¥145,000 (PhD), round-trip economy airfare Dhaka–Tokyo, and 6 months intensive Japanese language course.",
           "other": "No bond or return requirement. Grantees can transition into competitive post-study employment in Japan's advanced technology sector."
-        }
-      },
-      {
-        "id": "JP-001",
-        "name": "MEXT Japanese Government Scholarship (Embassy Recommendation for Bangladesh)",
-        "provider": "Ministry of Education, Culture, Sports, Science and Technology (MEXT), Government of Japan",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Undergraduate / Research Students (Master / PhD)",
-        "deadline": "2026-05-15",
-        "status": "Active / Verified",
-        "officialSource": "https://www.mext.go.jp",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি, বিশ্ববিদ্যালয়ের ভর্তি ফি ও পরীক্ষা ফি জাপান সরকার বহন করে।",
-          "benefits": "রিসার্চ ও মাস্টার্স শিক্ষার্থীদের জন্য প্রতি মাসে ১৪৪,০০০ ইয়েন এবং পিএইচডির জন্য ১৪৫,০০০ ইয়েন (প্রায় ১,১৫,০০০ টাকা) নগদ মাসিক ভাতা, ঢাকা-টোকিও রাউন্ড-ট্রিপ বিমান টিকিট ও হেলথ ইনস্যুরেন্স।",
-          "other": "জাপান সরকারের মেক্সট (MEXT) বিশ্বব্যাপী সবচেয়ে সম্মানজনক বৃত্তির অন্যতম। বাংলাদেশ শিক্ষা মন্ত্রণালয় ও ঢাকাস্থ জাপান দূতাবাস যৌথভাবে কঠোর মেধার ভিত্তিতে প্রার্থী বাছাই করে।"
         }
       },
       {
@@ -3951,22 +3451,19 @@
   "NLD": {
     "iso": "NLD",
     "countryEn": "Netherlands",
-    "totalCount": 20,
+    "totalCount": 16,
     "fullyFundedCount": 5,
     "fullTuitionCount": 4,
-    "partialCount": 5,
-    "otherCount": 6,
+    "partialCount": 4,
+    "otherCount": 3,
     "scholarshipIds": [
       "EU-0033",
-      "EU-0038",
       "BD-043",
       "EU-0035",
       "BD-044",
-      "EU-0031",
       "BD-045",
       "EU-0039",
       "EU-0037",
-      "EU-0041",
       "EU-0042",
       "EU-0043",
       "EU-0040",
@@ -3975,15 +3472,12 @@
       "EU-0036",
       "EUR-NL-001",
       "EUR-NL-002",
-      "EUR-NL-003",
-      "NL-001"
+      "EUR-NL-003"
     ],
     "studyLevels": [
       "Master's",
       "Bachelor's",
-      "Master's degree",
-      "Bachelor",
-      "Master"
+      "Master's degree"
     ],
     "intakes": [],
     "items": [
@@ -4001,22 +3495,6 @@
           "cost": "Merit scholarship · Faculty-specific awards; value may cover part or substantial tuition/living costs",
           "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
           "other": "Academics: Excellent non-EEA master's applicant. Language: Programme-specific; verify on the official page. Route: Faculty/programme application"
-        }
-      },
-      {
-        "id": "EU-0038",
-        "name": "Eric Bleumink Fund",
-        "provider": "University of Groningen",
-        "coverage": "Tuition, international travel, subsistence, books and health insurance",
-        "fundingTier": "other",
-        "studyLevel": "Master's",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://www.rug.nl/education/scholarships/eric-bleumink-fund",
-        "overallSummary": {
-          "cost": "Full scholarship · Tuition, international travel, subsistence, books and health insurance",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: Outstanding applicant from a developing country nominated by Groningen. Language: Programme-specific; verify on the official page. Route: No direct application; faculty nomination"
         }
       },
       {
@@ -4068,22 +3546,6 @@
         }
       },
       {
-        "id": "EU-0031",
-        "name": "NL Scholarship",
-        "provider": "Dutch Ministry / Participating institutions",
-        "coverage": "€5,000 in the first year · EUR 5,000",
-        "fundingTier": "other",
-        "studyLevel": "Bachelor's / Master's",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://www.studyinnl.org/finances/nl-scholarship",
-        "overallSummary": {
-          "cost": "One-time scholarship · €5,000 in the first year · EUR 5,000",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: Non-EEA applicant to a full-time bachelor's or master's at a participating institution. Language: Programme-specific; verify on the official page. Route: Apply through participating university"
-        }
-      },
-      {
         "id": "BD-045",
         "name": "Radboud Encouragement Scholarship",
         "provider": "Radboud University",
@@ -4129,22 +3591,6 @@
           "cost": "100% tuition fee waiver covered by provider. Living expenses and housing are student-financed.",
           "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations. Statutory student health insurance covered.",
           "other": "Academics: High-potential non-EU/EEA applicant to a participating full-time master's. Language: Programme-specific; verify on the official page. Route: Separate scholarship application after admission application"
-        }
-      },
-      {
-        "id": "EU-0041",
-        "name": "University of Twente Scholarship",
-        "provider": "University of Twente",
-        "coverage": "€3,000–€22,000 for one year · EUR 3,000",
-        "fundingTier": "other",
-        "studyLevel": "Master's",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://www.utwente.nl/en/education/scholarship-finder/university-of-twente-scholarship/",
-        "overallSummary": {
-          "cost": "Merit scholarship · €3,000–€22,000 for one year · EUR 3,000",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: Excellent non-EU/EEA applicant to eligible MSc. Language: Programme-specific; verify on the official page. Route: Separate application after provisional admission"
         }
       },
       {
@@ -4289,22 +3735,6 @@
           "cost": "100% full tuition fee covered directly by the scholarship (€19,000–€23,000/year value).",
           "benefits": "€15,300 living expenses stipend (€1,275/month for 12 months), full health and liability insurance (€700 value), and visa application costs reimbursed.",
           "other": "One of the most generous comprehensive scholarships in the Netherlands. Requires top academic standing and strong recommendation."
-        }
-      },
-      {
-        "id": "NL-001",
-        "name": "NL Scholarship (formerly Holland Scholarship)",
-        "provider": "Dutch Ministry of Education, Culture and Science & Dutch Research Universities",
-        "coverage": "Partial funding",
-        "fundingTier": "partial",
-        "studyLevel": "Bachelor / Master",
-        "deadline": "2026-05-01",
-        "status": "Active / Verified",
-        "officialSource": "https://www.studyinnl.org",
-        "overallSummary": {
-          "cost": "প্রথম শিক্ষাবর্ষের টিউশন ফি-এর বিপরীতে সরাসরি €৫,০০০ থেকে €১৫,০০০ ইউরো (প্রায় ৭,০০,০০০-২০,০০,০০০ টাকা) এককালীন গ্রান্ট।",
-          "benefits": "আন্তর্জাতিক শিক্ষার্থীদের প্রাথমিক ব্যয় হ্রাস ও টিউশন ফি ওয়েভারের পরিপূরক সহায়তা।",
-          "other": "নেদারল্যান্ডস ইউরোপের সর্বোচ্চ ইংরেজিভাষী অ-স্থানীয় দেশ। মাস্টার্স শেষে ১ বছরের 'Search Year' (Zoekjaar) ভিসা পাওয়া যায় যা দিয়ে ইউরোপে সহজেই স্থায়ী চাকরি পাওয়া যায়।"
         }
       }
     ]
@@ -4485,42 +3915,25 @@
   "NOR": {
     "iso": "NOR",
     "countryEn": "Norway",
-    "totalCount": 4,
+    "totalCount": 3,
     "fullyFundedCount": 2,
     "fullTuitionCount": 1,
     "partialCount": 0,
-    "otherCount": 1,
+    "otherCount": 0,
     "scholarshipIds": [
-      "EU-0074",
       "EU-0073",
       "EUR-NO-001",
       "NO-001"
     ],
     "studyLevels": [
-      "PhD",
       "Bachelor's",
       "Master's",
+      "PhD",
       "Doctoral degree",
       "Master of Science (2 Years)"
     ],
     "intakes": [],
     "items": [
-      {
-        "id": "EU-0074",
-        "name": "Paid PhD Research Fellow Positions",
-        "provider": "Norwegian universities and research institutes",
-        "coverage": "Salary under Norwegian public-sector/collective-agreement scale; no tuition",
-        "fundingTier": "other",
-        "studyLevel": "PhD",
-        "deadline": "",
-        "status": "Active funding route",
-        "officialSource": "https://www.jobbnorge.no/search/en?OrderBy=Published&Period=All&category=137",
-        "overallSummary": {
-          "cost": "Salaried employment · Salary under Norwegian public-sector/collective-agreement scale; no tuition",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: Applicant hired into an advertised doctoral research fellow position. Language: Programme-specific; verify on the official page. Route: Job application"
-        }
-      },
       {
         "id": "EU-0073",
         "name": "Tuition Exemptions and Institution-Specific Scholarships",
@@ -4833,41 +4246,21 @@
   "POL": {
     "iso": "POL",
     "countryEn": "Poland",
-    "totalCount": 4,
-    "fullyFundedCount": 3,
+    "totalCount": 2,
+    "fullyFundedCount": 2,
     "fullTuitionCount": 0,
     "partialCount": 0,
-    "otherCount": 1,
+    "otherCount": 0,
     "scholarshipIds": [
-      "EU-0087",
       "EU-0088",
-      "EUR-PL-001",
-      "PL-001"
+      "EUR-PL-001"
     ],
     "studyLevels": [
-      "Master's",
       "PhD",
-      "Master's degree",
-      "Master's Degree (2nd Cycle)"
+      "Master's degree"
     ],
     "intakes": [],
     "items": [
-      {
-        "id": "EU-0087",
-        "name": "Banach NAWA Programme",
-        "provider": "Polish National Agency for Academic Exchange (NAWA)",
-        "coverage": "Monthly scholarship and tuition-fee exemption at public universities under programme rules",
-        "fundingTier": "other",
-        "studyLevel": "Master's",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://nawa.gov.pl/en/students/foreign-students/the-banach-scholarship-programme",
-        "overallSummary": {
-          "cost": "Government scholarship · Monthly scholarship and tuition-fee exemption at public universities under programme rules",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: Citizens of eligible developing countries applying to eligible second-cycle programmes. Language: Programme-specific; verify on the official page. Route: NAWA application system"
-        }
-      },
       {
         "id": "EU-0088",
         "name": "Doctoral Schools – Tuition-Free and Stipend",
@@ -4898,22 +4291,6 @@
           "cost": "100% tuition fee exemption at Polish public higher education institutions.",
           "benefits": "PLN 1,700/month living stipend paid for 12 months each academic year, plus an initial relocation grant.",
           "other": "Focuses on engineering and sciences. Poland offers low cost of living and EU work rights."
-        }
-      },
-      {
-        "id": "PL-001",
-        "name": "The Stefan Banach Scholarship Programme",
-        "provider": "Polish National Agency for Academic Exchange (NAWA) & Ministry of Foreign Affairs of Poland",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's Degree (2nd Cycle)",
-        "deadline": "2026-06-21",
-        "status": "Active / Verified",
-        "officialSource": "https://nawa.gov.pl",
-        "overallSummary": {
-          "cost": "পোল্যান্ডের যেকোনো স্বনামধন্য পাবলিক বিশ্ববিদ্যালয়ে ১০০% সম্পূর্ণ টিউশন ফি মওকুফ।",
-          "benefits": "প্রতি মাসে ১,৭০০ পোলিশ জ্লটি (PLN) লিভিং স্টাইপেন্ড এবং মাস্টার্স শুরুর পূর্বে পোলিশ ভাষা ও সংস্কৃতি কোর্সের সুযোগ।",
-          "other": "পোল্যান্ডের ইঞ্জিনিয়ারিং ও আইটি শিক্ষা ইউরোপে অত্যন্ত সমাদৃত। ঢাকায় পোল্যান্ড দূতাবাসের মাধ্যমে স্টাডি ভিসা গ্রহণ করা যায়।"
         }
       }
     ]
@@ -5201,8 +4578,8 @@
   "SAU": {
     "iso": "SAU",
     "countryEn": "Saudi Arabia",
-    "totalCount": 17,
-    "fullyFundedCount": 7,
+    "totalCount": 15,
+    "fullyFundedCount": 5,
     "fullTuitionCount": 0,
     "partialCount": 2,
     "otherCount": 8,
@@ -5215,14 +4592,12 @@
       "ME-0008",
       "ME-0003",
       "ME-0010",
-      "BD-062",
       "ME-0004",
       "ME-0011",
       "ME-0002",
       "ME-0012",
       "GLB-SA-001",
       "SA-001",
-      "SA-016",
       "SA-017"
     ],
     "studyLevels": [
@@ -5366,22 +4741,6 @@
         }
       },
       {
-        "id": "BD-062",
-        "name": "KAUST Fellowship",
-        "provider": "KAUST",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's / PhD",
-        "deadline": "",
-        "status": "Admissions rounds—monitor",
-        "officialSource": "https://admissions.kaust.edu.sa/fees-funding",
-        "overallSummary": {
-          "cost": "100% full tuition fee covered (KAUST Fellowship). Minimal student union/administrative registration fees may apply.",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
-          "other": "Academics: Strong STEM degree and programme prerequisites. Language: TOEFL/IELTS requirement unless exempt. Route: Apply for KAUST admission"
-        }
-      },
-      {
         "id": "ME-0004",
         "name": "KFUPM Full Scholarship",
         "provider": "King Fahd University of Petroleum and Minerals",
@@ -5478,22 +4837,6 @@
         }
       },
       {
-        "id": "SA-016",
-        "name": "KAUST Fellowship (King Abdullah University of Science and Technology)",
-        "provider": "KAUST (Thuwal, Saudi Arabia)",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's / PhD",
-        "deadline": "2026-03-01",
-        "status": "Active / Verified",
-        "officialSource": "https://www.kaust.edu.sa/en/study/fellowship",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি ফ্রি। সারা বিশ্বের সবচেয়ে ধনী ও সুযোগ-সুবিধাসম্পন্ন গ্র্যাজুয়েট ফেলোশিপ।",
-          "benefits": "বাৎসরিক ২০,০০০ থেকে ৩০,০০০ মার্কিন ডলার (মাসে প্রায় ২ লক্ষ থেকে ৩ লক্ষ টাকা) সম্পূর্ণ ট্যাক্স-ফ্রি ক্যাশ ভাতা, অন-ক্যাম্পাস ফ্রি প্রাইভেট হাউজিং, মেডিকেল/ডেন্টাল ইনস্যুরেন্স এবং বছরে ১ বার ঢাকা যাতায়াতের রিটার্ন বিমান টিকিট।",
-          "other": "লোহিত সাগরের তীরে অবস্থিত এই বিশেষায়িত আন্তর্জাতিক বিশ্ববিদ্যালয়টিতে নারী ও পুরুষ উভয় গবেষকের জন্যই সমান ও অত্যন্ত উন্মুক্ত আধুনিক ক্যাম্পাস পরিবেশ বিদ্যমান।"
-        }
-      },
-      {
         "id": "SA-017",
         "name": "KFUPM Full Graduate Scholarship (King Fahd University of Petroleum and Minerals)",
         "provider": "King Fahd University of Petroleum and Minerals (Dhahran - QS World Rank #101)",
@@ -5514,8 +4857,8 @@
   "SGP": {
     "iso": "SGP",
     "countryEn": "Singapore",
-    "totalCount": 9,
-    "fullyFundedCount": 9,
+    "totalCount": 6,
+    "fullyFundedCount": 6,
     "fullTuitionCount": 0,
     "partialCount": 0,
     "otherCount": 0,
@@ -5525,17 +4868,12 @@
       "BD-059",
       "BD-058",
       "GLB-SG-001",
-      "SG-001",
-      "SG-007",
-      "SG-008",
       "SG-009"
     ],
     "studyLevels": [
       "PhD",
       "Research Master's",
       "Doctoral degree",
-      "PhD Degree (4 Years)",
-      "Master's by Research",
       "Master by Research"
     ],
     "intakes": [],
@@ -5621,54 +4959,6 @@
         }
       },
       {
-        "id": "SG-001",
-        "name": "Singapore International Graduate Award (SINGA)",
-        "provider": "Agency for Science, Technology and Research (A*STAR), NTU, NUS, SUTD",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "PhD Degree (4 Years)",
-        "deadline": "2026-06-01",
-        "status": "Active / Verified",
-        "officialSource": "https://www.a-star.edu.sg",
-        "overallSummary": {
-          "cost": "৪ বছরের পিএইচডি মেয়াদের ১০০% টিউশন ফি সম্পূর্ণ ফ্রি।",
-          "benefits": "যোগ্যতা ভিত্তিক পরীক্ষায় উত্তীর্ণ হওয়ার আগে প্রতি মাসে ২,৭০০ সিঙ্গাপুর ডলার এবং উত্তীর্ণ হওয়ার পর ৩,২০০ সিঙ্গাপুর ডলার (প্রায় ২,৮০,০০০ টাকা) নগদ মাসিক স্টাইপেন্ড, ১,৫০০ ডলার বিমান টিকিট ভাতা এবং ১,০০০ ডলার সেটেলমেন্ট এলাউন্স।",
-          "other": "বিশ্বের শীর্ষ ১০ বিশ্ববিদ্যালয়ের মধ্যে স্থান পাওয়া ন্যাশনাল ইউনিভার্সিটি অব সিঙ্গাপুর (NUS) ও নানইয়াং টেকনোলজিক্যাল ইউনিভার্সিটি (NTU)-এর ডিগ্রি অর্জনের সবচেয়ে সম্মানিত পথ।"
-        }
-      },
-      {
-        "id": "SG-007",
-        "name": "Singapore International Graduate Award (SINGA)",
-        "provider": "A*STAR, NUS, NTU, and SUTD",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "PhD",
-        "deadline": "2026-06-01",
-        "status": "Active / Verified",
-        "officialSource": "https://www.a-star.edu.sg/Scholarships/for-graduate-studies/singapore-international-graduate-award-singa",
-        "overallSummary": {
-          "cost": "৪ বছর মেয়াদের পুরো পিএইচডি টিউশন ফি ১০০% ফ্রি।",
-          "benefits": "প্রতি মাসে ২,৭০০ সিঙ্গাপুর ডলার (কোয়ালিফাইং পরীক্ষার পর বেড়ে ৩,২০০ ডলার হয়), ১,৫০০ সিঙ্গাপুর ডলার এককালীন এয়ার টিকেট অনুদান এবং ১,০০০ ডলার সেটলিং-ইন ভাতা।",
-          "other": "সিঙ্গাপুরের জাতীয় গবেষণা সংস্থা A*STAR এবং NUS/NTU-র ল্যাবরেটরিতে বিশ্বমানের গবেষণার বিরল সুযোগ।"
-        }
-      },
-      {
-        "id": "SG-008",
-        "name": "NUS Research Scholarship",
-        "provider": "National University of Singapore (NUS - QS World Rank #8)",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's by Research / PhD",
-        "deadline": "2026-05-15",
-        "status": "Active / Verified",
-        "officialSource": "https://nusgs.nus.edu.sg/scholarships/",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি ফ্রি।",
-          "benefits": "প্রতি মাসে ২,২০০ থেকে ২,৮০০ সিঙ্গাপুর ডলার (পিএইচডিতে কোয়ালিফাইং টেস্টের পর ৩,০০০ ডলারে উন্নীত) মাসিক জীবনযাত্রার স্টাইপেন্ড।",
-          "other": "বিশ্বের অষ্টম সেরা বিশ্ববিদ্যালয় NUS-এ ফুল ফান্ডেড মাস্টার্স ও পিএইচডি করার সবচেয়ে সরাসরি মাধ্যম।"
-        }
-      },
-      {
         "id": "SG-009",
         "name": "NTU Research Studentship",
         "provider": "Nanyang Technological University (NTU - QS World Rank #15)",
@@ -5743,16 +5033,14 @@
   "KOR": {
     "iso": "KOR",
     "countryEn": "South Korea",
-    "totalCount": 10,
-    "fullyFundedCount": 10,
+    "totalCount": 8,
+    "fullyFundedCount": 8,
     "fullTuitionCount": 0,
     "partialCount": 0,
     "otherCount": 0,
     "scholarshipIds": [
-      "BD-022",
       "BD-063",
       "GLB-KR-001",
-      "KR-001",
       "KR-002",
       "KR-006",
       "KR-007",
@@ -5762,31 +5050,12 @@
     ],
     "studyLevels": [
       "Master's",
-      "Doctoral",
-      "research",
       "PhD",
-      "Undergraduate",
       "Master",
       "Bachelor's"
     ],
     "intakes": [],
     "items": [
-      {
-        "id": "BD-022",
-        "name": "Global Korea Scholarship—Graduate",
-        "provider": "Participating Korean universities",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's / Doctoral / research",
-        "deadline": "",
-        "status": "Closed—annual monitor",
-        "officialSource": "https://www.studyinkorea.go.kr/ko/scholarship/Gks1NoticeDetail.do",
-        "overallSummary": {
-          "cost": "100% full tuition fee covered (Global Korea Scholarship—Graduate). Minimal student union/administrative registration fees may apply.",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
-          "other": "Academics: Bachelor's/master's as required and strong GPA under annual guideline. Language: Programme requirement; Korean/English scores strengthen application. Route: Embassy of Korea or designated university"
-        }
-      },
       {
         "id": "BD-063",
         "name": "KAIST International Graduate Scholarship",
@@ -5817,22 +5086,6 @@
           "cost": "100% tuition covered for the entire 2-year Master's or 3-year PhD degree.",
           "benefits": "1,000,000 KRW/month living allowance, round-trip airfare, 200,000 KRW settlement allowance, medical insurance, and 1 year fully funded Korean language training.",
           "other": "Must achieve TOPIK Level 3 during the mandatory 1-year language course before entering degree program."
-        }
-      },
-      {
-        "id": "KR-001",
-        "name": "Global Korea Scholarship (GKS Embassy Track for Bangladesh)",
-        "provider": "National Institute for International Education (NIIED), Ministry of Education ROK",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Undergraduate / Master / PhD",
-        "deadline": "2026-03-10",
-        "status": "Active / Verified",
-        "officialSource": "https://www.studyinkorea.go.kr",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি এবং প্রথম বর্ষের সম্পূর্ণ কোরিয়ান ল্যাঙ্গুয়েজ ট্রেনিং ফি কোরিয়া সরকার বহন করে।",
-          "benefits": "প্রতি মাসে ১,০০০,০০০ কোরিয়ান ওন (KRW) নগদ লিভিং স্টাইপেন্ড (প্রায় ৯০,০০০ টাকা), ২০০,০০০ ওন সেটেলমেন্ট এলাউন্স, ঢাকা-সিউল রাউন্ড-ট্রিপ বিমান টিকিট, গবেষণা ভাতা এবং স্বাস্থ্য বীমা।",
-          "other": "জিকেএস বিশ্বের অন্যতম সম্মানিত সরকারি বৃত্তি। ঢাকার কোরিয়ান দূতাবাস সরাসরি প্রাথমিক ইন্টারভিউ গ্রহণ করে এবং প্রতি বছর বেশ কয়েকজন বাংলাদেশি শিক্ষার্থী এতে মনোনীত হন।"
         }
       },
       {
@@ -6043,9 +5296,9 @@
   "SWE": {
     "iso": "SWE",
     "countryEn": "Sweden",
-    "totalCount": 14,
-    "fullyFundedCount": 5,
-    "fullTuitionCount": 9,
+    "totalCount": 10,
+    "fullyFundedCount": 2,
+    "fullTuitionCount": 8,
     "partialCount": 0,
     "otherCount": 0,
     "scholarshipIds": [
@@ -6054,21 +5307,16 @@
       "EU-0020",
       "INTAKE-034",
       "EU-0018",
-      "EU-0015",
-      "BD-011",
-      "INTAKE-028",
       "INTAKE-029",
       "INTAKE-035",
       "EUR-SE-001",
       "EUR-SE-002",
-      "EUR-SE-003",
-      "SE-001"
+      "EUR-SE-003"
     ],
     "studyLevels": [
       "Master's",
       "Bachelor's",
-      "Master's degree",
-      "Master's Degree (1-2 Years)"
+      "Master's degree"
     ],
     "intakes": [],
     "items": [
@@ -6153,54 +5401,6 @@
         }
       },
       {
-        "id": "EU-0015",
-        "name": "Lund University Global Scholarship",
-        "provider": "Lund University",
-        "coverage": "May cover 25%, 50%, 75% or 100% of tuition",
-        "fundingTier": "full_tuition",
-        "studyLevel": "Bachelor's / Master's",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://www.lunduniversity.lu.se/admissions/bachelors-and-masters-studies/scholarships-and-awards/lund-university-global-scholarship",
-        "overallSummary": {
-          "cost": "100% tuition fee waiver covered by provider. Living expenses and housing are student-financed.",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: High-achieving non-EU/EEA applicants to eligible degree programmes. Language: Programme-specific; verify on the official page. Route: Separate scholarship application after admission application"
-        }
-      },
-      {
-        "id": "BD-011",
-        "name": "SI Scholarship for Global Professionals",
-        "provider": "Eligible Swedish universities/programmes",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's",
-        "deadline": "2026-02-25",
-        "status": "Closed—2027 cycle opens late 2026",
-        "officialSource": "https://si.se/en/apply/scholarships/swedish-institute-scholarships-for-global-professionals/",
-        "overallSummary": {
-          "cost": "100% full tuition fee covered (SI Scholarship for Global Professionals). Minimal student union/administrative registration fees may apply.",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
-          "other": "Academics: Admission to an eligible master's and fee-paying status. Language: University Admissions requirement. Route: University Admissions first; separate SI portal"
-        }
-      },
-      {
-        "id": "INTAKE-028",
-        "name": "SI Scholarship for Global Professionals",
-        "provider": "Swedish Institute",
-        "coverage": "Full tuition, monthly living allowance, travel grant and SI network membership",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's",
-        "deadline": "2026-02-25",
-        "status": "Closed (2026 cycle)",
-        "officialSource": "https://si.se/en/apply/scholarships/swedish-institute-scholarships-for-global-professionals/",
-        "overallSummary": {
-          "cost": "100% full tuition fee covered (SI Scholarship for Global Professionals). Minimal student union/administrative registration fees may apply.",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations. International return travel subsidy provided.",
-          "other": "Academics: Citizens of eligible countries with work and leadership experience applying to eligible master's programmes. Language: Programme-specific; verify on the official page. Route: Separate SI application after university application"
-        }
-      },
-      {
         "id": "INTAKE-029",
         "name": "SI Scholarship for Pioneering Women in STEM",
         "provider": "Swedish Institute",
@@ -6279,52 +5479,30 @@
           "benefits": "Substantial direct fee deduction credited directly to tuition accounts at Sweden's oldest top-100 university.",
           "other": "Living costs are not covered and must be proven for the Swedish Migration Agency (Migrationsverket)."
         }
-      },
-      {
-        "id": "SE-001",
-        "name": "Swedish Institute (SI) Scholarships for Global Professionals",
-        "provider": "Swedish Institute, Ministry for Foreign Affairs of Sweden",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's Degree (1-2 Years)",
-        "deadline": "2026-02-28",
-        "status": "Active / Verified",
-        "officialSource": "https://si.se",
-        "overallSummary": {
-          "cost": "সুইডেনের শীর্ষ বিশ্ববিদ্যালয়ে ১০০% সম্পূর্ণ আন্তর্জাতিক টিউশন ফি সুইডিশ ইনস্টিটিউট কর্তৃক সরাসরি পরিশোধিত।",
-          "benefits": "প্রতি মাসে ১২,০০০ সুইডিশ ক্রোনা (SEK) জীবনযাত্রার নগদ স্টাইপেন্ড (প্রায় ১,৪০,০০০ টাকা), এককালীন ১৫,০০০ ক্রোনা ভ্রমণ অনুদান, ব্যাপক স্বাস্থ্য বীমা এবং নেটওয়ার্ক ফর ফিউচার গ্লোবাল লিডার্স (NFGL)-এর আজীবন সদস্যপদ।",
-          "other": "সুইডিশ সরকারের এই ফ্ল্যাগশিপ স্কলারশিপ বিশ্বের সবচেয়ে কাঙ্ক্ষিত বৃত্তির একটি। বাংলাদেশে সুইডেন দূতাবাসের মাধ্যমে দ্রুত রেসিডেন্স পারমিট প্রদান করা হয়।"
-        }
       }
     ]
   },
   "CHE": {
     "iso": "CHE",
     "countryEn": "Switzerland",
-    "totalCount": 8,
-    "fullyFundedCount": 3,
+    "totalCount": 5,
+    "fullyFundedCount": 2,
     "fullTuitionCount": 0,
-    "partialCount": 1,
-    "otherCount": 4,
+    "partialCount": 0,
+    "otherCount": 3,
     "scholarshipIds": [
       "BD-042",
-      "BD-041",
       "EU-0066",
-      "BD-015",
       "EU-0068",
       "EUR-CH-001",
-      "EUR-CH-002",
-      "CH-001"
+      "EUR-CH-002"
     ],
     "studyLevels": [
       "Master's",
       "PhD",
-      "Postdoc",
-      "Research",
-      "Arts",
       "Postdoctoral",
-      "Master's degree",
-      "Research Fellowship"
+      "Research",
+      "Master's degree"
     ],
     "intakes": [],
     "items": [
@@ -6345,22 +5523,6 @@
         }
       },
       {
-        "id": "BD-041",
-        "name": "ETH Excellence Scholarship & Opportunity Programme (ESOP)",
-        "provider": "ETH Zurich",
-        "coverage": "Study and living-cost scholarship plus tuition-fee waiver",
-        "fundingTier": "other",
-        "studyLevel": "Master's",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://ethz.ch/students/en/studies/financial/scholarships/excellencescholarship.html",
-        "overallSummary": {
-          "cost": "Full scholarship · Study and living-cost scholarship plus tuition-fee waiver",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
-          "other": "Academics: Outstanding applicant to ETH master's programme, generally top 10% of bachelor's cohort. Language: Programme-specific; verify on the official page. Route: Scholarship application with master's application"
-        }
-      },
-      {
         "id": "EU-0066",
         "name": "Excellence Master Fellowships",
         "provider": "University of Geneva",
@@ -6374,22 +5536,6 @@
           "cost": "Fellowship · CHF 10,000–15,000 per year · CHF 10,000",
           "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
           "other": "Academics: Outstanding international applicant to Faculty of Science master's. Language: Programme-specific; verify on the official page. Route: Separate fellowship application plus programme application"
-        }
-      },
-      {
-        "id": "BD-015",
-        "name": "Swiss Government Excellence Scholarships",
-        "provider": "Swiss Confederation",
-        "coverage": "Monthly stipend, mandatory health insurance for non-EU recipients and other allowances",
-        "fundingTier": "partial",
-        "studyLevel": "PhD / Postdoc / Research / Arts",
-        "deadline": "",
-        "status": "Recurring",
-        "officialSource": "https://www.sbfi.admin.ch/sbfi/en/home/education/scholarships-and-grants/swiss-government-excellence-scholarships.html",
-        "overallSummary": {
-          "cost": "Government scholarship · Monthly stipend, mandatory health insurance for non-EU recipients and other allowances",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations. Statutory student health insurance covered.",
-          "other": "Academics: Early-career researchers/artists from eligible countries with Swiss host/supervisor. Language: Programme-specific; verify on the official page. Route: Swiss embassy / national application route"
         }
       },
       {
@@ -6439,30 +5585,14 @@
           "benefits": "CHF 12,000 per semester (CHF 24,000/year) living stipend covering room, board, and study expenses.",
           "other": "ETH Zurich is consistently ranked among the world's top 10 universities for science and engineering."
         }
-      },
-      {
-        "id": "CH-001",
-        "name": "Swiss Government Excellence Scholarships (ESKAS) for Foreign Scholars",
-        "provider": "Federal Commission for Scholarships for Foreign Students (FCS), SERI",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "PhD / Postdoctoral / Research Fellowship",
-        "deadline": "2026-11-12",
-        "status": "Active / Verified",
-        "officialSource": "https://www.sbfi.admin.ch",
-        "overallSummary": {
-          "cost": "সুইজারল্যান্ডের সকল বিশ্ববিদ্যালয়ে টিউশন ফি মওকুফ (FCS কোনো টিউশন ফি চার্জ গ্রহণ না করার অনুরোধ জানায়)।",
-          "benefits": "প্রতি মাসে ১,৯২০ সুইস ফ্রাঁ (CHF) নগদ জীবনযাত্রার ভাতা (প্রায় ২,৬০,০০০ টাকা), সুইস সরকারের পক্ষ থেকে বাধ্যতামূলক স্বাস্থ্য বীমার সম্পূর্ণ প্রিমিয়াম পরিশোধ এবং আবাসন সহায়তা।",
-          "other": "সুইজারল্যান্ড পৃথিবীর অন্যতম সেরা জীবনযাত্রার মান ও শীর্ষ গবেষণা হাব (ETH Zurich, EPFL)। ঢাকায় সুইস দূতাবাস সরাসরি আবেদন গ্রহণ ও প্রার্থীদের ইন্টারভিউ সম্পন্ন করে।"
-        }
       }
     ]
   },
   "TUR": {
     "iso": "TUR",
     "countryEn": "Türkiye",
-    "totalCount": 15,
-    "fullyFundedCount": 4,
+    "totalCount": 14,
+    "fullyFundedCount": 3,
     "fullTuitionCount": 6,
     "partialCount": 5,
     "otherCount": 0,
@@ -6480,15 +5610,12 @@
       "ME-0083",
       "BD-012",
       "ME-0089",
-      "GLB-TR-001",
-      "TR-001"
+      "GLB-TR-001"
     ],
     "studyLevels": [
       "Bachelor's",
       "Master's",
-      "PhD",
-      "Bachelor",
-      "Master"
+      "PhD"
     ],
     "intakes": [],
     "items": [
@@ -6715,30 +5842,14 @@
           "benefits": "Monthly stipend (TL 3,500 for UG, TL 5,000 for Master's, TL 6,500 for PhD), free student dormitory accommodation, one-year Turkish language course, round-trip flight ticket, and health insurance.",
           "other": "Includes complete university placement. Very popular among Bangladeshi students with straightforward online application."
         }
-      },
-      {
-        "id": "TR-001",
-        "name": "Türkiye Bursları Government Scholarship",
-        "provider": "Presidency for Turks Abroad and Related Communities (YTB), Republic of Türkiye",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Bachelor / Master / PhD",
-        "deadline": "2026-02-20",
-        "status": "Active / Verified",
-        "officialSource": "https://www.turkiyeburslari.gov.tr",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি, ভর্তি ফি ও এক বছরের তার্কিশ ভাষা কোর্সের সকল খরচ তুরস্ক সরকার বহন করে।",
-          "benefits": "ব্যাচেলরের জন্য ৪,৫০০ টিএল, মাস্টার্সের জন্য ৫,৫০০ টিএল এবং পিএইচডির জন্য ৮,০০০ তার্কিশ লিরা নগদ মাসিক ভাতা, সরকারি হোস্টেলে ফ্রি থাকা ও তিন বেলা খাবার, ঢাকা-ইস্তাম্বুল রাউন্ডট্রিপ বিমান টিকিট ও সার্বিক স্বাস্থ্য বীমা।",
-          "other": "তুর্কি বুর্সলারি বাংলাদেশি শিক্ষার্থীদের সবচেয়ে জনপ্রিয় ও বিশ্বস্ত সরকারি বৃত্তি। ঢাকায় তুরস্ক দূতাবাস ইন্টারভিউ ও ভিসা প্রক্রিয়া অত্যন্ত সুশৃঙ্খলভাবে সম্পন্ন করে।"
-        }
       }
     ]
   },
   "ARE": {
     "iso": "ARE",
     "countryEn": "United Arab Emirates",
-    "totalCount": 29,
-    "fullyFundedCount": 3,
+    "totalCount": 28,
+    "fullyFundedCount": 2,
     "fullTuitionCount": 21,
     "partialCount": 3,
     "otherCount": 2,
@@ -6769,15 +5880,13 @@
       "ME-0036",
       "ME-0030",
       "ME-0031",
-      "AE-001",
       "AE-029",
       "AE-030"
     ],
     "studyLevels": [
       "Bachelor's",
       "Master's",
-      "PhD",
-      "Master"
+      "PhD"
     ],
     "intakes": [],
     "items": [
@@ -7198,22 +6307,6 @@
         }
       },
       {
-        "id": "AE-001",
-        "name": "Mohamed bin Zayed University of Artificial Intelligence (MBZUAI) Full Scholarship",
-        "provider": "MBZUAI (Abu Dhabi, UAE)",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master / PhD",
-        "deadline": "2026-03-31",
-        "status": "Active / Verified",
-        "officialSource": "https://mbzuai.ac.ae",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি ও ল্যাবরেটরি ফি মওকুফ।",
-          "benefits": "মাস্টার্স শিক্ষার্থীদের জন্য প্রতি মাসে ৮,০০০ এইডি (AED) এবং পিএইচডি শিক্ষার্থীদের জন্য ১০,০০০ এইডি (প্রায় ২,৭০,০০০-৩,৪০,০০০ টাকা) ট্যাক্স-ফ্রি মাসিক ভাতা, আবুধাবিতে ফ্রি সিঙ্গেল আবাসন, বার্ষিক বিমান টিকিট এবং স্বাস্থ্য বীমা।",
-          "other": "বিশ্বের প্রথম কৃত্রিম বুদ্ধিমত্তা (AI) বিশ্ববিদ্যালয় হিসেবে এমবিজেইউএআই শীর্ষস্থানীয় এআই গবেষকদের আকৃষ্ট করছে। বাংলাদেশি সিএসই গ্র্যাজুয়েটদের জন্য সেরা গন্তব্য।"
-        }
-      },
-      {
         "id": "AE-029",
         "name": "MBZUAI Graduate Scholarship (Mohamed bin Zayed University of Artificial Intelligence)",
         "provider": "MBZUAI (Abu Dhabi, UAE)",
@@ -7250,22 +6343,19 @@
   "GBR": {
     "iso": "GBR",
     "countryEn": "United Kingdom",
-    "totalCount": 104,
-    "fullyFundedCount": 21,
+    "totalCount": 92,
+    "fullyFundedCount": 16,
     "fullTuitionCount": 0,
-    "partialCount": 78,
-    "otherCount": 5,
+    "partialCount": 72,
+    "otherCount": 4,
     "scholarshipIds": [
       "UK-0066",
       "UK-0068",
       "UK-0015",
       "BD-031",
-      "BD-001",
       "BD-024",
-      "BD-002",
       "BD-003",
       "UK-0005",
-      "ATTACHED-UK-0005",
       "BD-036",
       "BD-030",
       "UK-0055",
@@ -7274,7 +6364,6 @@
       "UK-0033",
       "BD-033",
       "UK-0020",
-      "ATTACHED-UK-0040",
       "UK-0013",
       "UK-0050",
       "UK-0039",
@@ -7290,7 +6379,6 @@
       "UK-0030",
       "UK-0007",
       "UK-0029",
-      "ATTACHED-UK-0007",
       "UK-0018",
       "UK-0032",
       "UK-0034",
@@ -7318,7 +6406,6 @@
       "UK-0014",
       "UK-0004",
       "UK-0026",
-      "ATTACHED-UK-0046",
       "UK-0037",
       "UK-0057",
       "UK-0036",
@@ -7338,12 +6425,9 @@
       "UK-0023",
       "UK-0069",
       "UK-0051",
-      "ATTACHED-UK-0051",
       "UK-0024",
       "UK-0025",
-      "BD-034",
       "BD-029",
-      "BD-035",
       "UK-0046",
       "UK-0063",
       "UK-0045",
@@ -7353,13 +6437,10 @@
       "INTAKE-021",
       "INTAKE-023",
       "INTAKE-024",
-      "INTAKE-025",
       "INTAKE-026",
       "GLB-UK-001",
       "GLB-UK-002",
-      "GLB-UK-003",
-      "GB-001",
-      "GB-002"
+      "GLB-UK-003"
     ],
     "studyLevels": [
       "Bachelor's",
@@ -7376,12 +6457,8 @@
       "Bachelor",
       "MRes",
       "PhD pathway",
-      "One-year taught Master",
       "Master",
-      "Master's degree (1 year)",
-      "Master's Degree (1 Year Taught)",
-      "Master (1 Year)",
-      "PhD (3-4 Years)"
+      "Master's degree (1 year)"
     ],
     "intakes": [],
     "items": [
@@ -7450,22 +6527,6 @@
         }
       },
       {
-        "id": "BD-001",
-        "name": "Chevening Scholarship",
-        "provider": "UK Government / Chevening",
-        "coverage": "Full scholarship",
-        "fundingTier": "partial",
-        "studyLevel": "Master's",
-        "deadline": "",
-        "status": "Recurring / applications currently closed",
-        "officialSource": "https://www.chevening.org/scholarship/bangladesh/",
-        "overallSummary": {
-          "cost": "Full scholarship · Tuition, living allowance, travel and other approved costs",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations. International return travel subsidy provided.",
-          "other": "Academics: Bangladeshi citizen; leadership potential; eligible UK master's; work-experience and return-home requirements. Language: Programme-specific; verify on the official page. Route: Separate application"
-        }
-      },
-      {
         "id": "BD-024",
         "name": "Clarendon Scholarships",
         "provider": "University of Oxford",
@@ -7479,22 +6540,6 @@
           "cost": "100% full tuition fee covered (Clarendon Scholarships). Minimal student union/administrative registration fees may apply.",
           "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
           "other": "Academics: Outstanding academic record and potential. Language: Course requirement. Route: Automatic consideration with Oxford graduate application"
-        }
-      },
-      {
-        "id": "BD-002",
-        "name": "Commonwealth Master's Scholarships",
-        "provider": "Commonwealth Scholarship Commission",
-        "coverage": "Full scholarship",
-        "fundingTier": "other",
-        "studyLevel": "Master's",
-        "deadline": "",
-        "status": "Closed for 2026/27; recurring",
-        "officialSource": "https://cscuk.fcdo.gov.uk/scholarships/commonwealth-masters-scholarships/",
-        "overallSummary": {
-          "cost": "Full scholarship · Full award; official package varies by scheme",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: Applicants from eligible low- and middle-income Commonwealth countries; nomination route applies. Language: Programme-specific; verify on the official page. Route: Separate application / nomination"
         }
       },
       {
@@ -7525,22 +6570,6 @@
         "officialSource": "https://www.coventry.ac.uk/international-students-hub/apply-for-a-scholarship/",
         "overallSummary": {
           "cost": "Partial tuition grant / fee reduction (Tuition discount · £2,000 · £2,000 tuition fee reduction). Remaining tuition and living costs paid by student.",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: New self-funded international student on eligible full-time course. Language: Programme-specific; verify on the official page. Route: Automatic"
-        }
-      },
-      {
-        "id": "ATTACHED-UK-0005",
-        "name": "Coventry University Group Scholarship",
-        "provider": "Coventry University Group",
-        "coverage": "Tuition discount · £2,000",
-        "fundingTier": "partial",
-        "studyLevel": "Bachelor's",
-        "deadline": "",
-        "status": "Open/active scheme",
-        "officialSource": "https://www.coventry.ac.uk/international-students-hub/apply-for-a-scholarship/",
-        "overallSummary": {
-          "cost": "Partial tuition grant / fee reduction (Tuition discount · £2,000 · £2,000 per academic year). Remaining tuition and living costs paid by student.",
           "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
           "other": "Academics: New self-funded international student on eligible full-time course. Language: Programme-specific; verify on the official page. Route: Automatic"
         }
@@ -7671,22 +6700,6 @@
           "cost": "Partial tuition grant / fee reduction (Tuition discount · £2,000 · £2,000 tuition fee discount). Remaining tuition and living costs paid by student.",
           "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
           "other": "Academics: Suitably qualified international postgraduate applicant. Language: Programme-specific; verify on the official page. Route: Automatic/eligibility-based"
-        }
-      },
-      {
-        "id": "ATTACHED-UK-0040",
-        "name": "Global Silver Excellence Scholarship",
-        "provider": "University of Salford",
-        "coverage": "Tuition discount · £3,000",
-        "fundingTier": "partial",
-        "studyLevel": "Bachelor's",
-        "deadline": "",
-        "status": "Active",
-        "officialSource": "https://www.salford.ac.uk/international/scholarships/global-silver-excellence-scholarship",
-        "overallSummary": {
-          "cost": "Partial tuition grant / fee reduction (Tuition discount · £3,000 · £3,000 for every year of study). Remaining tuition and living costs paid by student.",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: High-achieving international undergraduate. Language: Programme-specific; verify on the official page. Route: Automatic/assessment"
         }
       },
       {
@@ -7927,22 +6940,6 @@
           "cost": "Partial tuition grant / fee reduction (Tuition discount · £2,000 · £2,000 for January 2027 entry; progression awards may be higher). Remaining tuition and living costs paid by student.",
           "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
           "other": "Academics: Eligible international pathway student. Language: Programme-specific; verify on the official page. Route: Automatic/eligibility-based"
-        }
-      },
-      {
-        "id": "ATTACHED-UK-0007",
-        "name": "International Scholarship Award",
-        "provider": "University of Greenwich",
-        "coverage": "Tuition discount · £2,500",
-        "fundingTier": "partial",
-        "studyLevel": "Bachelor's",
-        "deadline": "",
-        "status": "Active award windows",
-        "officialSource": "https://www.gre.ac.uk/bursaries/international-scholarships-award",
-        "overallSummary": {
-          "cost": "Partial tuition grant / fee reduction (Tuition discount · £2,500 · Guaranteed minimum £2,500; awards up to £3,000). Remaining tuition and living costs paid by student.",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: International offer-holder meeting award-window and deposit conditions. Language: Programme-specific; verify on the official page. Route: Automatic / award window"
         }
       },
       {
@@ -8378,22 +7375,6 @@
         }
       },
       {
-        "id": "ATTACHED-UK-0046",
-        "name": "Vice-Chancellor's International Scholarship",
-        "provider": "Birkbeck, University of London",
-        "coverage": "Tuition discount · £1,000",
-        "fundingTier": "partial",
-        "studyLevel": "Bachelor's",
-        "deadline": "",
-        "status": "Active",
-        "officialSource": "https://www.bbk.ac.uk/international/finance/vice-chancellors-international-scholarship",
-        "overallSummary": {
-          "cost": "Partial tuition grant / fee reduction (Tuition discount · £1,000 · £1,000 per year, total up to £3,000). Remaining tuition and living costs paid by student.",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: New student domiciled in Bangladesh, India, Nepal, Pakistan or Vietnam. Language: Programme-specific; verify on the official page. Route: Automatic/eligibility-based"
-        }
-      },
-      {
         "id": "UK-0037",
         "name": "Vice-Chancellor's Postgraduate International Scholarship",
         "provider": "Cardiff University",
@@ -8698,22 +7679,6 @@
         }
       },
       {
-        "id": "ATTACHED-UK-0051",
-        "name": "International Scholarships Portfolio",
-        "provider": "University of South Wales",
-        "coverage": "Tuition discount",
-        "fundingTier": "partial",
-        "studyLevel": "Bachelor's",
-        "deadline": "",
-        "status": "Active",
-        "officialSource": "https://www.southwales.ac.uk/international/fees-scholarships/international-scholarships/",
-        "overallSummary": {
-          "cost": "Partial tuition grant / fee reduction (Tuition discount · Automatic university scholarship confirmed in offer; exact value by award/country). Remaining tuition and living costs paid by student.",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: Self-funding international undergraduate; sponsored students excluded. Language: Programme-specific; verify on the official page. Route: Automatic"
-        }
-      },
-      {
         "id": "UK-0024",
         "name": "International Study Centre Excellence Scholarship",
         "provider": "Royal Holloway, University of London",
@@ -8746,22 +7711,6 @@
         }
       },
       {
-        "id": "BD-034",
-        "name": "Sussex Bangladesh Scholarship",
-        "provider": "University of Sussex",
-        "coverage": "Partial tuition",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's",
-        "deadline": "",
-        "status": "Closed/annual monitor",
-        "officialSource": "https://web.sussex.ac.uk/study/masters/fees-and-scholarships/scholarships/view/1885-Sussex-Bangladesh-Scholarship-(Masters)",
-        "overallSummary": {
-          "cost": "Partial tuition grant / fee reduction (Partial tuition · Country-specific tuition reduction · No stipend). Remaining tuition and living costs paid by student.",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
-          "other": "Academics: Offer for eligible Sussex master's. Language: Course requirement. Route: Automatic or declaration-based after offer per annual page"
-        }
-      },
-      {
         "id": "BD-029",
         "name": "Think Big Scholarships",
         "provider": "University of Bristol",
@@ -8775,22 +7724,6 @@
           "cost": "Partial tuition grant / fee reduction (Partial tuition award · Tuition fee discount at published award levels · No living stipend in standard award). Remaining tuition and living costs paid by student.",
           "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
           "other": "Academics: Strong academic record and offer/application. Language: Course requirement. Route: Bristol programme application plus Think Big form"
-        }
-      },
-      {
-        "id": "BD-035",
-        "name": "University of Exeter Postgraduate Taught Scholarships—Bangladesh",
-        "provider": "University of Exeter",
-        "coverage": "Partial tuition",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's",
-        "deadline": "",
-        "status": "2026/27—check availability",
-        "officialSource": "https://www.exeter.ac.uk/study/funding/award/?id=5667",
-        "overallSummary": {
-          "cost": "Partial tuition grant / fee reduction (Partial tuition · Tuition discount at published Bangladesh award levels · No stipend). Remaining tuition and living costs paid by student.",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
-          "other": "Academics: Offer for eligible course and academic merit. Language: Course requirement. Route: Apply/automatic consideration as stated on current page"
         }
       },
       {
@@ -8938,22 +7871,6 @@
         }
       },
       {
-        "id": "INTAKE-025",
-        "name": "Chevening Scholarship — Bangladesh",
-        "provider": "UK Foreign, Commonwealth & Development Office",
-        "coverage": "Full",
-        "fundingTier": "fully_funded",
-        "studyLevel": "One-year taught Master",
-        "deadline": "2025-10-07",
-        "status": "Closed—2027 cycle opens late 2026",
-        "officialSource": "https://www.chevening.org/scholarship/bangladesh/",
-        "overallSummary": {
-          "cost": "Tuition, monthly stipend, travel and other allowances under award terms",
-          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations. International return travel subsidy provided.",
-          "other": "Academics: Leadership/networking profile; eligible work experience and return-home commitment under current rules. Language: Meet Chevening/course requirements. Route: Apply in Chevening portal; separate university applications required"
-        }
-      },
-      {
         "id": "INTAKE-026",
         "name": "Clarendon Fund",
         "provider": "University of Oxford",
@@ -9016,49 +7933,17 @@
           "benefits": "Significant financial discount making premium UK master's education highly accessible.",
           "other": "Jointly funded by the UK Government's GREAT Britain Campaign and UK higher education institutions for Bangladeshi students."
         }
-      },
-      {
-        "id": "GB-001",
-        "name": "Chevening Scholarships for Bangladesh",
-        "provider": "Foreign, Commonwealth and Development Office (FCDO), UK Government",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's Degree (1 Year Taught)",
-        "deadline": "2026-11-05",
-        "status": "Active / Verified",
-        "officialSource": "https://www.chevening.org",
-        "overallSummary": {
-          "cost": "যুক্তরাজ্যের যেকোনো শীর্ষ বিশ্ববিদ্যালয়ে (অক্সফোর্ড, ক্যামব্রিজ, এলএসই, ইম্পেরিয়ালসহ) ১০০% পূর্ণ টিউশন ফি ব্রিটিশ সরকার বহন করে।",
-          "benefits": "যুক্তরাজ্যে জীবনযাত্রার জন্য প্রতি মাসে সম্মানজনক লিভিং স্টাইপেন্ড (লন্ডনে প্রায় £১,৬৫৫ পাউন্ড, লন্ডনের বাইরে প্রায় £১,৩৪০ পাউন্ড), ঢাকা-লন্ডন রাউন্ড-ট্রিপ বিমান টিকিট ও ভিসা ফি।",
-          "other": "ভবিষ্যৎ লিডার ও নীতিনির্ধারকদের জন্য যুক্তরাজ্যের সর্বোচ্চ মর্যাদাপূর্ণ সরকারি ফেলোশিপ। ব্রিটিশ কাউন্সিল ঢাকা ও হাইকমিশনের মাধ্যমে চূড়ান্ত ইন্টারভিউ পরিচালিত হয়।"
-        }
-      },
-      {
-        "id": "GB-002",
-        "name": "Commonwealth Master's & PhD Scholarships for Developing Commonwealth Countries",
-        "provider": "Commonwealth Scholarship Commission (CSC UK) & FCDO",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master (1 Year) / PhD (3-4 Years)",
-        "deadline": "2026-10-17",
-        "status": "Active / Verified",
-        "officialSource": "https://cscuk.fcdo.gov.uk",
-        "overallSummary": {
-          "cost": "যুক্তরাজ্যের বিশ্ববিদ্যালয়ের ১০০% টিউশন ফি সম্পূর্ণ মওকুফ।",
-          "benefits": "মাসিক লিভিং এলাউন্স (£১,৩৪৭ থেকে £১,৬৫২ পাউন্ড), ঢাকা-যুক্তরাজ্য এয়ার টিকেট, গরম কাপড়ের এলাউন্স, থিসিস অনুদান এবং পারিবারিক সহায়তা (প্রযোজ্য ক্ষেত্রে)।",
-          "other": "বাংলাদেশ বিশ্ববিদ্যালয় মঞ্জুরি কমিশন (UGC) এবং শিক্ষা মন্ত্রণালয় (shed.gov.bd)-এর মাধ্যমে প্রাথমিক লিখিত পরীক্ষা ও মৌখিক সাক্ষাৎকারের ভিত্তিতে এই মনোনয়ন দেওয়া হয়।"
-        }
       }
     ]
   },
   "USA": {
     "iso": "USA",
     "countryEn": "United States",
-    "totalCount": 95,
-    "fullyFundedCount": 20,
+    "totalCount": 93,
+    "fullyFundedCount": 19,
     "fullTuitionCount": 10,
     "partialCount": 12,
-    "otherCount": 53,
+    "otherCount": 52,
     "scholarshipIds": [
       "US-0047",
       "US-0070",
@@ -9106,7 +7991,6 @@
       "US-0013",
       "US-0049",
       "US-0048",
-      "US-0055",
       "US-0035",
       "US-0036",
       "US-0051",
@@ -9153,8 +8037,7 @@
       "US-0024",
       "INTAKE-005",
       "GLB-US-001",
-      "GLB-US-002",
-      "US-001"
+      "GLB-US-002"
     ],
     "studyLevels": [
       "Bachelor's",
@@ -9169,8 +8052,7 @@
       "Bachelor",
       "Master's degree",
       "JD",
-      "MD",
-      "Master's Degree (1-2 Years)"
+      "MD"
     ],
     "intakes": [],
     "items": [
@@ -9908,22 +8790,6 @@
           "cost": "Partial tuition grant / fee reduction (Merit scholarship · Partial tuition award; published values are annual average amounts and vary by profile). Remaining tuition and living costs paid by student.",
           "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
           "other": "Academics: International freshman with strong high-school academics. Language: Programme-specific; verify on the official page. Route: Automatic/merit review"
-        }
-      },
-      {
-        "id": "US-0055",
-        "name": "International Amigo Scholarship",
-        "provider": "University of New Mexico",
-        "coverage": "Resident-tuition scholarship · $15,000",
-        "fundingTier": "other",
-        "studyLevel": "Master's / PhD",
-        "deadline": "",
-        "status": "Active",
-        "officialSource": "https://international.unm.edu/graduate/scholarship-and-cost-of-attendance.html",
-        "overallSummary": {
-          "cost": "Resident-tuition scholarship · $15,000 annual · Converts international graduate tuition to resident rate; estimated value over $15,000 per year",
-          "benefits": "No living stipend included. Students must demonstrate sufficient independent funds for visa maintenance.",
-          "other": "Academics: High-achieving international master's or PhD applicant. Language: Programme-specific; verify on the official page. Route: Automatic consideration"
         }
       },
       {
@@ -10677,22 +9543,6 @@
           "benefits": "Generous living stipend covering room and board, books, supplies, instructional materials, and round-trip annual airfare to Stanford.",
           "other": "Includes membership in the King Global Leadership Program with specialized workshops, retreats, and global leadership training."
         }
-      },
-      {
-        "id": "US-001",
-        "name": "Fulbright Foreign Student Program for Bangladesh",
-        "provider": "Bureau of Educational and Cultural Affairs (ECA), US Department of State",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's Degree (1-2 Years)",
-        "deadline": "2026-06-01",
-        "status": "Active / Verified",
-        "officialSource": "https://bd.usembassy.gov",
-        "overallSummary": {
-          "cost": "যুক্তরাষ্ট্রের যেকোনো আইভি লিগ বা শীর্ষ বিশ্ববিদ্যালয়ে ১০০% সম্পূর্ণ টিউশন ফি ও প্রাতিষ্ঠানিক ফি মওকুফ।",
-          "benefits": "প্রতি মাসে শহরভেদে $১,৫০০ থেকে $২,৫০০ ডলার নগদ জীবনযাত্রার স্টাইপেন্ড (প্রায় ১,৮০,০০০-৩,০০,০০০ টাকা), ঢাকা-যুক্তরাষ্ট্র রিটার্ন বিমান টিকিট, বই ভাতা ও স্বাস্থ্য বীমা।",
-          "other": "আমেরিকান সরকারের সবচেয়ে সম্মানজনক আন্তর্জাতিক এক্সচেঞ্জ ফেলোশিপ। ঢাকায় মার্কিন দূতাবাসের প্যানেল সরাসরি মৌখিক সাক্ষাৎকার নিয়ে চূড়ান্ত প্রার্থী নির্বাচন করে।"
-        }
       }
     ]
   },
@@ -10946,6 +9796,77 @@
           "cost": "১০০% সম্পূর্ণ টিউশন ফি এবং রেজিস্ট্রেশন ফি ফ্রি।",
           "benefits": "প্রতি মাসে ৫০০ ব্রুনাই ডলার (BND) নগদ ভাতা, ক্যাম্পাসে ফ্রি আবাসন এবং ঢাকা থেকে আসা-যাওয়ার রিটার্ন বিমান টিকিট।",
           "other": "ইউবিডি ব্রুনাইয়ের এক নম্বর বিশ্ববিদ্যালয় (কিউএস ওয়ার্ল্ড র‍্যাংক টপ ৩০০)।"
+        }
+      }
+    ]
+  },
+  "CAN": {
+    "iso": "CAN",
+    "countryEn": "Canada",
+    "totalCount": 3,
+    "fullyFundedCount": 2,
+    "fullTuitionCount": 0,
+    "partialCount": 0,
+    "otherCount": 1,
+    "scholarshipIds": [
+      "BD-039",
+      "CA-001",
+      "CA-002"
+    ],
+    "studyLevels": [
+      "Undergraduate",
+      "Undergraduate (Bachelor - 4 Years)",
+      "Master's Degree",
+      "Professional Studies"
+    ],
+    "intakes": [],
+    "items": [
+      {
+        "id": "BD-039",
+        "name": "UBC International Scholars Program",
+        "provider": "University of British Columbia",
+        "coverage": "Need-and-merit based; up to full demonstrated need",
+        "fundingTier": "other",
+        "studyLevel": "Undergraduate",
+        "deadline": "",
+        "status": "Annual—monitor",
+        "officialSource": "https://you.ubc.ca/financial-planning/scholarships-awards-international-students/international-scholars/",
+        "overallSummary": {
+          "cost": "Need-and-merit based; up to full demonstrated need · Can cover tuition according to assessed need · Living costs may be included in need assessment",
+          "benefits": "Includes periodic living stipend, living allowance contribution, and study support as specified in the award regulations.",
+          "other": "Academics: Outstanding secondary-school achievement. Language: UBC admission requirement. Route: School/NGO nomination plus UBC application and award application"
+        }
+      },
+      {
+        "id": "CA-001",
+        "name": "Lester B. Pearson International Scholarship (University of Toronto)",
+        "provider": "University of Toronto",
+        "coverage": "Fully funded",
+        "fundingTier": "fully_funded",
+        "studyLevel": "Undergraduate (Bachelor - 4 Years)",
+        "deadline": "2026-11-30",
+        "status": "Active / Verified",
+        "officialSource": "https://future.utoronto.ca/pearson",
+        "overallSummary": {
+          "cost": "৪ বছরের সম্পূর্ণ আন্তর্জাতিক টিউশন ফি, বইয়ের খরচ এবং ইউনিভার্সিটির সকল প্রাসঙ্গিক ইনসিডেন্টাল ফি সম্পূর্ণ ফ্রি।",
+          "benefits": "টরন্টো বিশ্ববিদ্যালয়ের নিজস্ব রেসিডেন্সে ৪ বছরের সম্পূর্ণ ফ্রি থাকার ও খাওয়ার ব্যবস্থা (মোট ফান্ডিং মূল্য প্রায় $৩০০,০০০+ কানাডিয়ান ডলার)।",
+          "other": "কানাডার এক নম্বর বিশ্ববিদ্যালয় ইউ অব টি-এর সবচেয়ে প্রেস্টিজিয়াস আন্ডারগ্র্যাজুয়েট স্কলারশিপ। বিশ্বের সেরা সম্ভাবনাময় তরুণদের এই ফেলোশিপ দেওয়া হয়।"
+        }
+      },
+      {
+        "id": "CA-002",
+        "name": "McCall MacBain Scholarship (McGill University)",
+        "provider": "McCall MacBain Foundation & McGill University",
+        "coverage": "Fully funded",
+        "fundingTier": "fully_funded",
+        "studyLevel": "Master's Degree / Professional Studies",
+        "deadline": "2026-08-21",
+        "status": "Active / Verified",
+        "officialSource": "https://www.mccallmacbainscholars.org",
+        "overallSummary": {
+          "cost": "ম্যাকগিল বিশ্ববিদ্যালয়ে সম্পূর্ণ প্রোগ্রামের ১০০% টিউশন ফি এবং সংশ্লিষ্ট ক্যাম্পাস ফি মওকুফ।",
+          "benefits": "কানাডায় জীবনযাত্রার ব্যয়ের জন্য প্রতি মাসে $২,০০০ ক্যাড (CAD) নগদ স্টাইপেন্ড (প্রায় ১,৮০,০০০ টাকা) এবং মন্ট্রিয়েলে আসার জন্য এককালীন রিলোকেশন গ্রান্ট।",
+          "other": "কানাডার রোডস স্কলারশিপ হিসেবে খ্যাত ম্যাককল ম্যাকবেইন ফেলোদের নিবিড় লিডারশিপ ট্রেনিং, মেন্টরশিপ এবং আন্তর্জাতিক নেটওয়ার্কিং সরবরাহ করে।"
         }
       }
     ]
@@ -11507,23 +10428,21 @@
   "MYS": {
     "iso": "MYS",
     "countryEn": "Malaysia",
-    "totalCount": 5,
-    "fullyFundedCount": 5,
+    "totalCount": 4,
+    "fullyFundedCount": 4,
     "fullTuitionCount": 0,
     "partialCount": 0,
     "otherCount": 0,
     "scholarshipIds": [
       "MY-001",
-      "MY-002",
       "MY-003",
       "MY-004",
       "MY-005"
     ],
     "studyLevels": [
       "Master's Degree",
-      "Master",
-      "PhD",
       "Master by Research",
+      "PhD",
       "Master's"
     ],
     "intakes": [],
@@ -11542,22 +10461,6 @@
           "cost": "১০০% সম্পূর্ণ টিউশন ফি এবং সকল প্রাতিষ্ঠানিক রেজিস্ট্রেশন ফি মালয়েশিয়ান সরকার বহন করে।",
           "benefits": "প্রতি মাসে ৩,৫০০ মালয়েশিয়ান রিঙ্গিত (MYR) জীবনযাত্রার ভাতা, ঢাকা-কুয়ালালামপুর রিটার্ন বিমান টিকিট, বার্ষিক বুক এলাউন্স ও মেডিকেল ইন্স্যুরেন্স।",
           "other": "মালয়েশিয়ার কিউএস টপ ১০০ বিশ্ববিদ্যালয় যেমন Universiti Malaya (UM), UTM, UKM, USM-এ অধ্যয়নের জন্য এটি দক্ষিণ এশিয়ার অন্যতম মর্যাদাপূর্ণ সরকারি বৃত্তি।"
-        }
-      },
-      {
-        "id": "MY-002",
-        "name": "Malaysia International Scholarship (MIS)",
-        "provider": "Ministry of Higher Education (MOHE) Malaysia",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master / PhD",
-        "deadline": "2026-05-18",
-        "status": "Active / Verified",
-        "officialSource": "https://www.mohe.gov.my",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি ওয়েভার মালয়েশিয়ার পাবলিক ও শীর্ষ প্রাইভেট বিশ্ববিদ্যালয়গুলোতে।",
-          "benefits": "প্রতি মাসে ১,৫০০ রিঙ্গিত (MYR) মাসিক জীবনযাত্রার স্টাইপেন্ড এবং ক্যাম্পাসে গবেষণার সর্বাধুনিক সুযোগ-সুবিধা।",
-          "other": "মালয়েশিয়ায় জীবনযাত্রার ব্যয় সাশ্রয়ী এবং হালাল খাবারের প্রাচুর্য থাকায় বাংলাদেশি পোস্টগ্র্যাজুয়েট গবেষকদের কাছে এটি অত্যন্ত জনপ্রিয়।"
         }
       },
       {
@@ -11613,8 +10516,8 @@
   "THA": {
     "iso": "THA",
     "countryEn": "Thailand",
-    "totalCount": 5,
-    "fullyFundedCount": 5,
+    "totalCount": 4,
+    "fullyFundedCount": 4,
     "fullTuitionCount": 0,
     "partialCount": 0,
     "otherCount": 0,
@@ -11622,7 +10525,6 @@
       "TH-001",
       "TH-002",
       "TH-003",
-      "TH-004",
       "TH-005"
     ],
     "studyLevels": [
@@ -11630,8 +10532,8 @@
       "Master's Degree in Science",
       "Master",
       "PhD (Graduate Scholarship Program for Excellent Foreign Students - EFS)",
-      "PhD",
-      "Master's"
+      "Master's",
+      "PhD"
     ],
     "intakes": [],
     "items": [
@@ -11684,22 +10586,6 @@
         }
       },
       {
-        "id": "TH-004",
-        "name": "Asian Institute of Technology (AIT) Royal Thai Government Fellowship",
-        "provider": "Royal Thai Government (RTG) & Asian Institute of Technology (AIT)",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master / PhD",
-        "deadline": "2026-06-10",
-        "status": "Active / Verified",
-        "officialSource": "https://ait.ac.th",
-        "overallSummary": {
-          "cost": "এআইটি-র সম্পূর্ণ টিউশন ও রেজিস্ট্রেশন ফি থাই রাজকীয় সরকার বহন করে।",
-          "benefits": "আন্তর্জাতিক ক্যাম্পাসের ডরমিটরিতে ফ্রি আবাসন, জীবনযাত্রার ভাতা এবং সর্বাধুনিক গবেষণাগার সুবিধা।",
-          "other": "এআইটি ব্যাংককে অবস্থিত একটি স্বনামধন্য আন্তর্জাতিক বিশ্ববিদ্যালয় যেখানে এশিয়ার শীর্ষ প্রকৌশলী ও গবেষকরা শিক্ষকতা করেন। বাংলাদেশি শিক্ষার্থীদের ব্যাপক উপস্থিতি রয়েছে।"
-        }
-      },
-      {
         "id": "TH-005",
         "name": "Asian Institute of Technology (AIT) Royal Thai Government Fellowship",
         "provider": "Royal Thai Government / Asian Institute of Technology (AIT)",
@@ -11713,79 +10599,6 @@
           "cost": "১০০% সম্পূর্ণ টিউশন ফি এবং রেজিস্ট্রেশন ফি ফ্রি।",
           "benefits": "ক্যাম্পাসের আন্তর্জাতিক হোস্টেলে আবাসন ও লিভিং এলাউন্স।",
           "other": "ব্যাংককে অবস্থিত এআইটি দক্ষিণ এশিয়ার অন্যতম মর্যাদাপূর্ণ আন্তর্জাতিক পোস্টগ্র্যাজুয়েট ইনস্টিটিউট, যেখানে বহু বুয়েট ও বাংলাদেশি প্রকৌশলী উচ্চশিক্ষা সম্পন্ন করেছেন।"
-        }
-      }
-    ]
-  },
-  "IDN": {
-    "iso": "IDN",
-    "countryEn": "Indonesia",
-    "totalCount": 3,
-    "fullyFundedCount": 3,
-    "fullTuitionCount": 0,
-    "partialCount": 0,
-    "otherCount": 0,
-    "scholarshipIds": [
-      "ID-001",
-      "ID-002",
-      "ID-003"
-    ],
-    "studyLevels": [
-      "Bachelor",
-      "Master",
-      "PhD",
-      "Master's Degree (2 Years)",
-      "Bachelor's",
-      "Master's"
-    ],
-    "intakes": [],
-    "items": [
-      {
-        "id": "ID-001",
-        "name": "Kemitraan Negara Berkembang (KNB) Scholarship",
-        "provider": "Ministry of Education, Culture, Research, and Technology of the Republic of Indonesia",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Bachelor / Master / PhD",
-        "deadline": "2026-03-31",
-        "status": "Active / Verified",
-        "officialSource": "https://knb.kemdikbud.go.id",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি ওয়েভার এবং প্রথম বছরের ইন্দোনেশিয়ান ভাষা কোর্সের সকল ব্যয় ফ্রি।",
-          "benefits": "সেটেলমেন্ট এলাউন্স (১,৫০০,০০০ আইডিআর), মাসিক লিভিং এলাউন্স (প্রায় ৩,০০০,০০০-৪,০০০,০০০ আইডিআর), বই ভাতা, স্বাস্থ্য বীমা ও রিটার্ন ইকোনমি বিমান টিকিট।",
-          "other": "ইন্দোনেশিয়া সরকারের এই ফ্ল্যাগশিপ স্কলারশিপে প্রতি বছর বেশ কয়েকজন বাংলাদেশি শিক্ষার্থী সুযোগ পান। ইন্দোনেশিয়া দূতাবাস ঢাকা সরাসরি রেকমেন্ডেশন ইস্যু করে।"
-        }
-      },
-      {
-        "id": "ID-002",
-        "name": "Universitas Indonesia (UI) Great International Scholarship",
-        "provider": "Universitas Indonesia (Depok, Jakarta)",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's Degree (2 Years)",
-        "deadline": "2026-03-03",
-        "status": "Active / Verified",
-        "officialSource": "https://ui.ac.id",
-        "overallSummary": {
-          "cost": "ইন্দোনেশিয়ার এক নম্বর বিশ্ববিদ্যালয় ইউআই-তে ১০০% সম্পূর্ণ আন্তর্জাতিক টিউশন ফি মওকুফ।",
-          "benefits": "প্রতি মাসে ৩,০০০,০০০ ইন্দোনেশিয়ান রুপিয়া (IDR) লিভিং এলাউন্স, সেটেলমেন্ট এলাউন্স, রিটার্ন বিমান টিকিট ও স্বাস্থ্য বীমা।",
-          "other": "ইউনিভার্সিটি অব ইন্দোনেশিয়া (UI) জাকার্তায় অবস্থিত কিউএস শীর্ষ ২০০-র বিশ্বমানের একটি আধুনিক বিশ্ববিদ্যালয়।"
-        }
-      },
-      {
-        "id": "ID-003",
-        "name": "Kemitraan Negara Berkembang (KNB) Scholarship",
-        "provider": "Ministry of Education, Culture, Research, and Technology, Republic of Indonesia",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Bachelor's / Master's / PhD",
-        "deadline": "2026-03-31",
-        "status": "Active / Verified",
-        "officialSource": "https://knb.kemdikbud.go.id/",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি এবং এক বছরের পূর্ণাঙ্গ ইন্দোনেশিয়ান ভাষা কোর্স ফ্রি।",
-          "benefits": "ঢাকা-জাকার্তা রিটার্ন আন্তর্জাতিক বিমান টিকিট, সেটেলমেন্ট ভাতা, মাসিক লিভিং ভাতা (২.৭৫ মিলিয়ন রুপিয়াহ) এবং স্বাস্থ্য বীমা।",
-          "other": "ইন্দোনেশিয়ার শীর্ষ সরকারি বিশ্ববিদ্যালয়গুলোতে (UGM, ITB, UI) পড়ার চমৎকার সুযোগ।"
         }
       }
     ]
@@ -11951,115 +10764,6 @@
           "cost": "১০০% সম্পূর্ণ টিউশন ফি, ভর্তি ফি ও অ্যাকাডেমিক কোর্স ফি মওকুফ।",
           "benefits": "ব্রাজিলের জাতীয় বিজ্ঞান কাউন্সিলের সমমানের মাসিক জীবনযাত্রার স্টাইপেন্ড এবং বিশ্ববিদ্যালয়ের অত্যাধুনিক ল্যাব ও লাইব্রেরি অ্যাক্সেস।",
           "other": "ব্রাজিলের বিশ্ববিদ্যালয়গুলো (যেমন University of São Paulo) ব্রিকস (BRICS) ও দক্ষিণ গোলার্ধের অন্যতম শক্তিশালী গবেষণাগার। ঢাকায় ব্রাজিল দূতাবাস থেকে সরাসরি ভিসা পাওয়া যায়।"
-        }
-      }
-    ]
-  },
-  "TWN": {
-    "iso": "TWN",
-    "countryEn": "Taiwan",
-    "totalCount": 5,
-    "fullyFundedCount": 5,
-    "fullTuitionCount": 0,
-    "partialCount": 0,
-    "otherCount": 0,
-    "scholarshipIds": [
-      "TW-001",
-      "TW-002",
-      "TW-003",
-      "TW-004",
-      "TW-005"
-    ],
-    "studyLevels": [
-      "Undergraduate",
-      "Master",
-      "PhD",
-      "Bachelor (4 Yrs)",
-      "Master (2 Yrs)",
-      "PhD (4 Yrs)",
-      "Bachelor's",
-      "Master's"
-    ],
-    "intakes": [],
-    "items": [
-      {
-        "id": "TW-001",
-        "name": "Taiwan ICDF International Higher Education Scholarship Program",
-        "provider": "International Cooperation and Development Fund (TaiwanICDF)",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Undergraduate / Master / PhD",
-        "deadline": "2026-03-15",
-        "status": "Active / Verified",
-        "officialSource": "https://www.icdf.org.tw",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি, ক্রেডিট ফি এবং বিশ্ববিদ্যালয়ের সকল ল্যাবরেটরি ফি তাইওয়ান সরকার বহন করে।",
-          "benefits": "ঢাকা-তাইপেই রিটার্ন ইকোনমি বিমান টিকিট, বিশ্ববিদ্যালয় ছাত্রাবাসে ফ্রি আবাসন, প্রতি মাসে ১৫,০০০ থেকে ২০,০০০ নতুন তাইওয়ান ডলার (NT$) জীবনযাত্রার ভাতা এবং স্বাস্থ্য বীমা।",
-          "other": "সেমিকন্ডাক্টর ও ইলেকট্রনিক্স প্রযুক্তির বৈশ্বিক রাজধানী তাইওয়ানে ইংরেজি মাধ্যমে আন্তর্জাতিক ডিগ্রি অর্জনের জন্য অন্যতম সেরা ফুললি ফান্ডেড স্কলারশিপ।"
-        }
-      },
-      {
-        "id": "TW-002",
-        "name": "Taiwan Ministry of Education (MOE) Scholarship",
-        "provider": "Ministry of Education (MOE), Republic of China (Taiwan)",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Bachelor (4 Yrs) / Master (2 Yrs) / PhD (4 Yrs)",
-        "deadline": "2026-03-31",
-        "status": "Active / Verified",
-        "officialSource": "https://taiwanscholarship.moe.gov.tw",
-        "overallSummary": {
-          "cost": "প্রতি সেমিস্টারে সর্বোচ্চ ৪০,০০০ নতুন তাইওয়ান ডলার (NT$) পর্যন্ত টিউশন ও অ্যাকাডেমিক ফি সরকার বহন করে।",
-          "benefits": "আন্ডারগ্র্যাজুয়েটদের জন্য প্রতি মাসে ১৫,০০০ ডলার এবং পোস্টগ্র্যাজুয়েটদের জন্য ২০,০০০ নতুন তাইওয়ান ডলার (প্রায় ৮০,০০০ টাকা) নগদ জীবনযাত্রার স্টাইপেন্ড।",
-          "other": "তাইওয়ানের সেমিকন্ডাক্টর ও প্রযুক্তি ইন্ডাস্ট্রি বিশ্বসেরা। ন্যাশনাল তাইওয়ান ইউনিভার্সিটি (NTU) কিউএস শীর্ষ ৭০-এ অবস্থান করছে।"
-        }
-      },
-      {
-        "id": "TW-003",
-        "name": "MOE Taiwan Scholarship",
-        "provider": "Ministry of Education (MOE), Taiwan",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Bachelor's / Master's / PhD",
-        "deadline": "2026-03-31",
-        "status": "Active / Verified",
-        "officialSource": "https://taiwanscholarship.moe.gov.tw/",
-        "overallSummary": {
-          "cost": "প্রতি সেমিস্টারে সর্বোচ্চ ৪০,০০০ তাইওয়ান ডলার পর্যন্ত টিউশন ও অ্যাকাডেমিক ফি কাভার করে (অতিরিক্ত ফি বিশ্ববিদ্যালয় ওয়েভ করে)।",
-          "benefits": "আন্ডারগ্র্যাজুয়েটে প্রতি মাসে ১৫,০০০ NTD এবং মাস্টার্স ও পিএইচডিতে প্রতি মাসে ২০,০০০ NTD নগদ জীবনযাত্রার স্টাইপেন্ড।",
-          "other": "তাইওয়ানের জীবনযাত্রার ব্যয় সাশ্রয়ী এবং সেমিকন্ডাক্টর ও কম্পিউটার প্রযুক্তিতে তারা বৈশ্বিক শীর্ষে।"
-        }
-      },
-      {
-        "id": "TW-004",
-        "name": "Taiwan ICDF International Higher Education Scholarship Program",
-        "provider": "International Cooperation and Development Fund (Taiwan ICDF)",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Undergraduate / Master's / PhD",
-        "deadline": "2026-03-15",
-        "status": "Active / Verified",
-        "officialSource": "https://www.icdf.org.tw/",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি, ক্রেডিট ফি এবং পাঠ্যবইয়ের খরচ ফ্রি।",
-          "benefits": "ঢাকা-তাইওয়ান রিটার্ন এয়ার টিকিট, বিশ্ববিদ্যালয় হোস্টেলে থাকার ব্যবস্থা, স্বাস্থ্য বীমা এবং প্রতি মাসে ১৫,০০০ থেকে ২০,০০০ তাইওয়ান ডলার মাসিক নগদ ভাতা।",
-          "other": "পুরো প্রোগ্রামটি ১০০% ইংরেজি মাধ্যমে পরিচালিত হয় এবং কৃষিশিক্ষা, আইটি ও আন্তর্জাতিক উন্নয়নের সাবজেক্টে এটি দারুণ একটি সুযোগ।"
-        }
-      },
-      {
-        "id": "TW-005",
-        "name": "National Taiwan University (NTU) Outstanding International Graduate Scholarship",
-        "provider": "National Taiwan University (NTU - QS World Rank #68)",
-        "coverage": "Fully funded",
-        "fundingTier": "fully_funded",
-        "studyLevel": "Master's / PhD",
-        "deadline": "2026-02-20",
-        "status": "Active / Verified",
-        "officialSource": "https://oia.ntu.edu.tw/en/",
-        "overallSummary": {
-          "cost": "১০০% সম্পূর্ণ টিউশন ফি ফ্রি।",
-          "benefits": "মাস্টার্স গবেষকদের জন্য মাসিক ৮,০০০ NTD এবং পিএইচডি গবেষকদের জন্য ১৫,০০০ NTD লিভিং সাপোর্ট।",
-          "other": "তাইওয়ানের এক নম্বর শীর্ষ বিশ্ববিদ্যালয় NTU-তে মাস্টার্স ও পিএইচডি ডিগ্রি আন্তর্জাতিক পরিমণ্ডলে ব্যাপক সমাদৃত।"
         }
       }
     ]
@@ -12346,6 +11050,133 @@
           "cost": "১০০% সম্পূর্ণ টিউশন ফি এবং এক বছরের ভাষা কোর্সের সকল ব্যয় বুলগেরিয়া সরকার বহন করে।",
           "benefits": "বিশ্ববিদ্যালয় হোস্টেলে অত্যন্ত সাশ্রয়ী আবাসন এবং রাষ্ট্রীয় মাসিক শিক্ষাবৃত্তি।",
           "other": "বুলগেরিয়া ইউরোপীয় ইউনিয়নের শেঙ্গেনভুক্ত দেশ। দেশটির প্রাচীন সোফিয়া বিশ্ববিদ্যালয় ও টেকনিক্যাল বিশ্ববিদ্যালয় ইউরোপে সুপরিচিত।"
+        }
+      }
+    ]
+  },
+  "TWN": {
+    "iso": "TWN",
+    "countryEn": "Taiwan",
+    "totalCount": 3,
+    "fullyFundedCount": 3,
+    "fullTuitionCount": 0,
+    "partialCount": 0,
+    "otherCount": 0,
+    "scholarshipIds": [
+      "TW-002",
+      "TW-004",
+      "TW-005"
+    ],
+    "studyLevels": [
+      "Bachelor (4 Yrs)",
+      "Master (2 Yrs)",
+      "PhD (4 Yrs)",
+      "Undergraduate",
+      "Master's",
+      "PhD"
+    ],
+    "intakes": [],
+    "items": [
+      {
+        "id": "TW-002",
+        "name": "Taiwan Ministry of Education (MOE) Scholarship",
+        "provider": "Ministry of Education (MOE), Republic of China (Taiwan)",
+        "coverage": "Fully funded",
+        "fundingTier": "fully_funded",
+        "studyLevel": "Bachelor (4 Yrs) / Master (2 Yrs) / PhD (4 Yrs)",
+        "deadline": "2026-03-31",
+        "status": "Active / Verified",
+        "officialSource": "https://taiwanscholarship.moe.gov.tw",
+        "overallSummary": {
+          "cost": "প্রতি সেমিস্টারে সর্বোচ্চ ৪০,০০০ নতুন তাইওয়ান ডলার (NT$) পর্যন্ত টিউশন ও অ্যাকাডেমিক ফি সরকার বহন করে।",
+          "benefits": "আন্ডারগ্র্যাজুয়েটদের জন্য প্রতি মাসে ১৫,০০০ ডলার এবং পোস্টগ্র্যাজুয়েটদের জন্য ২০,০০০ নতুন তাইওয়ান ডলার (প্রায় ৮০,০০০ টাকা) নগদ জীবনযাত্রার স্টাইপেন্ড।",
+          "other": "তাইওয়ানের সেমিকন্ডাক্টর ও প্রযুক্তি ইন্ডাস্ট্রি বিশ্বসেরা। ন্যাশনাল তাইওয়ান ইউনিভার্সিটি (NTU) কিউএস শীর্ষ ৭০-এ অবস্থান করছে।"
+        }
+      },
+      {
+        "id": "TW-004",
+        "name": "Taiwan ICDF International Higher Education Scholarship Program",
+        "provider": "International Cooperation and Development Fund (Taiwan ICDF)",
+        "coverage": "Fully funded",
+        "fundingTier": "fully_funded",
+        "studyLevel": "Undergraduate / Master's / PhD",
+        "deadline": "2026-03-15",
+        "status": "Active / Verified",
+        "officialSource": "https://www.icdf.org.tw/",
+        "overallSummary": {
+          "cost": "১০০% সম্পূর্ণ টিউশন ফি, ক্রেডিট ফি এবং পাঠ্যবইয়ের খরচ ফ্রি।",
+          "benefits": "ঢাকা-তাইওয়ান রিটার্ন এয়ার টিকিট, বিশ্ববিদ্যালয় হোস্টেলে থাকার ব্যবস্থা, স্বাস্থ্য বীমা এবং প্রতি মাসে ১৫,০০০ থেকে ২০,০০০ তাইওয়ান ডলার মাসিক নগদ ভাতা।",
+          "other": "পুরো প্রোগ্রামটি ১০০% ইংরেজি মাধ্যমে পরিচালিত হয় এবং কৃষিশিক্ষা, আইটি ও আন্তর্জাতিক উন্নয়নের সাবজেক্টে এটি দারুণ একটি সুযোগ।"
+        }
+      },
+      {
+        "id": "TW-005",
+        "name": "National Taiwan University (NTU) Outstanding International Graduate Scholarship",
+        "provider": "National Taiwan University (NTU - QS World Rank #68)",
+        "coverage": "Fully funded",
+        "fundingTier": "fully_funded",
+        "studyLevel": "Master's / PhD",
+        "deadline": "2026-02-20",
+        "status": "Active / Verified",
+        "officialSource": "https://oia.ntu.edu.tw/en/",
+        "overallSummary": {
+          "cost": "১০০% সম্পূর্ণ টিউশন ফি ফ্রি।",
+          "benefits": "মাস্টার্স গবেষকদের জন্য মাসিক ৮,০০০ NTD এবং পিএইচডি গবেষকদের জন্য ১৫,০০০ NTD লিভিং সাপোর্ট।",
+          "other": "তাইওয়ানের এক নম্বর শীর্ষ বিশ্ববিদ্যালয় NTU-তে মাস্টার্স ও পিএইচডি ডিগ্রি আন্তর্জাতিক পরিমণ্ডলে ব্যাপক সমাদৃত।"
+        }
+      }
+    ]
+  },
+  "IDN": {
+    "iso": "IDN",
+    "countryEn": "Indonesia",
+    "totalCount": 2,
+    "fullyFundedCount": 2,
+    "fullTuitionCount": 0,
+    "partialCount": 0,
+    "otherCount": 0,
+    "scholarshipIds": [
+      "ID-002",
+      "ID-003"
+    ],
+    "studyLevels": [
+      "Master's Degree (2 Years)",
+      "Bachelor's",
+      "Master's",
+      "PhD"
+    ],
+    "intakes": [],
+    "items": [
+      {
+        "id": "ID-002",
+        "name": "Universitas Indonesia (UI) Great International Scholarship",
+        "provider": "Universitas Indonesia (Depok, Jakarta)",
+        "coverage": "Fully funded",
+        "fundingTier": "fully_funded",
+        "studyLevel": "Master's Degree (2 Years)",
+        "deadline": "2026-03-03",
+        "status": "Active / Verified",
+        "officialSource": "https://ui.ac.id",
+        "overallSummary": {
+          "cost": "ইন্দোনেশিয়ার এক নম্বর বিশ্ববিদ্যালয় ইউআই-তে ১০০% সম্পূর্ণ আন্তর্জাতিক টিউশন ফি মওকুফ।",
+          "benefits": "প্রতি মাসে ৩,০০০,০০০ ইন্দোনেশিয়ান রুপিয়া (IDR) লিভিং এলাউন্স, সেটেলমেন্ট এলাউন্স, রিটার্ন বিমান টিকিট ও স্বাস্থ্য বীমা।",
+          "other": "ইউনিভার্সিটি অব ইন্দোনেশিয়া (UI) জাকার্তায় অবস্থিত কিউএস শীর্ষ ২০০-র বিশ্বমানের একটি আধুনিক বিশ্ববিদ্যালয়।"
+        }
+      },
+      {
+        "id": "ID-003",
+        "name": "Kemitraan Negara Berkembang (KNB) Scholarship",
+        "provider": "Ministry of Education, Culture, Research, and Technology, Republic of Indonesia",
+        "coverage": "Fully funded",
+        "fundingTier": "fully_funded",
+        "studyLevel": "Bachelor's / Master's / PhD",
+        "deadline": "2026-03-31",
+        "status": "Active / Verified",
+        "officialSource": "https://knb.kemdikbud.go.id/",
+        "overallSummary": {
+          "cost": "১০০% সম্পূর্ণ টিউশন ফি এবং এক বছরের পূর্ণাঙ্গ ইন্দোনেশিয়ান ভাষা কোর্স ফ্রি।",
+          "benefits": "ঢাকা-জাকার্তা রিটার্ন আন্তর্জাতিক বিমান টিকিট, সেটেলমেন্ট ভাতা, মাসিক লিভিং ভাতা (২.৭৫ মিলিয়ন রুপিয়াহ) এবং স্বাস্থ্য বীমা।",
+          "other": "ইন্দোনেশিয়ার শীর্ষ সরকারি বিশ্ববিদ্যালয়গুলোতে (UGM, ITB, UI) পড়ার চমৎকার সুযোগ।"
         }
       }
     ]

@@ -984,37 +984,6 @@ export default function GlobalStudyMapsPage() {
               onClick={handleCanvasClick}
             />
 
-            {/* Interactive Continent Color Showing Diagram / Legend */}
-            <div className={styles.continentLegend}>
-              <div className={styles.continentLegendHeader}>
-                <span className={styles.continentLegendIcon}>🌍</span>
-                <span className={styles.continentLegendTitle}>মহাদেশ • Continents</span>
-              </div>
-              <div className={styles.continentGrid}>
-                {CONTINENTS.map((c) => {
-                  const isActive = hoveredContinent === c.id;
-                  return (
-                    <button
-                      key={c.id}
-                      type="button"
-                      className={`${styles.continentItem} ${isActive ? styles.continentItemActive : ""}`}
-                      onMouseEnter={() => handleContinentHover(c.id)}
-                      onMouseLeave={() => handleContinentHover(null)}
-                      onClick={() => handleContinentClick(c.id)}
-                      title={`${c.nameBn} (${c.nameEn}) - ক্লিক করে হাইলাইট করুন`}
-                    >
-                      <span
-                        className={styles.continentDot}
-                        style={{ background: c.badge }}
-                      />
-                      <span className={styles.continentNameBn}>{c.nameBn}</span>
-                      <span className={styles.continentNameEn}>{c.nameEn}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
             {/* Interactive Zoom Controls */}
             <div className={styles.zoomControls}>
               <button className={styles.zoomBtn} onClick={handleZoomIn} title="Zoom In (+)">
@@ -1091,7 +1060,8 @@ export default function GlobalStudyMapsPage() {
                       onMouseEnter={() => handleContinentHover(c.id)}
                       onMouseLeave={() => handleContinentHover(null)}
                       onClick={() => handleContinentClick(c.id)}
-                      style={{ cursor: "pointer" }}
+                      style={{ cursor: "pointer", transition: "transform 0.15s ease" }}
+                      title={`${c.nameBn} (${c.nameEn}) - ক্লিক করে মহাদেশ হাইলাইট করুন`}
                     >
                       <span className={styles.legendDot} style={{ background: c.badge }} />
                       <span>{c.nameBn}</span>
