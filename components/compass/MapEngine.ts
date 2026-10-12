@@ -154,6 +154,70 @@ export const FUNDING_COLORS = {
   },
 };
 
+// Continent metadata and mild/soothing color tokens
+export type ContinentInfo = {
+  id: string; // 'as', 'eu', 'af', 'na', 'sa', 'oc'
+  nameEn: string;
+  nameBn: string;
+  badge: string; // Accent color for swatch
+};
+
+export const CONTINENTS: ContinentInfo[] = [
+  { id: "as", nameEn: "Asia", nameBn: "এশিয়া", badge: "#34D399" },
+  { id: "eu", nameEn: "Europe", nameBn: "ইউরোপ", badge: "#60A5FA" },
+  { id: "af", nameEn: "Africa", nameBn: "আফ্রিকা", badge: "#FBBF24" },
+  { id: "na", nameEn: "North America", nameBn: "উত্তর আমেরিকা", badge: "#C084FC" },
+  { id: "sa", nameEn: "South America", nameBn: "দক্ষিণ আমেরিকা", badge: "#F472B6" },
+  { id: "oc", nameEn: "Oceania", nameBn: "ওশেনিয়া", badge: "#2DD4BF" },
+];
+
+export const CONTINENT_THEME_COLORS: Record<
+  string,
+  Record<
+    string,
+    {
+      fill: string;
+      stroke: string;
+      highlightFill?: string;
+      highlightStroke?: string;
+      badge: string;
+    }
+  >
+> = {
+  midnight: {
+    as: { fill: "#255842", stroke: "#387E5E", highlightFill: "#2F6E52", highlightStroke: "#6EE7B7", badge: "#34D399" }, // Mild Sage Green
+    eu: { fill: "#224972", stroke: "#356BA5", highlightFill: "#2B5E93", highlightStroke: "#93C5FD", badge: "#60A5FA" }, // Mild Slate Blue
+    af: { fill: "#524025", stroke: "#7A5E36", highlightFill: "#69522F", highlightStroke: "#FDE68A", badge: "#FBBF24" }, // Mild Sand / Amber
+    na: { fill: "#44345C", stroke: "#664E8B", highlightFill: "#574276", highlightStroke: "#E9D5FF", badge: "#C084FC" }, // Mild Plum / Purple
+    sa: { fill: "#53303D", stroke: "#7C485C", highlightFill: "#693D4D", highlightStroke: "#FBCFE8", badge: "#F472B6" }, // Mild Rose / Terracotta
+    oc: { fill: "#1F4E57", stroke: "#2E7481", highlightFill: "#27636F", highlightStroke: "#99F6E4", badge: "#2DD4BF" }, // Mild Teal / Seafoam
+  },
+  daylight: {
+    as: { fill: "#D4E9DE", stroke: "#A3CFBB", highlightFill: "#BCE0CD", highlightStroke: "#059669", badge: "#059669" },
+    eu: { fill: "#D2E3F8", stroke: "#9EC5FE", highlightFill: "#BCD7F6", highlightStroke: "#2563EB", badge: "#2563EB" },
+    af: { fill: "#FBF0D3", stroke: "#F6DE95", highlightFill: "#F9E7BA", highlightStroke: "#D97706", badge: "#D97706" },
+    na: { fill: "#E8DFF5", stroke: "#CAB8E8", highlightFill: "#DDCFF1", highlightStroke: "#7C3AED", badge: "#7C3AED" },
+    sa: { fill: "#F9DDE2", stroke: "#F0AFBC", highlightFill: "#F6C8D1", highlightStroke: "#E11D48", badge: "#E11D48" },
+    oc: { fill: "#D3ECEF", stroke: "#9FD7DF", highlightFill: "#BFE3E7", highlightStroke: "#0D9488", badge: "#0D9488" },
+  },
+  emerald: {
+    as: { fill: "#C6E7D9", stroke: "#8ED4BA", highlightFill: "#AEE0CC", highlightStroke: "#047857", badge: "#059669" },
+    eu: { fill: "#CEE1F2", stroke: "#99C2E6", highlightFill: "#B7D4ED", highlightStroke: "#1D4ED8", badge: "#2563EB" },
+    af: { fill: "#F7ECCB", stroke: "#EED896", highlightFill: "#F3E3B2", highlightStroke: "#B45309", badge: "#D97706" },
+    na: { fill: "#E2D9EE", stroke: "#BEADD9", highlightFill: "#D2C5E4", highlightStroke: "#6D28D9", badge: "#7C3AED" },
+    sa: { fill: "#F5D7DC", stroke: "#E8A6B0", highlightFill: "#EEBFC7", highlightStroke: "#BE123C", badge: "#E11D48" },
+    oc: { fill: "#CBE6E8", stroke: "#96D0D5", highlightFill: "#B4DCDD", highlightStroke: "#0F766E", badge: "#0D9488" },
+  },
+  sunset: {
+    as: { fill: "#234938", stroke: "#376F55", highlightFill: "#2F614A", highlightStroke: "#6EE7B7", badge: "#34D399" },
+    eu: { fill: "#223F62", stroke: "#356093", highlightFill: "#2B507C", highlightStroke: "#93C5FD", badge: "#60A5FA" },
+    af: { fill: "#4F3A26", stroke: "#755536", highlightFill: "#65492F", highlightStroke: "#FDE68A", badge: "#FBBF24" },
+    na: { fill: "#3F2E52", stroke: "#5F457E", highlightFill: "#513B69", highlightStroke: "#E9D5FF", badge: "#C084FC" },
+    sa: { fill: "#502A36", stroke: "#783F51", highlightFill: "#663544", highlightStroke: "#FBCFE8", badge: "#F472B6" },
+    oc: { fill: "#1E444B", stroke: "#2D6771", highlightFill: "#265760", highlightStroke: "#99F6E4", badge: "#2DD4BF" },
+  },
+};
+
 // Dhaka Home Coordinate in 1000x444.7
 export const DHAKA_COORD: [number, number] = [741.4, 155.3];
 
@@ -187,6 +251,7 @@ export class MapRenderer {
   dpr: number = 1;
   activeFundingFilter: "all" | "fully_funded" | "full_tuition" | "partial" = "all";
   geoIndexData: Record<string, any> = {};
+  highlightedContinent: string | null = null;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -216,6 +281,11 @@ export class MapRenderer {
 
   setGeoIndexData(data: Record<string, any>) {
     this.geoIndexData = data;
+  }
+
+  setHighlightedContinent(continent: string | null) {
+    this.highlightedContinent = continent;
+    this.render();
   }
 
   setFundingFilter(filter: "all" | "fully_funded" | "full_tuition" | "partial") {
@@ -404,12 +474,24 @@ export class MapRenderer {
           ctx.stroke(path);
         }
       } else {
-        // Default Country
-        ctx.fillStyle = t.land;
-        ctx.fill(path);
-        ctx.strokeStyle = t.stroke;
-        ctx.lineWidth = baseLineWidth;
-        ctx.stroke(path);
+        // Default Country: Colored by Continent (Mild & Soothing)
+        const isContinentHighlighted = this.highlightedContinent && this.highlightedContinent === f.ct;
+        const continentMap = CONTINENT_THEME_COLORS[t.id] || CONTINENT_THEME_COLORS.midnight;
+        const continentStyle = continentMap[f.ct] || { fill: t.land, stroke: t.stroke, badge: t.dot };
+
+        if (isContinentHighlighted) {
+          ctx.fillStyle = continentStyle.highlightFill || continentStyle.fill;
+          ctx.fill(path);
+          ctx.strokeStyle = continentStyle.highlightStroke || "#FFFFFF";
+          ctx.lineWidth = 1.4 / this.scale;
+          ctx.stroke(path);
+        } else {
+          ctx.fillStyle = continentStyle.fill;
+          ctx.fill(path);
+          ctx.strokeStyle = continentStyle.stroke;
+          ctx.lineWidth = baseLineWidth;
+          ctx.stroke(path);
+        }
       }
     }
 
@@ -440,6 +522,12 @@ export class MapRenderer {
           if (!isSelected && !isHovered) continue;
           dotColor = "rgba(100, 116, 139, 0.4)";
           dotSize = 2.8;
+        }
+      } else {
+        const continentMap = CONTINENT_THEME_COLORS[t.id] || CONTINENT_THEME_COLORS.midnight;
+        const continentStyle = continentMap[f.ct];
+        if (continentStyle && continentStyle.badge) {
+          dotColor = continentStyle.badge;
         }
       }
 

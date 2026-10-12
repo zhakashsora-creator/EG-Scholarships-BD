@@ -1587,6 +1587,110 @@
 }
 
 /* ==========================================================================
+   7B. Continent Legend Overlay (Canvas)
+   ========================================================================== */
+.continentLegend {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  background: rgba(22, 34, 47, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  z-index: 25;
+  max-width: 330px;
+  user-select: none;
+}
+
+.continentLegendHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.continentLegendIcon {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.continentLegendTitle {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #F5B041;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.continentGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 8px;
+}
+
+.continentItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 4px 7px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  font-family: inherit;
+  color: #E2E8F0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.continentItem:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.continentItemActive {
+  background: rgba(245, 176, 65, 0.18);
+  border-color: #F5B041;
+  color: #FFFFFF;
+  box-shadow: 0 0 8px rgba(245, 176, 65, 0.3);
+}
+
+.continentDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+}
+
+.continentNameBn {
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.continentNameEn {
+  font-size: 0.64rem;
+  color: #94A3B8;
+  margin-left: 2px;
+  white-space: nowrap;
+}
+
+.footerContinentPills {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
    8. Global Funding Filter Bar
    ========================================================================== */
 .fundingFilterBar {
@@ -1999,6 +2103,55 @@
     width: 36px;
     height: 36px;
     font-size: 1.2rem;
+  }
+
+  .continentLegend {
+    left: 8px;
+    bottom: 8px;
+    padding: 5px 8px;
+    max-width: calc(100% - 66px);
+    border-radius: 8px;
+  }
+
+  .continentLegendHeader {
+    margin-bottom: 3px;
+    padding-bottom: 2px;
+    gap: 4px;
+  }
+
+  .continentLegendIcon {
+    font-size: 0.75rem;
+  }
+
+  .continentLegendTitle {
+    font-size: 0.64rem;
+  }
+
+  .continentGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3px 4px;
+  }
+
+  .continentItem {
+    padding: 2px 4px;
+    gap: 4px;
+  }
+
+  .continentDot {
+    width: 7px;
+    height: 7px;
+  }
+
+  .continentNameBn {
+    font-size: 0.64rem;
+  }
+
+  .continentNameEn {
+    display: none;
+  }
+
+  .footerContinentPills {
+    gap: 8px;
   }
 
   .mapFooter {

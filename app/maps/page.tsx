@@ -10,6 +10,7 @@ import {
   University,
   CountryBrief,
   WorldData,
+  CONTINENTS,
 } from "../../components/compass/MapEngine";
 
 // Static Imports of Curated Data
@@ -169,6 +170,26 @@ export default function GlobalStudyMapsPage() {
       rendererRef.current.render();
     }
   }, [selectedIso]);
+
+  // Continent Highlight & Legend State
+  const [hoveredContinent, setHoveredContinent] = useState<string | null>(null);
+
+  const handleContinentHover = useCallback((continentId: string | null) => {
+    setHoveredContinent(continentId);
+    if (rendererRef.current) {
+      rendererRef.current.setHighlightedContinent(continentId);
+    }
+  }, []);
+
+  const handleContinentClick = useCallback((continentId: string) => {
+    setHoveredContinent((prev) => {
+      const next = prev === continentId ? null : continentId;
+      if (rendererRef.current) {
+        rendererRef.current.setHighlightedContinent(next);
+      }
+      return next;
+    });
+  }, []);
 
   // In-Page Detail Modal (Zero Login Barrier)
   const [detailScholarship, setDetailScholarship] = useState<ScholarshipItem | null>(null);
@@ -963,6 +984,37 @@ export default function GlobalStudyMapsPage() {
               onClick={handleCanvasClick}
             />
 
+            {/* Interactive Continent Color Showing Diagram / Legend */}
+            <div className={styles.continentLegend}>
+              <div className={styles.continentLegendHeader}>
+                <span className={styles.continentLegendIcon}>🌍</span>
+                <span className={styles.continentLegendTitle}>মহাদেশ • Continents</span>
+              </div>
+              <div className={styles.continentGrid}>
+                {CONTINENTS.map((c) => {
+                  const isActive = hoveredContinent === c.id;
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      className={`${styles.continentItem} ${isActive ? styles.continentItemActive : ""}`}
+                      onMouseEnter={() => handleContinentHover(c.id)}
+                      onMouseLeave={() => handleContinentHover(null)}
+                      onClick={() => handleContinentClick(c.id)}
+                      title={`${c.nameBn} (${c.nameEn}) - ক্লিক করে হাইলাইট করুন`}
+                    >
+                      <span
+                        className={styles.continentDot}
+                        style={{ background: c.badge }}
+                      />
+                      <span className={styles.continentNameBn}>{c.nameBn}</span>
+                      <span className={styles.continentNameEn}>{c.nameEn}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* Interactive Zoom Controls */}
             <div className={styles.zoomControls}>
               <button className={styles.zoomBtn} onClick={handleZoomIn} title="Zoom In (+)">
@@ -1030,7 +1082,23 @@ export default function GlobalStudyMapsPage() {
                     <span>Partial Scholarship</span>
                   </div>
                 </>
-              ) : null}
+              ) : (
+                <div className={styles.footerContinentPills}>
+                  {CONTINENTS.map((c) => (
+                    <div
+                      key={c.id}
+                      className={styles.legendItem}
+                      onMouseEnter={() => handleContinentHover(c.id)}
+                      onMouseLeave={() => handleContinentHover(null)}
+                      onClick={() => handleContinentClick(c.id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <span className={styles.legendDot} style={{ background: c.badge }} />
+                      <span>{c.nameBn}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div style={{ color: "#94A3B8" }}>
