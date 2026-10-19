@@ -94,3 +94,15 @@ html{font-size:16px}body{font-size:16px}.landing-nav nav,.button{font-size:14px}
 :root[data-theme="dark"] .summary-block{background:#0c1828;border-color:var(--line)}
 :root[data-theme="dark"] .summary-pill{color:#aeb9ca}
 @media(max-width:850px){.overall-summary-grid{grid-template-columns:1fr}}
+
+/* Landing-page dark-mode contrast: avoid light-on-light text in fixed light surfaces. */
+:root[data-theme="dark"] .process-section{background:#0c1828;color:var(--ink)}
+:root[data-theme="dark"] .process-section>h2,
+:root[data-theme="dark"] .process-grid h3,
+:root[data-theme="dark"] .brand strong,
+:root[data-theme="dark"] .landing-nav nav{color:var(--ink)}
+:root[data-theme="dark"] .hero-copy>p{color:var(--muted)}
+:root[data-theme="dark"] .trust-row b{color:var(--ink)}
+:root[data-theme="dark"] .button.ghost{background:var(--white);color:var(--ink);border-color:var(--line)}
+:root[data-theme="dark"] .hero-product{border-color:#33445b}
+:root[data-theme="dark"] .privacy-strip>a{background:var(--white);color:var(--ink);border:1px solid var(--line)}

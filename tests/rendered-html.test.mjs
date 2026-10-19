@@ -83,6 +83,9 @@ test("portal includes theme controls, personalized analysis pages and a complete
   ]);
   assert.match(themeToggle, /eg-theme/);
   assert.match(css, /data-theme="dark"/);
+  assert.match(css, /data-theme="dark"\] \.process-section\{background:#0c1828;color:var\(--ink\)\}/);
+  assert.match(css, /data-theme="dark"\] \.button\.ghost\{background:var\(--white\);color:var\(--ink\)/);
+  assert.match(css, /data-theme="dark"\] \.trust-row b\{color:var\(--ink\)\}/);
   assert.match(dashboard, /View full match analysis/);
   assert.match(dashboard, /Fees paid \/ to pay/);
   assert.match(dashboard, /Plane tickets/);
