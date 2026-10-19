@@ -1,6 +1,6 @@
 # EG Scholarships current project memory
 
-Updated 19 October 2026 after reconciling the repository and Antigravity-era commits through `57abed5`.
+Updated 19 October 2026 after reconciling the repository and Antigravity-era commits through `725aab1`.
 
 This is the durable handoff record for future work. It describes the current application, not the retired Sites prototype.
 
@@ -49,6 +49,7 @@ The October commit history adds and refines the Global Study Compass and scholar
 - continent coloring and legend spacing improvements
 - polygon-first hit testing, removal of misleading island/microstate dots and removal of the canvas continent overlay
 - catalogue and geographic-index deduplication, including duplicate MIS records
+- pre-hydration theme initialization that removes dark-mode reload flash and theme-control label flicker
 
 The core portal remains under `/dashboard`, with `/dashboard/scholarship/[id]` for analysis. Public access uses `/login`, `/auth/*` and `/reset-password`.
 

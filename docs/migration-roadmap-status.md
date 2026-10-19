@@ -1,6 +1,6 @@
 # Sites-to-owned-domain roadmap status
 
-Updated 19 October 2026 after reconciling the Namecheap repository and Antigravity-era map/compass work through `57abed5`. The original twelve-task plan remains the governing sequence; this file maps it to the work now present in the owned-domain repository.
+Updated 19 October 2026 after reconciling the Namecheap repository and Antigravity-era map/compass/theme work through `725aab1`. The original twelve-task plan remains the governing sequence; this file maps it to the work now present in the owned-domain repository.
 
 | Original task | Status | Evidence / remaining gate |
 |---|---|---|
@@ -26,4 +26,4 @@ Updated 19 October 2026 after reconciling the Namecheap repository and Antigravi
 
 ## Antigravity-era application additions
 
-The repository now includes the Global Study Compass and interactive scholarship-map surfaces at `/compass`, `/map` and `/maps`. October work added country briefs, scholarship-count exploration, full-screen details, mobile touch/pinch handling, shareable high-resolution social cards, continent coloring and legend improvements, polygon-first hit testing, and catalogue/geographic-index deduplication. The durable operational summary is maintained in `project-memory.md`.
+The repository now includes the Global Study Compass and interactive scholarship-map surfaces at `/compass`, `/map` and `/maps`. October work added country briefs, scholarship-count exploration, full-screen details, mobile touch/pinch handling, shareable high-resolution social cards, continent coloring and legend improvements, polygon-first hit testing, catalogue/geographic-index deduplication, and a pre-hydration theme initializer that prevents dark-mode reload flash. The durable operational summary is maintained in `project-memory.md`.
