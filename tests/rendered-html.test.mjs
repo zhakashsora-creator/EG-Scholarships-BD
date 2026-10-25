@@ -294,12 +294,11 @@ test("EG Global Study Maps interactive map app and data assets are available and
 
   assert.match(mapsPage, /GlobalStudyMapsPage/);
   assert.match(mapsPage, /compass-hud/);
-  assert.match(mapsPage, /Match My Profile/);
-  assert.match(mapsPage, /Download My Map/);
-  assert.match(mapsPage, /View details/);
+  assert.match(mapsPage, /Set Your Profile/);
+  assert.match(mapsPage, /Download Card/);
+  assert.match(mapsPage, /View details|View Details/);
   assert.doesNotMatch(mapsPage, /View match analysis/);
-  assert.match(mapsPage, /isScholarshipMatch/);
-  assert.match(mapsPage, /featuredScholarship/);
+  assert.match(mapsPage, /generateScholarshipCardImage/);
   assert.match(mapsPage, /fundingFilter/);
   assert.match(mapsPage, /zoomControls/);
   assert.match(compassRedirect, /redirect\("\/maps"\)/);

@@ -105,30 +105,36 @@
   color: #16222F;
 }
 
-/* Theme Swatches */
-.themeWrap {
-  display: flex;
+/* Header Toggle Buttons (Language BN/EN & Theme Dark/Light) */
+.toggleBtn {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-left: 6px;
-}
-
-.themeSwatch {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 2px solid transparent;
+  padding: 8px 13px;
+  border-radius: 8px;
+  font-size: 0.80rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
+  user-select: none;
+  white-space: nowrap;
 }
 
-.themeSwatch:hover {
-  transform: scale(1.15);
-}
-
-.themeSwatchActive {
+.toggleBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
   border-color: #F5B041;
-  box-shadow: 0 0 8px rgba(245, 176, 65, 0.6);
+  color: #F5B041;
+  transform: translateY(-1px);
+}
+
+.toggleBtn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  flex-shrink: 0;
 }
 
 /* 2. Zero-Overlap Dynamic HUD Ribbon */
@@ -298,6 +304,55 @@
   background: #F5B041;
   color: #16222F;
   border-color: #F5B041;
+}
+
+/* Country Selector Dropdown in Toolbar */
+.countrySelectWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.countrySelectLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.80rem;
+  font-weight: 600;
+  color: #94A3B8;
+  white-space: nowrap;
+}
+
+.countrySelectLabel svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+}
+
+.countrySelect {
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: #1E2C3A;
+  color: #FFFFFF;
+  border: 1px solid rgba(245, 176, 65, 0.35);
+  cursor: pointer;
+  outline: none;
+  max-width: 290px;
+  transition: all 0.2s ease;
+}
+
+.countrySelect:hover,
+.countrySelect:focus {
+  border-color: #F5B041;
+  box-shadow: 0 0 0 2px rgba(245, 176, 65, 0.2);
+}
+
+.countrySelect option {
+  background: #16222F;
+  color: #FFFFFF;
 }
 
 .canvasWrap {
@@ -1063,33 +1118,78 @@
   color: #F8FAFC;
 }
 
-/* Quick Explore Popular Destinations Chips */
-.welcomeChipsWrap {
+/* Quick Explore Popular Destinations Chips - Clean Individual Interactive Buttons */
+.welcomeChipsWrap,
+.quickChips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: 10px;
 }
 
-.welcomeChip {
+.welcomeChip,
+.quickChip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  justify-content: center;
+  padding: 8px 14px;
   border-radius: 8px;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.05);
   color: #E2E8F0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   cursor: pointer;
   transition: all 0.2s ease;
+  user-select: none;
+  text-decoration: none;
 }
 
-.welcomeChip:hover {
-  background: rgba(245, 176, 65, 0.15);
-  border-color: rgba(245, 176, 65, 0.4);
+.welcomeChip:hover,
+.quickChip:hover {
+  background: rgba(245, 176, 65, 0.16);
+  border-color: #F5B041;
   color: #F5B041;
   transform: translateY(-1px);
+}
+
+/* Status Indicator Dots (Replaces Emoticons) */
+.statusDotGreen,
+.statusDotBlue,
+.statusDotAmber {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.statusDotGreen {
+  background-color: #10B981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+}
+.statusDotBlue {
+  background-color: #38BDF8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.5);
+}
+.statusDotAmber {
+  background-color: #F59E0B;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.5);
+}
+
+.bdBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #059669;
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-right: 6px;
 }
 
 /* ==========================================================================
@@ -1879,9 +1979,11 @@
     white-space: nowrap;
   }
 
-  .themeWrap {
+  .toggleBtn {
     flex-shrink: 0;
-    margin-left: 2px;
+    padding: 6px 11px;
+    font-size: 0.76rem;
+    white-space: nowrap;
   }
 
   .hudRibbon {
@@ -1934,6 +2036,22 @@
     flex-direction: column;
     align-items: stretch;
     gap: 8px;
+  }
+
+  .countrySelectWrap {
+    width: 100%;
+    margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .countrySelect {
+    width: 100%;
+    max-width: 100%;
+    min-height: 44px;
+    font-size: 0.88rem;
   }
 
   .modeTabs {
@@ -2205,4 +2323,395 @@
     padding: 9px 12px;
     font-size: 0.8rem;
   }
+}
+
+/* ==========================================================================
+   11. Light Theme Comprehensive Mode
+   ========================================================================== */
+.compassShell[data-theme="light"] {
+  --cp-bg: #F8FAFC;
+  --cp-text: #0F172A;
+  background-color: #F8FAFC;
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .navHeader {
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.compassShell[data-theme="light"] .brandTitle {
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .brandSub {
+  color: #64748B;
+}
+
+.compassShell[data-theme="light"] .toggleBtn {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #1E293B;
+}
+
+.compassShell[data-theme="light"] .toggleBtn:hover {
+  background: #F1F5F9;
+  border-color: #D97706;
+  color: #B45309;
+}
+
+.compassShell[data-theme="light"] .actionBtn {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #1E293B;
+}
+
+.compassShell[data-theme="light"] .actionBtnPrimary {
+  background: #D97706;
+  color: #FFFFFF;
+  border-color: #D97706;
+}
+
+.compassShell[data-theme="light"] .actionBtnPrimary:hover {
+  background: #B45309;
+  border-color: #B45309;
+  color: #FFFFFF;
+}
+
+.compassShell[data-theme="light"] .hudRibbon {
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.compassShell[data-theme="light"] .hudCountryName {
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .hudCountryBn {
+  color: #64748B;
+}
+
+.compassShell[data-theme="light"] .hudPill {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  color: #334155;
+}
+
+.compassShell[data-theme="light"] .mapToolbar {
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.compassShell[data-theme="light"] .tabBtn {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  color: #475569;
+}
+
+.compassShell[data-theme="light"] .tabBtnActive {
+  background: #D97706;
+  border-color: #D97706;
+  color: #FFFFFF;
+}
+
+.compassShell[data-theme="light"] .countrySelect {
+  background: #FFFFFF;
+  color: #0F172A;
+  border-color: #CBD5E1;
+}
+
+.compassShell[data-theme="light"] .countrySelect option {
+  background: #FFFFFF;
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .countrySelectLabel {
+  color: #475569;
+}
+
+.compassShell[data-theme="light"] .fundingFilterBar {
+  background: #F1F5F9;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.compassShell[data-theme="light"] .fundingFilterLabel {
+  color: #334155;
+}
+
+.compassShell[data-theme="light"] .fundingFilterPill {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #334155;
+}
+
+.compassShell[data-theme="light"] .fundingFilterPillActive {
+  background: #D97706;
+  border-color: #D97706;
+  color: #FFFFFF;
+}
+
+.compassShell[data-theme="light"] .canvasWrap {
+  background: #FAF8F4;
+}
+
+.compassShell[data-theme="light"] .zoomControls {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #CBD5E1;
+}
+
+.compassShell[data-theme="light"] .zoomBtn {
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .zoomBadge {
+  color: #334155;
+}
+
+.compassShell[data-theme="light"] .mapFooter {
+  background: #FFFFFF;
+  border-top: 1px solid #E2E8F0;
+  color: #64748B;
+}
+
+.compassShell[data-theme="light"] .legendItem {
+  color: #334155;
+}
+
+.compassShell[data-theme="light"] .windowPanel {
+  background: #FFFFFF;
+  border-left: 1px solid #E2E8F0;
+}
+
+.compassShell[data-theme="light"] .panelHeader {
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.compassShell[data-theme="light"] .heroTitle {
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .heroSub {
+  color: #64748B;
+}
+
+.compassShell[data-theme="light"] .briefBox {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.compassShell[data-theme="light"] .briefHeading {
+  color: #B45309;
+}
+
+.compassShell[data-theme="light"] .briefRow {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+}
+
+.compassShell[data-theme="light"] .briefRow b {
+  color: #B45309;
+}
+
+.compassShell[data-theme="light"] .briefRow span {
+  color: #1E293B;
+}
+
+.compassShell[data-theme="light"] .briefTip {
+  background: #FEF3C7;
+  border-left-color: #D97706;
+  color: #92400E;
+}
+
+.compassShell[data-theme="light"] .briefTip strong {
+  color: #92400E;
+}
+
+.compassShell[data-theme="light"] .sectionTitle {
+  color: #0F172A;
+  border-bottom-color: #E2E8F0;
+}
+
+.compassShell[data-theme="light"] .scholarshipCard {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.compassShell[data-theme="light"] .scholarshipCard:hover {
+  border-color: #D97706;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.compassShell[data-theme="light"] .cardName {
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .cardProvider {
+  color: #475569;
+}
+
+.compassShell[data-theme="light"] .cardMeta {
+  color: #64748B;
+  border-top-color: #F1F5F9;
+}
+
+.compassShell[data-theme="light"] .cardBtnSecondary {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  color: #334155;
+}
+
+.compassShell[data-theme="light"] .cardBtnSecondary:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .univCard {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+}
+
+.compassShell[data-theme="light"] .univRank {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  color: #B45309;
+}
+
+.compassShell[data-theme="light"] .univName {
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .univCity {
+  color: #64748B;
+}
+
+.compassShell[data-theme="light"] .univStrengths {
+  color: #475569;
+}
+
+.compassShell[data-theme="light"] .welcomeWrap {
+  color: #1E293B;
+}
+
+.compassShell[data-theme="light"] .welcomeHeroTitle {
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .welcomeHeroSub {
+  color: #475569;
+}
+
+.compassShell[data-theme="light"] .welcomeHeroMotto {
+  color: #B45309;
+  background: #FEF3C7;
+  border-left-color: #D97706;
+}
+
+.compassShell[data-theme="light"] .welcomeStatCard {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+}
+
+.compassShell[data-theme="light"] .welcomeStatNum {
+  color: #B45309;
+}
+
+.compassShell[data-theme="light"] .welcomeStatLabel {
+  color: #64748B;
+}
+
+.compassShell[data-theme="light"] .stepItem {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+}
+
+.compassShell[data-theme="light"] .stepNum {
+  background: #FEF3C7;
+  color: #B45309;
+}
+
+.compassShell[data-theme="light"] .stepText {
+  color: #334155;
+}
+
+.compassShell[data-theme="light"] .stepText strong {
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .welcomeChip,
+.compassShell[data-theme="light"] .emptyChip {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #1E293B;
+}
+
+.compassShell[data-theme="light"] .welcomeChip:hover,
+.compassShell[data-theme="light"] .emptyChip:hover {
+  background: #FEF3C7;
+  border-color: #D97706;
+  color: #B45309;
+}
+
+.compassShell[data-theme="light"] .emptyCountryCard {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+}
+
+.compassShell[data-theme="light"] .emptyTitle {
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .emptyText {
+  color: #475569;
+}
+
+.compassShell[data-theme="light"] .emptyGuidanceBox {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+}
+
+.compassShell[data-theme="light"] .emptyGuidanceTitle {
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .emptyGuidanceText {
+  color: #475569;
+}
+
+.compassShell[data-theme="light"] .detailModalBox {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .detailTitle {
+  color: #0F172A;
+}
+
+.compassShell[data-theme="light"] .detailProvider {
+  color: #475569;
+}
+
+.compassShell[data-theme="light"] .detailSectionCard {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+}
+
+.compassShell[data-theme="light"] .detailSectionHeader {
+  color: #B45309;
+}
+
+.compassShell[data-theme="light"] .detailSectionBody {
+  color: #334155;
+}
+
+.compassShell[data-theme="light"] .detailMetaPill {
+  background: #F1F5F9;
+  border-color: #E2E8F0;
+  color: #334155;
+}
+
+.compassShell[data-theme="light"] .detailMetaPill b {
+  color: #B45309 !important;
 }
