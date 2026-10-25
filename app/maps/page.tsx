@@ -56,7 +56,7 @@ const universities = universitiesRaw as University[];
 // Clean SVG Icons for Professional Elite Consulting Appearance (Zero Emojis / Clip-arts)
 function GlobeIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="10" />
       <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
       <path d="M2 12h20" />
@@ -66,7 +66,7 @@ function GlobeIcon() {
 
 function SunIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="4" />
       <path d="M12 2v2" />
       <path d="M12 20v2" />
@@ -82,7 +82,7 @@ function SunIcon() {
 
 function MoonIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
     </svg>
   );
@@ -90,7 +90,7 @@ function MoonIcon() {
 
 function GradCapIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
       <path d="M22 10v6" />
       <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
@@ -100,7 +100,7 @@ function GradCapIcon() {
 
 function BuildingIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
       <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
       <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
@@ -114,7 +114,7 @@ function BuildingIcon() {
 
 function StarIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   );
@@ -122,7 +122,7 @@ function StarIcon() {
 
 function FilterIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
     </svg>
   );
@@ -130,7 +130,7 @@ function FilterIcon() {
 
 function DownloadIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
       <polyline points="7 10 12 15 17 10" />
       <line x1="12" y1="15" x2="12" y2="3" />
@@ -140,7 +140,7 @@ function DownloadIcon() {
 
 function ExternalLinkIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
       <polyline points="15 3 21 3 21 9" />
       <line x1="10" y1="14" x2="21" y2="3" />
@@ -150,7 +150,7 @@ function ExternalLinkIcon() {
 
 function CheckIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <polyline points="20 6 9 17 4 12" />
     </svg>
   );
@@ -158,7 +158,7 @@ function CheckIcon() {
 
 function CalendarIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
       <line x1="16" y1="2" x2="16" y2="6" />
       <line x1="8" y1="2" x2="8" y2="6" />
@@ -917,13 +917,15 @@ export default function GlobalStudyMapsPage() {
     return activeGeo.items.filter((item) => item.fundingTier === fundingFilter);
   }, [activeGeo, fundingFilter]);
 
-  // All available countries for the Dropdown Selector (Alphabetically ordered with scholarship counts)
+  // All available countries for the Dropdown Selector (Only destinations with indexed scholarships)
   const countryOptions = useMemo(() => {
     const list: { iso: string; nameEn: string; nameBn: string; count: number }[] = [];
     if (worldData) {
       for (const f of worldData.f) {
         if (f.i === "BGD") continue;
         const count = geoIndex[f.i]?.totalCount || 0;
+        // User Directive: Remove all countries that do not have scholarships from dropdown
+        if (count === 0) continue;
         const brief = countryBriefs[f.i];
         const nameEn = brief?.nameEn || f.n || f.i;
         const nameBn = brief?.nameBn || f.b || "";
@@ -931,8 +933,6 @@ export default function GlobalStudyMapsPage() {
       }
     }
     return list.sort((a, b) => {
-      if (a.count > 0 && b.count === 0) return -1;
-      if (a.count === 0 && b.count > 0) return 1;
       const nameA = lang === "bn" && a.nameBn ? a.nameBn : a.nameEn;
       const nameB = lang === "bn" && b.nameBn ? b.nameBn : b.nameEn;
       return nameA.localeCompare(nameB);
@@ -988,27 +988,41 @@ export default function GlobalStudyMapsPage() {
         </div>
 
         <div className={styles.headerActions}>
-          {/* Toggle 1: Bangla / English Switcher */}
-          <button
-            className={styles.toggleBtn}
+          {/* Toggle 1: Language Switcher (Segmented: BN / EN) */}
+          <div
+            className={styles.segmentedToggle}
             onClick={toggleLanguage}
-            title={lang === "bn" ? "Switch to English interface" : "বাংলা ইন্টারফেসে পরিবর্তন করুন"}
-            aria-label="Toggle language"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") toggleLanguage(); }}
+            title={lang === "bn" ? "Current: বাংলা (Click to switch to English)" : "Current: English (Click to switch to বাংলা)"}
+            aria-label="Toggle language between Bangla and English"
           >
-            <GlobeIcon />
-            <span>{lang === "bn" ? "English" : "বাংলা"}</span>
-          </button>
+            <span className={`${styles.segmentOption} ${lang === "bn" ? styles.segmentActive : ""}`}>
+              বাংলা
+            </span>
+            <span className={`${styles.segmentOption} ${lang === "en" ? styles.segmentActive : ""}`}>
+              English
+            </span>
+          </div>
 
-          {/* Toggle 2: Dark / Light Mode Switcher */}
-          <button
-            className={styles.toggleBtn}
+          {/* Toggle 2: Theme Switcher (Segmented: Dark / Light) */}
+          <div
+            className={styles.segmentedToggle}
             onClick={toggleTheme}
-            title={currentTheme === "midnight" ? (lang === "bn" ? "লাইট মোডে পরিবর্তন করুন" : "Switch to Light Mode") : (lang === "bn" ? "ডার্ক মোডে পরিবর্তন করুন" : "Switch to Dark Mode")}
-            aria-label="Toggle dark/light mode"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") toggleTheme(); }}
+            title={currentTheme === "midnight" ? "Current: Dark Mode (Click for Light Mode)" : "Current: Light Mode (Click for Dark Mode)"}
+            aria-label="Toggle dark and light theme"
           >
-            {currentTheme === "midnight" ? <SunIcon /> : <MoonIcon />}
-            <span>{currentTheme === "midnight" ? (lang === "bn" ? "লাইট মোড" : "Light") : (lang === "bn" ? "ডার্ক মোড" : "Dark")}</span>
-          </button>
+            <span className={`${styles.segmentOption} ${currentTheme === "midnight" ? styles.segmentActive : ""}`}>
+              <MoonIcon /> Dark
+            </span>
+            <span className={`${styles.segmentOption} ${currentTheme === "daylight" ? styles.segmentActive : ""}`}>
+              <SunIcon /> Light
+            </span>
+          </div>
 
           {/* Direct Link to Scholarship Portal Profile Builder */}
           <Link className={`${styles.actionBtn} ${styles.actionBtnPrimary}`} href="/dashboard">
@@ -1051,7 +1065,7 @@ export default function GlobalStudyMapsPage() {
                 )}
                 {hudBrief && (
                   <span className={`${styles.hudPill} ${styles.hudPillBlue}`}>
-                    <BuildingIcon /> {hudBrief.tuition.slice(0, 34)}...
+                    <BuildingIcon /> {hudBrief.tuition.slice(0, 32)}...
                   </span>
                 )}
                 {universities.filter((u) => u.iso === hudTarget.i).length > 0 && (
@@ -1098,7 +1112,7 @@ export default function GlobalStudyMapsPage() {
               </button>
             </div>
 
-            {/* Country Selector Dropdown Menu (Especially for Mobile and Quick Selection) */}
+            {/* Country Selector Dropdown Menu (Only countries with scholarships) */}
             <div className={styles.countrySelectWrap}>
               <label htmlFor="country-selector" className={styles.countrySelectLabel}>
                 <GlobeIcon />
@@ -1112,13 +1126,13 @@ export default function GlobalStudyMapsPage() {
                 aria-label={lang === "bn" ? "দেশ নির্বাচন করুন" : "Choose Country"}
               >
                 <option value="">
-                  {lang === "bn" ? "-- দেশ নির্বাচন করুন (বা মানচিত্রে চাপুন) --" : "-- Choose Country (or Tap Map) --"}
+                  {lang === "bn" ? "-- স্কলারশিপ সহ দেশ বেছে নিন --" : "-- Select Scholarship Destination --"}
                 </option>
                 {countryOptions.map((c) => (
                   <option key={c.iso} value={c.iso}>
                     {lang === "bn"
-                      ? `${c.nameBn ? c.nameBn + " (" + c.nameEn + ")" : c.nameEn}${c.count > 0 ? ` • ${c.count}টি স্কলারশিপ` : ""}`
-                      : `${c.nameEn}${c.nameBn ? " (" + c.nameBn + ")" : ""}${c.count > 0 ? ` • ${c.count} Scholarships` : ""}`}
+                      ? `${c.nameBn ? c.nameBn + " (" + c.nameEn + ")" : c.nameEn} • ${c.count}টি স্কলারশিপ`
+                      : `${c.nameEn}${c.nameBn ? " (" + c.nameBn + ")" : ""} • ${c.count} Scholarships`}
                   </option>
                 ))}
               </select>
@@ -1127,8 +1141,8 @@ export default function GlobalStudyMapsPage() {
             {selectedIso && (
               <div className={styles.selectionPill}>
                 <CheckIcon />
-                <span>{countryNameEn} {lang === "bn" ? "নির্বাচিত" : "Selected"}</span>
-                <button className={styles.clearBtn} onClick={handleClearSelection} title="Deselect country">
+                <span>{lang === "bn" ? (countryNameBn || countryNameEn) : countryNameEn} {lang === "bn" ? "নির্বাচিত" : "Selected"}</span>
+                <button className={styles.clearBtn} onClick={handleClearSelection} title={lang === "bn" ? "রিসেট করুন" : "Deselect country"}>
                   {lang === "bn" ? "রিসেট" : "Clear"}
                 </button>
               </div>
@@ -1505,18 +1519,18 @@ export default function GlobalStudyMapsPage() {
                                   }`}
                                 >
                                   {s.fundingTier === "fully_funded"
-                                    ? (lang === "bn" ? "Fully Funded" : "Fully Funded")
+                                    ? (lang === "bn" ? "সম্পূর্ণ ফান্ডেড" : "Fully Funded")
                                     : s.fundingTier === "full_tuition"
-                                    ? (lang === "bn" ? "100% Tuition" : "100% Tuition")
-                                    : (lang === "bn" ? "Partial / Discount" : "Partial")}
+                                    ? (lang === "bn" ? "১০০% টিউশন ওয়েভার" : "100% Tuition Waiver")
+                                    : (lang === "bn" ? "আংশিক স্কলারশিপ" : "Partial Scholarship")}
                                 </span>
                               </div>
 
                               <div className={styles.cardProvider}>{s.provider}</div>
 
                               <div className={styles.cardMeta}>
-                                <span>{s.coverage?.slice(0, 48) || "Funding varies"}...</span>
-                                <span><CalendarIcon /> {s.deadline || "Upcoming Intake"}</span>
+                                <span>{s.coverage?.slice(0, 48) || (lang === "bn" ? "ফান্ডিংয়ের বিবরণ" : "Funding details")}...</span>
+                                <span><CalendarIcon /> {s.deadline || (lang === "bn" ? "আসন্ন সেশন" : "Upcoming Intake")}</span>
                               </div>
 
                               <div className={styles.cardActions}>
@@ -1669,13 +1683,13 @@ export default function GlobalStudyMapsPage() {
                     }`}
                   >
                     {detailScholarship.fundingTier === "fully_funded"
-                      ? (lang === "bn" ? "Fully Funded (সম্পূর্ণ ফান্ডেড)" : "Fully Funded Award")
+                      ? (lang === "bn" ? "সম্পূর্ণ ফান্ডেড স্কলারশিপ" : "Fully Funded Award")
                       : detailScholarship.fundingTier === "full_tuition"
-                      ? (lang === "bn" ? "100% Tuition Waiver (টিউশন ফ্রি)" : "100% Tuition Waiver")
-                      : (lang === "bn" ? "Partial Scholarship (আংশিক স্কলারশিপ)" : "Partial Scholarship")}
+                      ? (lang === "bn" ? "১০০% টিউশন ওয়েভার" : "100% Tuition Waiver")
+                      : (lang === "bn" ? "আংশিক স্কলারশিপ" : "Partial Scholarship")}
                   </span>
                   <span className={styles.floatingCountryBadge}>
-                    {countryNameEn} {countryNameBn ? `(${countryNameBn})` : ""}
+                    {lang === "bn" ? `${countryNameBn || countryNameEn} (${countryNameEn})` : `${countryNameEn} ${countryNameBn ? `(${countryNameBn})` : ""}`}
                   </span>
                 </div>
                 <h2 className={styles.detailTitle}>{detailScholarship.name}</h2>
@@ -1698,21 +1712,21 @@ export default function GlobalStudyMapsPage() {
                 <>
                   <div className={styles.detailSectionCard}>
                     <div className={styles.detailSectionHeader}>
-                      {lang === "bn" ? "খরচ ও টিউশন ফি (Cost & Tuition)" : "Cost & Tuition"}
+                      {lang === "bn" ? "খরচ ও টিউশন ফি" : "Cost & Tuition Coverage"}
                     </div>
                     <div className={styles.detailSectionBody}>{detailScholarship.overallSummary.cost}</div>
                   </div>
 
                   <div className={styles.detailSectionCard}>
                     <div className={styles.detailSectionHeader}>
-                      {lang === "bn" ? "সুবিধা ও আবাসন ভাতা (Benefits & Living)" : "Benefits & Living Allowance"}
+                      {lang === "bn" ? "সুবিধা ও আবাসন ভাতা" : "Benefits & Living Allowance"}
                     </div>
                     <div className={styles.detailSectionBody}>{detailScholarship.overallSummary.benefits}</div>
                   </div>
 
                   <div className={styles.detailSectionCard}>
                     <div className={styles.detailSectionHeader}>
-                      {lang === "bn" ? "যোগ্যতা ও আবেদন প্রক্রিয়া (Eligibility & Strategy)" : "Eligibility & Strategy"}
+                      {lang === "bn" ? "যোগ্যতা ও আবেদন প্রক্রিয়া" : "Eligibility & Application Strategy"}
                     </div>
                     <div className={styles.detailSectionBody}>{detailScholarship.overallSummary.other}</div>
                   </div>
@@ -1723,23 +1737,23 @@ export default function GlobalStudyMapsPage() {
                     {lang === "bn" ? "স্কলারশিপ কাভারেজ" : "Scholarship Coverage"}
                   </div>
                   <div className={styles.detailSectionBody}>
-                    {detailScholarship.coverage || "ফান্ডিং ও স্কলারশিপের বিবরণ অফিসিয়াল পোর্টালে বিস্তারিত রয়েছে।"}
+                    {detailScholarship.coverage || (lang === "bn" ? "ফান্ডিং ও স্কলারশিপের বিবরণ অফিসিয়াল পোর্টালে বিস্তারিত রয়েছে।" : "Full coverage and funding guidelines are specified on the official award portal.")}
                   </div>
                 </div>
               )}
 
               <div className={styles.detailMetaPills}>
                 <div className={styles.detailMetaPill}>
-                  <b>{lang === "bn" ? "প্রোগ্রাম:" : "Program:"}</b> {detailScholarship.studyLevel || "সকল প্রোগ্রাম"}
+                  <b>{lang === "bn" ? "প্রোগ্রাম:" : "Program:"}</b> {detailScholarship.studyLevel || (lang === "bn" ? "সকল প্রোগ্রাম" : "All Programs")}
                 </div>
                 <div className={styles.detailMetaPill}>
-                  <b>{lang === "bn" ? "ডেডলাইন:" : "Deadline:"}</b> {detailScholarship.deadline || "Upcoming Intake"}
+                  <b>{lang === "bn" ? "ডেডলাইন:" : "Deadline:"}</b> {detailScholarship.deadline || (lang === "bn" ? "আসন্ন সেশন" : "Upcoming Intake")}
                 </div>
                 <div className={styles.detailMetaPill}>
-                  <b>{lang === "bn" ? "স্ট্যাটাস:" : "Status:"}</b> {detailScholarship.status || "Active / Verified"}
+                  <b>{lang === "bn" ? "স্ট্যাটাস:" : "Status:"}</b> {lang === "bn" ? "সক্রিয় / যাচাইকৃত" : (detailScholarship.status || "Active / Verified")}
                 </div>
                 <div className={styles.detailMetaPill}>
-                  <b>{lang === "bn" ? "যাচাইকরণ:" : "Verification:"}</b> EG Research Desk Verified
+                  <b>{lang === "bn" ? "যাচাইকরণ:" : "Verification:"}</b> {lang === "bn" ? "ইজি রিসার্চ ডেস্ক যাচাইকৃত" : "EG Research Desk Verified"}
                 </div>
               </div>
             </div>

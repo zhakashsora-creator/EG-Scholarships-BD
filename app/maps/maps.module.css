@@ -10,6 +10,43 @@
   overflow-x: hidden;
 }
 
+@media (min-width: 1101px) {
+  .compassShell {
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden; /* Desktop: stationary screen, zero whole-page vibration */
+  }
+
+  .mainGrid {
+    flex: 1;
+    min-height: 0;
+    height: calc(100vh - 106px);
+    max-height: calc(100vh - 106px);
+    overflow: hidden;
+  }
+
+  .mapColumn {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .canvasWrap {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .windowPanel {
+    height: 100%;
+    max-height: 100%;
+    position: static;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
 /* 1. Header Navigation */
 .navHeader {
   display: flex;
@@ -105,12 +142,62 @@
   color: #16222F;
 }
 
-/* Header Toggle Buttons (Language BN/EN & Theme Dark/Light) */
+/* Header Toggle Buttons (Language BN/EN & Theme Dark/Light - Segmented) */
+.segmentedToggle {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(22, 34, 47, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  padding: 2px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  height: 36px;
+  box-sizing: border-box;
+}
+
+.segmentedToggle:hover {
+  border-color: rgba(245, 176, 65, 0.4);
+}
+
+.segmentOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #94A3B8;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.segmentOption svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+.segmentActive {
+  background: #F5B041;
+  color: #16222F !important;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.segmentActive svg {
+  stroke: #16222F;
+}
+
 .toggleBtn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 13px;
+  padding: 6px 12px;
   border-radius: 8px;
   font-size: 0.80rem;
   font-weight: 600;
@@ -121,13 +208,14 @@
   color: #FFFFFF;
   user-select: none;
   white-space: nowrap;
+  height: 36px;
+  box-sizing: border-box;
 }
 
 .toggleBtn:hover {
   background: rgba(255, 255, 255, 0.12);
   border-color: #F5B041;
   color: #F5B041;
-  transform: translateY(-1px);
 }
 
 .toggleBtn svg {
@@ -142,10 +230,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 24px;
+  padding: 6px 20px;
   background: var(--cp-hud-bg, #1E2C3A);
   border-bottom: 1px solid var(--cp-hud-border, #34495E);
-  min-height: 52px;
+  min-height: 44px;
+  height: 44px;
+  box-sizing: border-box;
+  overflow: hidden;
   transition: background-color 0.2s, border-color 0.2s;
   z-index: 50;
 }
@@ -153,8 +244,10 @@
 .hudLeft {
   display: flex;
   align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
+  gap: 12px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .hudFlag {
@@ -163,36 +256,55 @@
 }
 
 .hudCountryName {
-  font-size: 1.05rem;
+  font-size: 0.96rem;
   font-weight: 800;
   color: #FFFFFF;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: baseline;
+  flex-shrink: 0;
 }
 
 .hudCountryBn {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: #94A3B8;
-  margin-left: 6px;
+  margin-left: 5px;
   font-weight: 600;
 }
 
 .hudPills {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 6px;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 .hudPill {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 3px 10px;
+  padding: 0 9px;
+  height: 26px;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 600;
   background: rgba(255, 255, 255, 0.08);
   color: #E2E8F0;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.hudPill svg {
+  width: 13px;
+  height: 13px;
+  max-width: 13px;
+  max-height: 13px;
+  stroke: currentColor;
+  flex-shrink: 0;
 }
 
 .hudPillGold {
@@ -276,34 +388,58 @@
   padding: 8px 18px;
   background: rgba(30, 44, 58, 0.4);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 12px;
 }
 
 .modeTabs {
   display: flex;
-  gap: 4px;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
 }
 
 .tabBtn {
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
   font-weight: 600;
-  border: 1px solid transparent;
-  background: transparent;
-  color: #94A3B8;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(30, 44, 58, 0.7);
+  color: #CBD5E1;
   cursor: pointer;
-  transition: all 0.2s;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.tabBtn svg {
+  width: 15px;
+  height: 15px;
+  max-width: 15px;
+  max-height: 15px;
+  flex-shrink: 0;
+  stroke: currentColor;
 }
 
 .tabBtn:hover {
   color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(245, 176, 65, 0.4);
 }
 
 .tabBtnActive {
   background: #F5B041;
   color: #16222F;
   border-color: #F5B041;
+  font-weight: 700;
+}
+
+.tabBtnActive svg {
+  stroke: #16222F;
 }
 
 /* Country Selector Dropdown in Toolbar */
@@ -328,10 +464,12 @@
   width: 14px;
   height: 14px;
   stroke: currentColor;
+  flex-shrink: 0;
 }
 
 .countrySelect {
-  padding: 7px 12px;
+  height: 36px;
+  padding: 0 12px;
   border-radius: 8px;
   font-size: 0.82rem;
   font-weight: 600;
@@ -342,6 +480,7 @@
   outline: none;
   max-width: 290px;
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .countrySelect:hover,
@@ -407,24 +546,43 @@
 }
 
 .selectionPill {
-  background: rgba(245, 176, 65, 0.15);
-  color: #F5B041;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-weight: 700;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: rgba(245, 176, 65, 0.15);
+  color: #F5B041;
+  border: 1px solid rgba(245, 176, 65, 0.35);
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.selectionPill svg {
+  width: 15px;
+  height: 15px;
+  stroke: #F5B041;
+  flex-shrink: 0;
 }
 
 .clearBtn {
-  background: none;
+  background: rgba(245, 176, 65, 0.25);
+  color: #FFFFFF;
   border: none;
-  color: #94A3B8;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 0.74rem;
+  font-weight: 700;
   cursor: pointer;
-  text-decoration: underline;
-  font-size: 0.75rem;
-  margin-left: 6px;
+  margin-left: 4px;
+  transition: background 0.2s;
+}
+
+.clearBtn:hover {
+  background: #E67E22;
 }
 
 /* 4. Right Side Window Panel */
@@ -750,8 +908,17 @@
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   box-sizing: border-box;
+}
+
+.cardBtn svg {
+  width: 14px;
+  height: 14px;
+  max-width: 14px;
+  max-height: 14px;
+  stroke: currentColor;
+  flex-shrink: 0;
 }
 
 .cardBtnPrimary {
@@ -2312,16 +2479,32 @@
   }
 
   .detailActions {
-    flex-direction: column;
-    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
+    padding-top: 10px;
   }
 
   .detailActions .cardBtn {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 120px;
+    height: 38px;
+    padding: 0 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
     justify-content: center;
-    width: 100%;
-    padding: 9px 12px;
-    font-size: 0.8rem;
+    box-sizing: border-box;
+  }
+
+  .detailActions .cardBtn svg {
+    width: 14px;
+    height: 14px;
+    max-width: 14px;
+    max-height: 14px;
+    stroke: currentColor;
+    flex-shrink: 0;
   }
 }
 
@@ -2554,6 +2737,24 @@
 .compassShell[data-theme="light"] .cardMeta {
   color: #64748B;
   border-top-color: #F1F5F9;
+}
+
+.compassShell[data-theme="light"] .segmentedToggle {
+  background: #EDF2F7;
+  border-color: #CBD5E1;
+}
+
+.compassShell[data-theme="light"] .segmentOption {
+  color: #64748B;
+}
+
+.compassShell[data-theme="light"] .segmentActive {
+  background: #2C3E50;
+  color: #FFFFFF !important;
+}
+
+.compassShell[data-theme="light"] .segmentActive svg {
+  stroke: #FFFFFF;
 }
 
 .compassShell[data-theme="light"] .cardBtnSecondary {
