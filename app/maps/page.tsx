@@ -17,6 +17,7 @@ import {
 import geoIndexRaw from "../data/geo-scholarship-index.json";
 import countryBriefsRaw from "../data/country-briefs.json";
 import universitiesRaw from "../data/universities.json";
+import { generateScholarshipCardImage } from "./poster/generateScholarshipCardImage";
 
 export type ScholarshipItem = {
   id: string;
@@ -193,225 +194,8 @@ const POPULAR_DESTINATIONS = [
   { iso: "AZE", nameBn: "আজারবাইজান", nameEn: "Azerbaijan" },
 ];
 
-/**
- * Generate a high-resolution, branded scholarship card image for direct download
- */
-function generateScholarshipCardImage(
-  item: ScholarshipItem,
-  countryEn: string,
-  countryBn: string,
-  lang: "bn" | "en" = "bn"
-): string {
-  if (typeof document === "undefined") return "";
 
-  const canvas = document.createElement("canvas");
-  const width = 1200;
-  const height = 1500;
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return "";
 
-  // 1. Background gradient (Midnight Blue Corporate)
-  const bgGrad = ctx.createLinearGradient(0, 0, width, height);
-  bgGrad.addColorStop(0, "#16222F");
-  bgGrad.addColorStop(1, "#0D1722");
-  ctx.fillStyle = bgGrad;
-  ctx.fillRect(0, 0, width, height);
-
-  // Outer golden accent frame
-  ctx.strokeStyle = "rgba(245, 176, 65, 0.45)";
-  ctx.lineWidth = 3;
-  ctx.strokeRect(24, 24, width - 48, height - 48);
-
-  // Inner subtle border
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
-  ctx.lineWidth = 1;
-  ctx.strokeRect(36, 36, width - 72, height - 72);
-
-  // 2. Top Header Brand Bar
-  ctx.fillStyle = "#1E2C3A";
-  ctx.fillRect(36, 36, width - 72, 110);
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
-  ctx.beginPath();
-  ctx.moveTo(36, 146);
-  ctx.lineTo(width - 36, 146);
-  ctx.stroke();
-
-  // Brand Name & Motto
-  ctx.fillStyle = "#F5B041";
-  ctx.font = "bold 26px Montserrat, Inter, system-ui, sans-serif";
-  ctx.fillText("EXCELLENCE GLOBAL CONSULTANCY", 70, 85);
-
-  ctx.fillStyle = "#94A3B8";
-  ctx.font = "16px Inter, system-ui, sans-serif";
-  ctx.fillText("EG Scholarships Directory • Evidence, not promises.", 70, 118);
-
-  // Top Right Verified Badge
-  ctx.fillStyle = "rgba(16, 185, 129, 0.15)";
-  ctx.strokeStyle = "#10B981";
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.roundRect(width - 360, 62, 290, 48, 8);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = "#34D399";
-  ctx.font = "bold 15px Inter, system-ui, sans-serif";
-  ctx.fillText("EG RESEARCH DESK VERIFIED", width - 338, 92);
-
-  // 3. Country & Destination Badge
-  ctx.fillStyle = "#38BDF8";
-  ctx.font = "bold 22px Inter, system-ui, sans-serif";
-  const destText = countryBn ? `${countryEn.toUpperCase()} (${countryBn})` : countryEn.toUpperCase();
-  ctx.fillText(`DESTINATION: ${destText}`, 70, 200);
-
-  // 4. Funding Tier Badge
-  let tierText = "PARTIAL SCHOLARSHIP";
-  let tierColor = "#F59E0B";
-  let tierBg = "rgba(245, 158, 11, 0.15)";
-  if (item.fundingTier === "fully_funded") {
-    tierText = "FULLY FUNDED SCHOLARSHIP";
-    tierColor = "#10B981";
-    tierBg = "rgba(16, 185, 129, 0.2)";
-  } else if (item.fundingTier === "full_tuition") {
-    tierText = "100% TUITION WAIVER";
-    tierColor = "#38BDF8";
-    tierBg = "rgba(56, 189, 248, 0.2)";
-  }
-
-  ctx.fillStyle = tierBg;
-  ctx.strokeStyle = tierColor;
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.roundRect(70, 225, 340, 42, 6);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = tierColor;
-  ctx.font = "bold 16px Inter, system-ui, sans-serif";
-  ctx.fillText(tierText, 90, 252);
-
-  // 5. Scholarship Name (Word-wrapped)
-  ctx.fillStyle = "#FFFFFF";
-  ctx.font = "bold 38px Montserrat, Inter, system-ui, sans-serif";
-  let currentY = 320;
-  const words = item.name.split(" ");
-  let line = "";
-  for (let n = 0; n < words.length; n++) {
-    const testLine = line + words[n] + " ";
-    const metrics = ctx.measureText(testLine);
-    if (metrics.width > width - 150 && n > 0) {
-      ctx.fillText(line, 70, currentY);
-      line = words[n] + " ";
-      currentY += 46;
-    } else {
-      line = testLine;
-    }
-  }
-  ctx.fillText(line, 70, currentY);
-  currentY += 40;
-
-  // Provider / Institution
-  ctx.fillStyle = "#F5B041";
-  ctx.font = "500 22px Inter, system-ui, sans-serif";
-  ctx.fillText(`Provider: ${item.provider}`, 70, currentY);
-  currentY += 45;
-
-  // 6. Meta Specifications Bar (Program, Deadline, Status)
-  ctx.fillStyle = "#1E2C3A";
-  ctx.beginPath();
-  ctx.roundRect(70, currentY, width - 140, 70, 10);
-  ctx.fill();
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
-  ctx.stroke();
-
-  ctx.fillStyle = "#94A3B8";
-  ctx.font = "14px Inter, system-ui, sans-serif";
-  ctx.fillText("PROGRAM LEVEL", 95, currentY + 28);
-  ctx.fillText("DEADLINE", 460, currentY + 28);
-  ctx.fillText("AWARD STATUS", 820, currentY + 28);
-
-  ctx.fillStyle = "#FFFFFF";
-  ctx.font = "bold 17px Inter, system-ui, sans-serif";
-  ctx.fillText((item.studyLevel || "All Levels").slice(0, 32), 95, currentY + 54);
-  ctx.fillText((item.deadline || "Upcoming Intake").slice(0, 28), 460, currentY + 54);
-  ctx.fillText((item.status || "Active Verified").slice(0, 24), 820, currentY + 54);
-
-  currentY += 95;
-
-  // Helper for structured detail card boxes
-  const drawDetailCard = (title: string, content: string, yPos: number, cardHeight: number) => {
-    ctx.fillStyle = "rgba(30, 44, 58, 0.85)";
-    ctx.beginPath();
-    ctx.roundRect(70, yPos, width - 140, cardHeight, 10);
-    ctx.fill();
-    ctx.strokeStyle = "rgba(245, 176, 65, 0.25)";
-    ctx.stroke();
-
-    // Card Title Header
-    ctx.fillStyle = "#F5B041";
-    ctx.font = "bold 17px Montserrat, Inter, system-ui, sans-serif";
-    ctx.fillText(title.toUpperCase(), 95, yPos + 32);
-
-    // Card Body text (wrapped)
-    ctx.fillStyle = "#E2E8F0";
-    ctx.font = "18px Inter, system-ui, sans-serif";
-    const cWords = content.split(" ");
-    let cLine = "";
-    let cY = yPos + 64;
-    for (let i = 0; i < cWords.length; i++) {
-      const test = cLine + cWords[i] + " ";
-      if (ctx.measureText(test).width > width - 200 && i > 0) {
-        ctx.fillText(cLine, 95, cY);
-        cLine = cWords[i] + " ";
-        cY += 28;
-        if (cY > yPos + cardHeight - 15) break;
-      } else {
-        cLine = test;
-      }
-    }
-    if (cY <= yPos + cardHeight - 15) {
-      ctx.fillText(cLine, 95, cY);
-    }
-  };
-
-  // 7. Three detail section cards
-  const costText = item.overallSummary?.cost || "Tuition fee exemption and statutory allowances specified by governing regulations.";
-  const benefitText = item.overallSummary?.benefits || item.coverage || "Includes tuition grant, living support stipends, and academic allowance.";
-  const eligText = item.overallSummary?.other || "Admissions to recognized degree program, English proficiency credentials, and merit evaluation.";
-
-  drawDetailCard(lang === "bn" ? "খরচ ও টিউশন ফি (COST & TUITION)" : "COST & TUITION", costText, currentY, 130);
-  currentY += 145;
-
-  drawDetailCard(lang === "bn" ? "সুবিধা ও আবাসন ভাতা (BENEFITS & LIVING)" : "BENEFITS & LIVING ALLOWANCE", benefitText, currentY, 130);
-  currentY += 145;
-
-  drawDetailCard(lang === "bn" ? "যোগ্যতা ও আবেদন প্রক্রিয়া (ELIGIBILITY & STRATEGY)" : "ELIGIBILITY & APPLICATION STRATEGY", eligText, currentY, 150);
-  currentY += 165;
-
-  // 8. Bottom Mandatory Watermark & Link (as strictly requested by user)
-  ctx.fillStyle = "#1E2C3A";
-  ctx.fillRect(36, height - 130, width - 72, 94);
-  ctx.strokeStyle = "rgba(245, 176, 65, 0.4)";
-  ctx.beginPath();
-  ctx.moveTo(36, height - 130);
-  ctx.lineTo(width - 36, height - 130);
-  ctx.stroke();
-
-  ctx.fillStyle = "#F5B041";
-  ctx.font = "bold 20px Inter, system-ui, sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText("Visit https://scholarships.egconsultancy.com.bd/maps for more scholarships around the globe", width / 2, height - 85);
-
-  ctx.fillStyle = "#94A3B8";
-  ctx.font = "15px Inter, system-ui, sans-serif";
-  ctx.fillText("Excellence Global Consultancy • House 22, Road 1, Block Ta, Mirpur, Dhaka 1216 • WhatsApp: +880 1601-247111", width / 2, height - 55);
-
-  ctx.textAlign = "left"; // reset
-
-  return canvas.toDataURL("image/png");
-}
 
 export default function GlobalStudyMapsPage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -948,12 +732,13 @@ export default function GlobalStudyMapsPage() {
   const hudGeo = hudTarget ? geoIndex[hudTarget.i] : null;
 
   // Handle Download Scholarship Detail Card (Direct High-Resolution Card Download)
-  const handleDownloadScholarshipCard = (item: ScholarshipItem) => {
+  const handleDownloadScholarshipCard = async (item: ScholarshipItem) => {
     try {
-      const dataUrl = generateScholarshipCardImage(
+      const dataUrl = await generateScholarshipCardImage(
         item,
-        countryNameEn,
-        countryNameBn,
+        activeBrief || undefined,
+        selectedFeature || undefined,
+        worldData,
         lang
       );
       if (!dataUrl) return;
