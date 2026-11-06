@@ -5,7 +5,9 @@ const { existsSync, readFileSync, writeFileSync } = require("node:fs");
 const { join } = require("node:path");
 const { execFileSync } = require("node:child_process");
 
-const archiveName = existsSync(join(__dirname, "next-build-5873b4f.zip"))
+const archiveName = existsSync(join(__dirname, "next-build-29f3b71.zip"))
+  ? "next-build-29f3b71.zip"
+  : existsSync(join(__dirname, "next-build-5873b4f.zip"))
   ? "next-build-5873b4f.zip"
   : existsSync(join(__dirname, "next-build-c11c4a9.zip"))
   ? "next-build-c11c4a9.zip"
