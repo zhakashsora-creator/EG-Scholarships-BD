@@ -760,10 +760,10 @@ export default function GlobalStudyMapsPage() {
       <header className={styles.navHeader}>
         <div className={styles.brandWrap}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/egc-emblem.png" alt="EG Emblem" className={styles.brandLogo} />
+          <img src="/eg-emblem-glow.png" alt="EG Emblem" className={styles.brandLogo} />
           <div>
             <div className={styles.brandTitle}>
-              EG Global Study Maps
+              EG Global Scholarships Map
               <span className={styles.brandBadge}>Interactive</span>
             </div>
             <div className={styles.brandSub}>
@@ -863,7 +863,7 @@ export default function GlobalStudyMapsPage() {
           ) : (
             <div className={styles.hudPrompt}>
               <span>
-                <strong>{lang === "bn" ? "স্বাগতম EG Global Study Maps-এ!" : "Welcome to EG Global Study Maps!"}</strong> {lang === "bn" ? "মানচিত্রের দেশ অথবা ড্রপডাউন থেকে যেকোনো দেশ নির্বাচন করে স্কলারশিপ, টিউশন ফি ও লিভিং কস্ট এক্সপ্লোর করুন।" : "Select any country from the map or dropdown to explore scholarships, living expenses, and top universities."}
+                <strong>{lang === "bn" ? "স্বাগতম EG Global Scholarships Map-এ!" : "Welcome to EG Global Scholarships Map!"}</strong> {lang === "bn" ? "মানচিত্রের দেশ অথবা ড্রপডাউন থেকে যেকোনো দেশ নির্বাচন করে স্কলারশিপ, টিউশন ফি ও লিভিং কস্ট এক্সপ্লোর করুন।" : "Select any country from the map or dropdown to explore scholarships, living expenses, and top universities."}
               </span>
             </div>
           )}
@@ -1348,8 +1348,8 @@ export default function GlobalStudyMapsPage() {
             /* Welcome & Onboarding View When No Country is Selected */
             <div className={styles.welcomeWrap}>
               <div className={styles.welcomeHero}>
-                <span className={styles.welcomeHeroBadge}>{lang === "bn" ? "গ্লোবাল স্টাডি ম্যাপস" : "Global Study Maps"}</span>
-                <h1 className={styles.welcomeHeroTitle}>{lang === "bn" ? "গ্লোবাল স্টাডি ম্যাপস" : "Global Study Maps"}</h1>
+                <span className={styles.welcomeHeroBadge}>{lang === "bn" ? "গ্লোবাল স্কলারশিপ ম্যাপ" : "Global Scholarships Map"}</span>
+                <h1 className={styles.welcomeHeroTitle}>{lang === "bn" ? "গ্লোবাল স্কলারশিপ ম্যাপ" : "Global Scholarships Map"}</h1>
                 <p className={styles.welcomeHeroSub}>
                   {lang === "bn"
                     ? "বাংলাদেশি শিক্ষার্থীদের জন্য ৭৮+ দেশের স্কলারশিপ, টিউশন ফি, লিভিং কস্ট ও শীর্ষ বিশ্ববিদ্যালয়ের সমন্বিত ইন্টারেক্টিভ মানচিত্র।"

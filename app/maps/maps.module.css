@@ -70,9 +70,11 @@
 }
 
 .brandLogo {
-  width: 38px;
-  height: 38px;
+  width: 48px;
+  height: 48px;
   object-fit: contain;
+  flex-shrink: 0;
+  display: block;
 }
 
 .brandTitle {
@@ -2105,8 +2107,11 @@
   }
 
   .brandLogo {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    flex-shrink: 0;
+    display: block;
   }
 
   .brandTitle {
