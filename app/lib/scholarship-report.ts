@@ -43,7 +43,7 @@ export function consultationUrl(fallbackOrigin: string) {
   return reportRuntime().bookingUrl || `${fallbackOrigin.replace(/\/$/, "")}/dashboard?tab=consultant`;
 }
 
-function clean(value?: string, fallback = "Not provided") {
+function clean(value?: string | null, fallback = "Not provided") {
   const normalized = value?.replace(/\s+/g, " ").trim();
   return normalized || fallback;
 }

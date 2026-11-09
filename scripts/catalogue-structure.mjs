@@ -63,7 +63,7 @@ export function normalizeCatalogueRecord(record, sourceOrder = 0) {
       id: `${scholarshipId}:cycle`,
       scholarshipId,
       intake: clean(record.intake),
-      deadline: clean(record.deadline),
+      deadline: record.deadline == null ? null : clean(record.deadline),
       deadlineTimezone: clean(record.deadlineTimezone),
       status: clean(record.status),
       applicationRoute: clean(record.applicationRoute),
